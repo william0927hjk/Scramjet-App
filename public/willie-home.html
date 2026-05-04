@@ -2009,22 +2009,10 @@
   function toolNav(url) {
     showView('proxy');
     document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-
     document.getElementById('proxy-landing').classList.add('hidden');
     document.getElementById('proxy-browser').classList.add('visible');
     document.getElementById('proxy-url-bar').value = url;
-
-    const container = document.getElementById('proxy-frame-container');
-    // Remove any existing scramjet frame and replace with plain iframe
-    const old = document.getElementById('proxy-iframe');
-    if (old) old.remove();
-    sjFrame = null;
-
-    const iframe = document.createElement('iframe');
-    iframe.id = 'proxy-iframe';
-    iframe.style.cssText = 'width:100%;height:100%;border:none;';
-    iframe.src = url;
-    container.appendChild(iframe);
+    navigateProxy(url);
   }
 
   // ── PROXY (Scramjet) ──
