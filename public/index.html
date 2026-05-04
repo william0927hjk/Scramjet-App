@@ -432,7 +432,6 @@
       letter-spacing: 1px;
     }
 
-    /* Active browser bar (shown when browsing) */
     /* ── PROXY TABS ── */
     #proxy-tabs {
       display: flex;
@@ -598,6 +597,7 @@
     #proxy-frame-container {
       flex: 1;
       overflow: hidden;
+      position: relative;
     }
 
     #proxy-frame-container iframe {
@@ -1316,7 +1316,6 @@
       <div class="games-grid" id="seraph-grid"></div>
     </div>
 
-    <!-- TOOLS VIEW -->
     <!-- APPS VIEW -->
     <div class="view" id="view-webapps">
       <div class="section-title">Social &amp; Web Apps</div>
@@ -1543,8 +1542,8 @@
         <div id="proxy-hint">Whats the baby boo game?</div>
       </div>
 
-      <!-- Browser UI (shown after navigating) -->
-      <div id="proxy-browser">
+      <!-- Browser UI (always visible) -->
+      <div id="proxy-browser" class="visible">
         <!-- TAB BAR -->
         <div id="proxy-tabs">
           <button id="proxy-new-tab-btn" onclick="proxyNewTab()" title="New tab">+</button>
@@ -2051,7 +2050,6 @@
     const safeName = game.name.replace(/'/g,"\\'");
 
     if (game.useProxy) {
-      // Seraph game — open through proxy
       return `
       <a class="game-card" style="cursor:pointer" onclick="trackPlayed('${safeName}');proxyNav('${game.path}')">
         <div class="game-thumb">${game.emoji}</div>
@@ -2063,7 +2061,6 @@
       </a>`;
     }
 
-    // Local gfiles game
     const target = newTab ? '_blank' : '_self';
     const href = newTab ? game.path : `game.html?src=${encodeURIComponent(game.path)}&name=${encodeURIComponent(game.name)}`;
     return `
@@ -2105,6 +2102,18 @@
     const titles = { home: 'Home', games: 'Games', apps: 'Tools', proxy: 'Proxy', history: 'History', bookmarks: 'Bookmarks', settings: 'Settings' };
     document.getElementById('page-title').textContent = titles[id] || id;
     event?.currentTarget?.classList.add('active');
+
+    // ── KEY CHANGE: When proxy view opens, always show browser chrome and create initial tab ──
+    if (id === 'proxy') {
+      document.getElementById('proxy-browser').classList.add('visible');
+      if (tabs.length === 0) {
+        createTab('');
+      }
+      const activeTab = tabs.find(t => t.id === activeTabId);
+      if (!activeTab || !activeTab.url) {
+        document.getElementById('proxy-landing').classList.remove('hidden');
+      }
+    }
   }
 
   async function appNav(url) {
@@ -2152,7 +2161,7 @@
   const connection = new BareMux.BareMuxConnection('/baremux/worker.js');
 
   // ── MULTI-TAB STATE ──
-  let tabs = [];        // [{id, title, url, sjFrame, iframe}]
+  let tabs = [];
   let activeTabId = null;
   let tabCounter = 0;
 
@@ -2160,10 +2169,9 @@
     const id = ++tabCounter;
     const container = document.getElementById('proxy-frame-container');
 
-    // Create iframe wrapper
     const wrapper = document.createElement('div');
     wrapper.id = `tab-wrapper-${id}`;
-    wrapper.style.cssText = 'width:100%;height:100%;display:none;';
+    wrapper.style.cssText = 'width:100%;height:100%;display:none;position:absolute;inset:0;';
     container.appendChild(wrapper);
 
     const tab = { id, title: 'New Tab', url: url || '', sjFrame: null, wrapper };
@@ -2178,9 +2186,7 @@
 
   function switchTab(id) {
     activeTabId = id;
-    // Hide all wrappers
     tabs.forEach(t => { t.wrapper.style.display = 'none'; });
-    // Show active
     const tab = tabs.find(t => t.id === id);
     if (tab) {
       tab.wrapper.style.display = '';
@@ -2199,18 +2205,15 @@
     tabs.splice(idx, 1);
 
     if (!tabs.length) {
-      // No tabs left — go home
       proxyHome();
       return;
     }
-    // Switch to adjacent tab
     const newIdx = Math.min(idx, tabs.length - 1);
     switchTab(tabs[newIdx].id);
   }
 
   function renderTabs() {
     const bar = document.getElementById('proxy-tabs');
-    // Remove old tab elements (keep the + button)
     bar.querySelectorAll('.proxy-tab').forEach(el => el.remove());
     const btn = document.getElementById('proxy-new-tab-btn');
 
@@ -2219,7 +2222,6 @@
       el.className = 'proxy-tab' + (tab.id === activeTabId ? ' active' : '');
       el.onclick = () => switchTab(tab.id);
 
-      // Favicon
       let faviconHtml = '';
       if (tab.url) {
         try {
@@ -2236,7 +2238,6 @@
 
   function proxyNewTab() {
     createTab('');
-    // Show landing
     document.getElementById('proxy-landing').classList.remove('hidden');
     document.getElementById('proxy-browser').classList.add('visible');
     document.getElementById('proxy-url').value = '';
@@ -2259,7 +2260,6 @@
       await connection.setTransport('/libcurl/index.mjs', [{ websocket: wispUrl }]);
     }
 
-    // Ensure we have an active tab
     if (!activeTabId || !tabs.find(t => t.id === activeTabId)) {
       createTab(url);
       return;
@@ -2276,7 +2276,6 @@
       tab.sjFrame.frame.style.cssText = 'width:100%;height:100%;border:none;display:block;';
       tab.wrapper.appendChild(tab.sjFrame.frame);
 
-      // Try to update tab title when the frame navigates
       tab.sjFrame.frame.addEventListener('load', () => {
         try {
           const title = tab.sjFrame.frame.contentDocument?.title;
@@ -2297,7 +2296,6 @@
       document.getElementById('proxy-url-bar').value = url;
     }
 
-    // Hide landing, show browser
     document.getElementById('proxy-landing').classList.add('hidden');
     document.getElementById('proxy-browser').classList.add('visible');
     renderTabs();
@@ -2307,7 +2305,6 @@
     let val = document.getElementById('proxy-url').value.trim();
     if (!val) return;
     const url = search(val, currentSearchEngine);
-    // Ensure there's an active tab
     if (!activeTabId || !tabs.find(t => t.id === activeTabId)) createTab('');
     await _doNavigate(url);
   }
@@ -2343,10 +2340,12 @@
     if (tab?.sjFrame) tab.sjFrame.frame.contentWindow.location.reload();
   }
 
+  // ── KEY CHANGE: proxyHome now keeps browser chrome visible ──
   function proxyHome() {
     document.getElementById('proxy-landing').classList.remove('hidden');
-    document.getElementById('proxy-browser').classList.remove('visible');
+    document.getElementById('proxy-browser').classList.add('visible');
     document.getElementById('proxy-url').value = '';
+    document.getElementById('proxy-url-bar').value = '';
   }
 
   document.getElementById('proxy-url').addEventListener('keydown', e => {
@@ -2364,7 +2363,6 @@
 
   // ── PARTICLES ──
   function initParticles() {
-    // Global background particles (all pages)
     const canvas = document.getElementById('global-particles');
     if (canvas) {
       const ctx = canvas.getContext('2d');
@@ -2412,15 +2410,7 @@
       init();
       draw();
     }
-
-    // Proxy landing canvas handled by global canvas above
-    // (proxy-particles is now just a visible overlay on the landing page)
   }
-
-  // Init particles when proxy view is shown
-  let particlesInited = false;
-  const origShowView = showView;
-  // We patch showView below after it's defined — handled in init block
 
   // ── SETTINGS ──
   function openSettings() { showView('settings'); }
@@ -2786,14 +2776,12 @@
     return str.split('').map(c => weirdMap[c] || c).join('');
   }
 
-  // Walk the DOM and weirdify all text nodes
   function weirdifyNode(node) {
     if (node.nodeType === Node.TEXT_NODE) {
       if (node._origText === undefined) node._origText = node.textContent;
       node.textContent = weirdify(node._origText);
     } else if (node.nodeType === Node.ELEMENT_NODE) {
       const tag = node.tagName;
-      // Skip script, style, input, select, textarea, canvas
       if (['SCRIPT','STYLE','INPUT','SELECT','TEXTAREA','CANVAS'].includes(tag)) return;
       for (const child of node.childNodes) weirdifyNode(child);
     }
@@ -2820,7 +2808,6 @@
 
     if (enabled) {
       weirdifyNode(document.body);
-      // Watch for new DOM changes and weirdify them too
       weirdObserver = new MutationObserver(mutations => {
         for (const m of mutations) {
           for (const node of m.addedNodes) weirdifyNode(node);
@@ -2894,7 +2881,6 @@
     if (mainSel) mainSel.value = val;
   }
 
-  // Sync landing engine dropdown with settings
   if (settings.searchEngine) {
     const landingSel = document.getElementById('proxy-engine-landing');
     if (landingSel) landingSel.value = settings.searchEngine;
@@ -2927,7 +2913,6 @@
         if (pctEl) pctEl.textContent = pct + '%';
         if (fill) fill.setAttribute('width', Math.max(1, Math.round(14 * battery.level)));
         if (charging) charging.style.display = battery.charging ? 'inline' : 'none';
-        // Color based on level
         const icon = document.getElementById('battery-icon');
         if (icon) {
           if (battery.charging) icon.style.color = '#66bb6a';
@@ -2980,22 +2965,19 @@
   }
   if (settings.weirdText) setWeirdText(true);
 
-  // Patch showView to track view changes (particles are global now)
-  const _origShowView = showView;
-  window.showView = function(id) {
-    _origShowView(id);
-  };
+  // ── KEY CHANGE: Pre-initialize proxy with tab bar and initial tab on page load ──
+  let particlesInited = false;
+  setTimeout(() => {
+    if (!particlesInited) {
+      particlesInited = true;
+      initParticles();
+    }
+    // Always create the first tab so browser chrome is ready immediately
+    if (tabs.length === 0) {
+      createTab('');
+    }
+  }, 50);
 
-  // Init global particles immediately
-  if (!particlesInited) {
-    particlesInited = true;
-    setTimeout(initParticles, 50);
-  }
-
-  // Also init if proxy view is active by default
-  document.querySelectorAll('.nav-item').forEach(el => {
-    el.addEventListener('click', () => {});
-  });
 </script>
 
 <!-- ── GLOBAL CHAT ── -->
@@ -3126,7 +3108,6 @@
   const AudioCtx = window.AudioContext || window.webkitAudioContext;
   let audioCtx = null;
 
-  // ── SOUND ──
   function playPing() {
     try {
       if (!audioCtx) audioCtx = new AudioCtx();
@@ -3143,7 +3124,6 @@
     } catch(e) {}
   }
 
-  // ── USERNAME ──
   const savedName = localStorage.getItem('willie-chat-username');
   if (savedName) document.getElementById('chat-username').value = savedName;
 
@@ -3151,7 +3131,6 @@
     localStorage.setItem('willie-chat-username', document.getElementById('chat-username').value.trim());
   });
 
-  // ── TOGGLE ──
   function toggleChat() {
     chatOpen = !chatOpen;
     document.getElementById('chat-panel').classList.toggle('open', chatOpen);
@@ -3164,7 +3143,6 @@
     }
   }
 
-  // ── CONNECT ──
   function connectChat() {
     const proto = location.protocol === 'https:' ? 'wss' : 'ws';
     chatWs = new WebSocket(`${proto}://${location.host}/chat/`);
@@ -3172,7 +3150,6 @@
     chatWs.addEventListener('open', () => {
       document.getElementById('chat-status-dot').classList.add('connected');
       addSystemMsg('Connected to global chat');
-      // Announce join with username
       const username = document.getElementById('chat-username').value.trim() || 'Anonymous';
       chatWs.send(JSON.stringify({ type: 'join', username }));
       joined = true;
@@ -3206,7 +3183,6 @@
     });
   }
 
-  // ── APPEND MESSAGE ──
   function appendMsg(msg, animate) {
     const myName = document.getElementById('chat-username').value.trim() || 'Anonymous';
     const isMe = msg.username === myName;
@@ -3228,7 +3204,6 @@
     if (animate) scrollChatBottom();
   }
 
-  // ── SYSTEM MESSAGE ──
   function addSystemMsg(text) {
     const el = document.createElement('div');
     el.className = 'chat-system';
@@ -3242,7 +3217,6 @@
     el.scrollTop = el.scrollHeight;
   }
 
-  // ── SEND ──
   function chatSend() {
     const input = document.getElementById('chat-input');
     const text = input.value.trim();
