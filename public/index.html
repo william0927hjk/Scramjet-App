@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Willie Games</title>
+  <title>educational learning</title>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600&display=swap" rel="stylesheet"/>
   <script src="/scram/scramjet.all.js"></script>
   <script src="/baremux/index.js"></script>
@@ -1155,6 +1155,15 @@
       if (d) d.remove();
     }
   });
+  // Ask before close active even on disguise screen
+  window.addEventListener('beforeunload', function(e) {
+    var s = JSON.parse(localStorage.getItem('willie-settings') || '{}');
+    if (s.askClose !== false) {
+      e.preventDefault();
+      e.returnValue = '';
+      return '';
+    }
+  });
 </script>
 
 <!-- GLOBAL PARTICLES -->
@@ -1641,6 +1650,16 @@
           <div class="settings-btn-row">
             <button class="s-btn" onclick="applyBackground()">apply</button>
             <button class="s-btn" onclick="resetBackground()">reset</button>
+          </div>
+        </div>
+
+        <!-- Ask Before Close -->
+        <div class="settings-card">
+          <div class="settings-card-title">ask before close <span class="rec-badge">recommended</span></div>
+          <div class="settings-card-sub">prompts before tab is closed or navigated away — helps prevent accidental detection</div>
+          <div class="settings-btn-row">
+            <button class="s-btn" id="askclose-enable-btn" onclick="setAskClose(true)">enable</button>
+            <button class="s-btn" id="askclose-disable-btn" onclick="setAskClose(false)">disable</button>
           </div>
         </div>
 
@@ -2656,6 +2675,22 @@
     document.getElementById('weirdtext-disable-btn').classList.toggle('active', !enabled);
   }
 
+  // ── ASK BEFORE CLOSE ──
+  function setAskClose(enabled) {
+    settings.askClose = enabled;
+    saveSettings();
+    document.getElementById('askclose-enable-btn').classList.toggle('active', enabled);
+    document.getElementById('askclose-disable-btn').classList.toggle('active', !enabled);
+  }
+
+  window.addEventListener('beforeunload', function(e) {
+    if (settings.askClose !== false) {
+      e.preventDefault();
+      e.returnValue = '';
+      return '';
+    }
+  });
+
   // ── PANIC KEY ──
   document.addEventListener('keydown', e => {
     if (listeningForPanic) {
@@ -2760,6 +2795,10 @@
     applyBackground();
   }
   if (settings.weirdText) setWeirdText(true);
+
+  // Ask before close — enabled by default
+  if (settings.askClose === undefined) settings.askClose = true;
+  setAskClose(settings.askClose);
 
   // Patch showView to track view changes (particles are global now)
   const _origShowView = showView;
