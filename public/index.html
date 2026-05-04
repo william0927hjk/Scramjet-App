@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Willie Games</title>
+  <title>educational web site</title>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600&display=swap" rel="stylesheet"/>
   <script src="/scram/scramjet.all.js"></script>
   <script src="/baremux/index.js"></script>
@@ -37,7 +37,7 @@
       overflow: hidden;
     }
 
-    /* ── SIDEBAR ── */
+
     #sidebar {
       width: 220px;
       min-width: 220px;
@@ -135,7 +135,7 @@
       border-top: 1px solid var(--border);
     }
 
-    /* ── MAIN ── */
+
     #main {
       flex: 1;
       display: flex;
@@ -179,7 +179,7 @@
     #search:focus { border-color: var(--silver); }
     #search::placeholder { color: var(--text-dim); }
 
-    /* ── CONTENT AREA ── */
+
     #content {
       flex: 1;
       overflow-y: auto;
@@ -192,11 +192,11 @@
     #content::-webkit-scrollbar-track { background: transparent; }
     #content::-webkit-scrollbar-thumb { background: var(--border-bright); border-radius: 3px; }
 
-    /* VIEWS */
+
     .view { display: none; }
     .view.active { display: block; }
 
-    /* ── GAMES GRID ── */
+
     .section-title {
       font-family: 'Orbitron', monospace;
       font-size: 11px;
@@ -281,7 +281,7 @@
       letter-spacing: 1px;
     }
 
-    /* ── PROXY VIEW ── */
+
     #view-proxy {
       position: relative;
       height: calc(100vh - 60px);
@@ -289,7 +289,7 @@
       margin: 0 -28px -28px -28px;
     }
 
-    /* Landing screen */
+    
     #proxy-landing {
       position: absolute;
       inset: 0;
@@ -303,7 +303,7 @@
 
     #proxy-landing.hidden { display: none; }
 
-    /* Particles canvas */
+
     #proxy-particles {
       position: absolute;
       inset: 0;
@@ -390,7 +390,7 @@
 
     .proxy-landing-go:hover { color: #c0622a; }
 
-    /* Quick links */
+
     .proxy-quicklinks {
       display: flex;
       gap: 16px;
@@ -436,7 +436,7 @@
       letter-spacing: 1px;
     }
 
-    /* Active browser bar (shown when browsing) */
+
     #proxy-browser {
       position: absolute;
       inset: 0;
@@ -541,7 +541,7 @@
       border-color: var(--silver);
     }
 
-    /* ── SETTINGS PANEL ── */
+
     #settings-overlay {
       display: none;
       position: fixed;
@@ -639,7 +639,7 @@
       margin-top: 2px;
     }
 
-    /* Toggle switch */
+
     .toggle {
       position: relative;
       width: 44px;
@@ -675,7 +675,7 @@
       background: #0a0a0c;
     }
 
-    /* Select */
+
     .setting-select {
       background: var(--card-bg);
       border: 1px solid var(--border-bright);
@@ -688,7 +688,7 @@
       cursor: pointer;
     }
 
-    /* HOME VIEW */
+
     .hero {
       background: linear-gradient(135deg, #101018, #141420);
       border: 1px solid var(--border);
@@ -755,7 +755,7 @@
       text-transform: uppercase;
       margin-top: 4px;
     }
-    /* ── SIDEBAR COLLAPSE ── */
+
     #sidebar { transition: width 0.2s, min-width 0.2s; }
     #sidebar.collapsed { width: 0; min-width: 0; overflow: hidden; }
     #sidebar-toggle {
@@ -778,7 +778,7 @@
     }
     #sidebar-toggle.collapsed { left: 6px; }
 
-    /* ── HISTORY / BOOKMARKS ── */
+
     .hb-list { display: flex; flex-direction: column; gap: 8px; padding-bottom: 28px; }
     .hb-item {
       display: flex;
@@ -801,10 +801,10 @@
     .hb-del:hover { color: #ef5350; }
     .hb-empty { color: var(--text-dim); font-size: 14px; text-align: center; padding: 40px 0; }
 
-    /* ── RECENTLY PLAYED / FAVORITES on home ── */
+
     .home-section { margin-bottom: 28px; }
 
-    /* ── GAME CARD STAR ── */
+
     .game-card { position: relative; }
     .game-fav-btn {
       position: absolute;
@@ -824,7 +824,7 @@
     .game-fav-btn.starred { color: #ffd600; }
     .game-fav-btn:hover { color: #ffd600; }
 
-    /* ── SEARCH ENGINE SELECTOR in proxy bar ── */
+
     #proxy-engine-select {
       background: var(--card-bg);
       border: 1px solid var(--border);
@@ -837,7 +837,7 @@
       flex-shrink: 0;
     }
 
-    /* ── BOOKMARK BUTTON in proxy bar ── */
+
     .btn-bookmark {
       background: var(--card-bg);
       border: 1px solid var(--border);
@@ -856,7 +856,7 @@
     .btn-bookmark:hover { background: var(--card-hover); color: #ffd600; }
     .btn-bookmark.bookmarked { color: #ffd600; border-color: #ffd600; }
 
-    /* ── INCOGNITO indicator ── */
+
     #incognito-badge {
       display: none;
       position: fixed;
@@ -873,7 +873,7 @@
     }
     #incognito-badge.visible { display: block; }
 
-    /* ── GLOBAL PARTICLES ── */
+
     #global-particles {
       position: fixed;
       inset: 0;
@@ -930,7 +930,7 @@
       letter-spacing: 0.5px;
       text-align: center;
     }
-    /* ── SETTINGS VIEW ── */
+
     .settings-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
@@ -1035,7 +1035,7 @@
       cursor: pointer;
     }
 
-    /* ── TOOL TOPBAR ── */
+
     #tool-topbar {
       display: none;
       position: fixed;
@@ -1108,7 +1108,7 @@
 </head>
 <body>
 
-<!-- SECURLY DISGUISE OVERLAY -->
+
 <div id="securly-disguise" style="
   position: fixed;
   inset: 0;
@@ -1157,25 +1157,25 @@
   });
 </script>
 
-<!-- GLOBAL PARTICLES -->
+
 <canvas id="global-particles"></canvas>
 
-<!-- TOOL TOPBAR -->
+
 <div id="tool-topbar">
   <span id="tool-topbar-title">TOOL</span>
   <button id="tool-fullscreen-btn" onclick="toolFullscreen()" title="Fullscreen">⛶</button>
   <button id="tool-close-btn" onclick="closeTool()" title="Close">✕</button>
 </div>
 
-<!-- TOOL IFRAME -->
+
 <div id="tool-iframe-container">
   <iframe id="tool-iframe" allowfullscreen></iframe>
 </div>
 
-<!-- SIDEBAR TOGGLE -->
+
 <button id="sidebar-toggle" onclick="toggleSidebar()" title="Toggle sidebar">‹</button>
 
-<!-- SIDEBAR -->
+
 <div id="sidebar">
   <div id="logo">
     <h1>Willie</h1>
@@ -1217,7 +1217,7 @@
   </div>
 </div>
 
-<!-- MAIN -->
+
 <div id="main">
   <div id="topbar">
     <h2 id="page-title">Home</h2>
@@ -1238,7 +1238,7 @@
 
   <div id="content">
 
-    <!-- HOME VIEW -->
+
     <div class="view active" id="view-home">
       <div class="hero">
         <h2>WILLIE GAMES</h2>
@@ -1274,7 +1274,7 @@
       </div>
     </div>
 
-    <!-- GAMES VIEW -->
+
     <div class="view" id="view-games">
       <div class="section-title">All Games</div>
       <div class="games-grid" id="all-games-grid"></div>
@@ -1282,8 +1282,7 @@
       <div class="games-grid" id="seraph-grid"></div>
     </div>
 
-    <!-- TOOLS VIEW -->
-    <!-- APPS VIEW -->
+
     <div class="view" id="view-webapps">
       <div class="section-title">Social &amp; Web Apps</div>
       <div class="apps-grid">
@@ -1448,10 +1447,10 @@
       </div>
     </div>
 
-    <!-- PROXY VIEW -->
+
     <div class="view" id="view-proxy">
 
-      <!-- Landing screen -->
+
       <div id="proxy-landing">
         <canvas id="proxy-particles"></canvas>
         <div class="proxy-landing-inner">
@@ -1487,7 +1486,7 @@
         </div>
       </div>
 
-      <!-- Browser UI (shown after navigating) -->
+
       <div id="proxy-browser">
         <div class="proxy-bar">
           <button class="nav-btn" onclick="proxyBack()" title="Back">&#8592;</button>
@@ -1504,7 +1503,7 @@
 
     </div>
 
-    <!-- HISTORY VIEW -->
+
     <div class="view" id="view-history">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
         <div class="section-title" style="margin:0">History</div>
@@ -1513,7 +1512,7 @@
       <div class="hb-list" id="history-list"></div>
     </div>
 
-    <!-- BOOKMARKS VIEW -->
+
     <div class="view" id="view-bookmarks">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
         <div class="section-title" style="margin:0">Bookmarks</div>
@@ -1522,12 +1521,12 @@
       <div class="hb-list" id="bookmarks-list"></div>
     </div>
 
-    <!-- SETTINGS VIEW -->
+
     <div class="view" id="view-settings">
       <div class="section-title">Settings</div>
       <div class="settings-grid">
 
-        <!-- Tab Cloak -->
+
         <div class="settings-card">
           <div class="settings-card-title">tab cloak</div>
           <select class="s-select" id="cloak-preset">
@@ -1540,7 +1539,7 @@
           <button class="s-btn" onclick="resetCloak()">reset cloak</button>
         </div>
 
-        <!-- Custom Cloak -->
+
         <div class="settings-card">
           <div class="settings-card-title">custom cloak</div>
           <input class="s-input" id="custom-cloak-title" placeholder="title" />
@@ -1548,7 +1547,7 @@
           <button class="s-btn" onclick="applyCustomCloak()">set cloak</button>
         </div>
 
-        <!-- Themes -->
+
         <div class="settings-card">
           <div class="settings-card-title">themes</div>
           <select class="s-select" id="theme-select" onchange="changeTheme(this.value)">
@@ -1559,7 +1558,7 @@
           </select>
         </div>
 
-        <!-- Particles -->
+      
         <div class="settings-card">
           <div class="settings-card-title">particles</div>
           <div class="settings-btn-row">
@@ -1568,7 +1567,7 @@
           </div>
         </div>
 
-        <!-- Mobile Screen Sizer -->
+        
         <div class="settings-card">
           <div class="settings-card-title">mobile screen sizer</div>
           <div class="settings-btn-row">
@@ -1577,7 +1576,7 @@
           </div>
         </div>
 
-        <!-- Games Sorted A-Z -->
+        
         <div class="settings-card">
           <div class="settings-card-title">games sorted a - z</div>
           <div class="settings-btn-row">
@@ -1586,7 +1585,7 @@
           </div>
         </div>
 
-        <!-- Anti Deledao -->
+        
         <div class="settings-card">
           <div class="settings-card-title">anti deledao</div>
           <div class="settings-card-sub">adds a static image over your game that deledao game detection cant see through. might not always work.</div>
@@ -1596,7 +1595,7 @@
           </div>
         </div>
 
-        <!-- About:blank Cloaker -->
+        
         <div class="settings-card">
           <div class="settings-card-title">about:blank cloaker <span class="rec-badge">recommended</span></div>
           <div class="settings-card-sub">double click the button to cloak</div>
@@ -1605,7 +1604,7 @@
           </div>
         </div>
 
-        <!-- Panic Key -->
+        
         <div class="settings-card">
           <div class="settings-card-title">panic key</div>
           <div class="settings-card-sub">press any key to set it as the panic key</div>
@@ -1613,7 +1612,7 @@
           <button class="s-btn" onclick="resetPanicKey()">reset to Escape</button>
         </div>
 
-        <!-- Search Engine -->
+
         <div class="settings-card">
           <div class="settings-card-title">search engine</div>
           <select class="s-select" id="search-engine-select" onchange="setSearchEngine(this.value)">
@@ -1624,7 +1623,7 @@
           </select>
         </div>
 
-        <!-- Incognito Mode -->
+
         <div class="settings-card">
           <div class="settings-card-title">incognito mode <span class="rec-badge">recommended</span></div>
           <div class="settings-card-sub">clears proxy history on close, disables history tracking</div>
@@ -1634,7 +1633,7 @@
           </div>
         </div>
 
-        <!-- Custom Background -->
+
         <div class="settings-card">
           <div class="settings-card-title">custom background</div>
           <input class="s-input" id="bg-url-input" placeholder="Image URL or CSS color (e.g. #ff0000)" />
@@ -1644,7 +1643,7 @@
           </div>
         </div>
 
-        <!-- Weird Text -->
+
         <div class="settings-card">
           <div class="settings-card-title">weird text <span class="rec-badge">recommended</span></div>
           <div class="settings-card-sub">makes text look աɨʀɖ to bypass content blockers that scan page text</div>
@@ -1661,10 +1660,10 @@
   </div>
 </div>
 
-<!-- INCOGNITO BADGE -->
+
 <div id="incognito-badge">🕵 Incognito Mode</div>
 
-<!-- ANTI DELEDAO OVERLAY -->
+
 <div id="deledao-overlay" style="display:none;position:fixed;inset:0;z-index:99998;pointer-events:none;">
   <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Google_Classroom_Logo.png/480px-Google_Classroom_Logo.png"
     style="position:absolute;top:0;left:0;width:1px;height:1px;opacity:0.01;" />
@@ -1993,7 +1992,7 @@
     const safeName = game.name.replace(/'/g,"\\'");
 
     if (game.useProxy) {
-      // Seraph game — open through proxy
+      
       return `
       <a class="game-card" style="cursor:pointer" onclick="trackPlayed('${safeName}');proxyNav('${game.path}')">
         <div class="game-thumb">${game.emoji}</div>
@@ -2005,7 +2004,7 @@
       </a>`;
     }
 
-    // Local gfiles game
+
     const target = newTab ? '_blank' : '_self';
     const href = newTab ? game.path : `game.html?src=${encodeURIComponent(game.path)}&name=${encodeURIComponent(game.name)}`;
     return `
@@ -2039,7 +2038,7 @@
     if (q) showView('games');
   }
 
-  // ── VIEWS ──
+
   function showView(id) {
     document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
     document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
@@ -2064,7 +2063,7 @@
     _doNavigate(url);
   }
 
-  // ── PROXY (Scramjet) ──
+
   const { ScramjetController } = $scramjetLoadController();
   const scramjet = new ScramjetController({
     files: {
@@ -2079,17 +2078,17 @@
   let sjFrame = null;
 
   async function _doNavigate(url) {
-    // Register SW and wait until it's actually controlling the page
+
     try {
       await registerSW();
-      // Wait for the SW to be active and controlling this page
+
       if (navigator.serviceWorker.controller) {
-        // Already controlled, good to go
+
       } else {
-        // Wait for the SW to take control
+
         await new Promise((resolve) => {
           navigator.serviceWorker.addEventListener('controllerchange', resolve, { once: true });
-          // Timeout fallback after 3s
+
           setTimeout(resolve, 3000);
         });
       }
@@ -2117,7 +2116,7 @@
     addHistory(url);
     updateBookmarkBtn(url);
 
-    // Switch from landing to browser UI
+
     document.getElementById('proxy-landing').classList.add('hidden');
     document.getElementById('proxy-browser').classList.add('visible');
     document.getElementById('proxy-url-bar').value = url;
@@ -2173,9 +2172,9 @@
     }
   });
 
-  // ── PARTICLES ──
+
   function initParticles() {
-    // Global background particles (all pages)
+
     const canvas = document.getElementById('global-particles');
     if (canvas) {
       const ctx = canvas.getContext('2d');
@@ -2224,17 +2223,17 @@
       draw();
     }
 
-    // Hide proxy landing canvas since global one handles it
+   
     const proxyCanvas = document.getElementById('proxy-particles');
     if (proxyCanvas) proxyCanvas.style.display = 'none';
   }
 
-  // Init particles when proxy view is shown
+  
   let particlesInited = false;
   const origShowView = showView;
-  // We patch showView below after it's defined — handled in init block
+ 
 
-  // ── SETTINGS ──
+
   function openSettings() { showView('settings'); }
   function closeSettings() {}
   function closeSettingsOutside() {}
@@ -2364,7 +2363,7 @@
     doc.close();
   }
 
-  // ── SIDEBAR COLLAPSE ──
+ 
   function toggleSidebar() {
     const sb = document.getElementById('sidebar');
     const btn = document.getElementById('sidebar-toggle');
@@ -2373,7 +2372,7 @@
     btn.textContent = sb.classList.contains('collapsed') ? '›' : '‹';
   }
 
-  // ── HISTORY ──
+  
   function getHistory() { return JSON.parse(localStorage.getItem('willie-history') || '[]'); }
   function saveHistory(h) { localStorage.setItem('willie-history', JSON.stringify(h)); }
 
@@ -2414,7 +2413,7 @@
     renderHistory();
   }
 
-  // ── BOOKMARKS ──
+
   function getBookmarks() { return JSON.parse(localStorage.getItem('willie-bookmarks') || '[]'); }
   function saveBookmarks(b) { localStorage.setItem('willie-bookmarks', JSON.stringify(b)); }
 
@@ -2477,7 +2476,7 @@
     btn.classList.toggle('bookmarked', isBookmarked);
   }
 
-  // ── FAVORITES (games) ──
+
   function toggleFav(e, name) {
     e.preventDefault(); e.stopPropagation();
     const favs = settings.favorites || [];
@@ -2500,7 +2499,7 @@
     grid.innerHTML = favGames.map(makeCard).join('');
   }
 
-  // ── RECENTLY PLAYED ──
+
   function trackPlayed(name) {
     if (settings.incognito) return;
     const recent = JSON.parse(localStorage.getItem('willie-recent') || '[]').filter(x => x !== name);
@@ -2520,7 +2519,7 @@
     grid.innerHTML = recentGames.map(makeCard).join('');
   }
 
-  // ── PANIC KEY CUSTOMIZER ──
+
   let listeningForPanic = false;
   function listenForPanicKey() {
     listeningForPanic = true;
@@ -2534,7 +2533,7 @@
     document.getElementById('panic-key-display').style.borderColor = '';
   }
 
-  // ── SEARCH ENGINE ──
+
   const searchEngines = {
     google: 'https://www.google.com/search?q=%s',
     bing: 'https://www.bing.com/search?q=%s',
@@ -2549,7 +2548,7 @@
     saveSettings();
   }
 
-  // ── INCOGNITO ──
+
   function setIncognito(enabled) {
     settings.incognito = enabled;
     saveSettings();
@@ -2559,7 +2558,7 @@
     if (enabled) { saveHistory([]); renderHistory(); }
   }
 
-  // ── CUSTOM BACKGROUND ──
+
   function applyBackground() {
     const val = document.getElementById('bg-url-input').value.trim();
     if (!val) return;
@@ -2584,7 +2583,7 @@
     saveSettings();
   }
 
-  // ── WEIRD TEXT ──
+  
   const weirdMap = {
     a:'ǟ',b:'ɮ',c:'ƈ',d:'ɖ',e:'ɛ',f:'ʄ',g:'ɢ',h:'ɦ',i:'ɨ',j:'ʝ',
     k:'ӄ',l:'ʟ',m:'ʍ',n:'ռ',o:'օ',p:'ք',q:'զ',r:'ʀ',s:'ֆ',t:'ȶ',
@@ -2598,14 +2597,14 @@
     return str.split('').map(c => weirdMap[c] || c).join('');
   }
 
-  // Walk the DOM and weirdify all text nodes
+
   function weirdifyNode(node) {
     if (node.nodeType === Node.TEXT_NODE) {
       if (node._origText === undefined) node._origText = node.textContent;
       node.textContent = weirdify(node._origText);
     } else if (node.nodeType === Node.ELEMENT_NODE) {
       const tag = node.tagName;
-      // Skip script, style, input, select, textarea, canvas
+      
       if (['SCRIPT','STYLE','INPUT','SELECT','TEXTAREA','CANVAS'].includes(tag)) return;
       for (const child of node.childNodes) weirdifyNode(child);
     }
@@ -2632,7 +2631,7 @@
 
     if (enabled) {
       weirdifyNode(document.body);
-      // Watch for new DOM changes and weirdify them too
+
       weirdObserver = new MutationObserver(mutations => {
         for (const m of mutations) {
           for (const node of m.addedNodes) weirdifyNode(node);
@@ -2656,7 +2655,7 @@
     document.getElementById('weirdtext-disable-btn').classList.toggle('active', !enabled);
   }
 
-  // ── PANIC KEY ──
+
   document.addEventListener('keydown', e => {
     if (listeningForPanic) {
       listeningForPanic = false;
@@ -2674,14 +2673,14 @@
     }
   });
 
-  // ── INIT ──
+
   renderGrids();
   renderHistory();
   renderBookmarks();
   const seraphGrid = document.getElementById('seraph-grid');
   if (seraphGrid) seraphGrid.innerHTML = seraphGames.map(makeSeraphCard).join('');
 
-  // ── CLOCK ──
+
   function updateClock() {
     const now = new Date();
     let h = now.getHours();
@@ -2695,7 +2694,7 @@
   updateClock();
   setInterval(updateClock, 1000);
 
-  // ── BATTERY ──
+
   async function initBattery() {
     if (!navigator.getBattery) return;
     try {
@@ -2708,7 +2707,7 @@
         if (pctEl) pctEl.textContent = pct + '%';
         if (fill) fill.setAttribute('width', Math.max(1, Math.round(14 * battery.level)));
         if (charging) charging.style.display = battery.charging ? 'inline' : 'none';
-        // Color based on level
+        
         const icon = document.getElementById('battery-icon');
         if (icon) {
           if (battery.charging) icon.style.color = '#66bb6a';
@@ -2724,7 +2723,7 @@
   }
   initBattery();
 
-  // Restore settings
+  
   if (settings.theme) changeTheme(settings.theme);
   if (settings.cloak) cloakTab(settings.cloak);
   if (settings.customCloak) {
@@ -2761,25 +2760,25 @@
   }
   if (settings.weirdText) setWeirdText(true);
 
-  // Patch showView to track view changes (particles are global now)
+
   const _origShowView = showView;
   window.showView = function(id) {
     _origShowView(id);
   };
 
-  // Init global particles immediately
+ 
   if (!particlesInited) {
     particlesInited = true;
     setTimeout(initParticles, 50);
   }
 
-  // Also init if proxy view is active by default
+
   document.querySelectorAll('.nav-item').forEach(el => {
     el.addEventListener('click', () => {});
   });
 </script>
 
-<!-- ── GLOBAL CHAT ── -->
+
 <style>
   #chat-toggle {
     position: fixed;
@@ -2907,7 +2906,7 @@
   const AudioCtx = window.AudioContext || window.webkitAudioContext;
   let audioCtx = null;
 
-  // ── SOUND ──
+
   function playPing() {
     try {
       if (!audioCtx) audioCtx = new AudioCtx();
@@ -2924,7 +2923,7 @@
     } catch(e) {}
   }
 
-  // ── USERNAME ──
+
   const savedName = localStorage.getItem('willie-chat-username');
   if (savedName) document.getElementById('chat-username').value = savedName;
 
@@ -2932,7 +2931,7 @@
     localStorage.setItem('willie-chat-username', document.getElementById('chat-username').value.trim());
   });
 
-  // ── TOGGLE ──
+
   function toggleChat() {
     chatOpen = !chatOpen;
     document.getElementById('chat-panel').classList.toggle('open', chatOpen);
@@ -2945,7 +2944,7 @@
     }
   }
 
-  // ── CONNECT ──
+
   function connectChat() {
     const proto = location.protocol === 'https:' ? 'wss' : 'ws';
     chatWs = new WebSocket(`${proto}://${location.host}/chat/`);
@@ -2953,7 +2952,7 @@
     chatWs.addEventListener('open', () => {
       document.getElementById('chat-status-dot').classList.add('connected');
       addSystemMsg('Connected to global chat');
-      // Announce join with username
+
       const username = document.getElementById('chat-username').value.trim() || 'Anonymous';
       chatWs.send(JSON.stringify({ type: 'join', username }));
       joined = true;
@@ -2987,7 +2986,7 @@
     });
   }
 
-  // ── APPEND MESSAGE ──
+
   function appendMsg(msg, animate) {
     const myName = document.getElementById('chat-username').value.trim() || 'Anonymous';
     const isMe = msg.username === myName;
@@ -3009,7 +3008,7 @@
     if (animate) scrollChatBottom();
   }
 
-  // ── SYSTEM MESSAGE ──
+
   function addSystemMsg(text) {
     const el = document.createElement('div');
     el.className = 'chat-system';
@@ -3023,7 +3022,7 @@
     el.scrollTop = el.scrollHeight;
   }
 
-  // ── SEND ──
+
   function chatSend() {
     const input = document.getElementById('chat-input');
     const text = input.value.trim();
