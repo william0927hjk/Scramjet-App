@@ -2008,11 +2008,11 @@
 
   function toolNav(url) {
     showView('proxy');
-    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-    document.getElementById('proxy-landing').classList.add('hidden');
-    document.getElementById('proxy-browser').classList.add('visible');
-    document.getElementById('proxy-url-bar').value = url;
-    navigateProxy(url);
+    document.querySelectorAll('.nav-item').forEach(n => {
+      if (n.getAttribute('onclick') && n.getAttribute('onclick').includes("'proxy'")) n.classList.add('active');
+      else n.classList.remove('active');
+    });
+    _doNavigate(url);
   }
 
   // ── PROXY (Scramjet) ──
