@@ -433,6 +433,93 @@
     }
 
     /* Active browser bar (shown when browsing) */
+    /* ── PROXY TABS ── */
+    #proxy-tabs {
+      display: flex;
+      align-items: center;
+      background: #0a0a0e;
+      border-bottom: 1px solid var(--border);
+      padding: 6px 8px 0;
+      gap: 4px;
+      flex-shrink: 0;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    #proxy-tabs::-webkit-scrollbar { display: none; }
+
+    .proxy-tab {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      padding: 6px 12px 7px;
+      background: #14141a;
+      border: 1px solid var(--border);
+      border-bottom: none;
+      border-radius: 8px 8px 0 0;
+      cursor: pointer;
+      min-width: 120px;
+      max-width: 200px;
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 13px;
+      color: var(--silver-dim);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      transition: background 0.15s, color 0.15s;
+      flex-shrink: 0;
+      user-select: none;
+      position: relative;
+    }
+    .proxy-tab:hover { background: #1c1c26; color: var(--silver); }
+    .proxy-tab.active {
+      background: #101014;
+      color: var(--silver-bright);
+      border-color: var(--border-bright);
+    }
+    .proxy-tab-favicon {
+      width: 14px;
+      height: 14px;
+      object-fit: contain;
+      flex-shrink: 0;
+      border-radius: 2px;
+    }
+    .proxy-tab-title {
+      flex: 1;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .proxy-tab-close {
+      background: none;
+      border: none;
+      color: var(--text-dim);
+      font-size: 13px;
+      cursor: pointer;
+      padding: 0 2px;
+      line-height: 1;
+      border-radius: 3px;
+      flex-shrink: 0;
+      transition: color 0.15s, background 0.15s;
+    }
+    .proxy-tab-close:hover { color: #ef5350; background: rgba(239,83,80,0.15); }
+    #proxy-new-tab-btn {
+      background: none;
+      border: 1px solid transparent;
+      color: var(--silver-dim);
+      width: 28px;
+      height: 28px;
+      border-radius: 6px;
+      font-size: 18px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: all 0.15s;
+      margin-bottom: 1px;
+    }
+    #proxy-new-tab-btn:hover { color: var(--silver-bright); background: var(--card-bg); border-color: var(--border); }
+
     #proxy-browser {
       position: absolute;
       inset: 0;
@@ -1458,6 +1545,10 @@
 
       <!-- Browser UI (shown after navigating) -->
       <div id="proxy-browser">
+        <!-- TAB BAR -->
+        <div id="proxy-tabs">
+          <button id="proxy-new-tab-btn" onclick="proxyNewTab()" title="New tab">+</button>
+        </div>
         <div class="proxy-bar">
           <button class="nav-btn" onclick="proxyBack()" title="Back">&#8592;</button>
           <button class="nav-btn" onclick="proxyForward()" title="Forward">&#8594;</button>
@@ -1466,9 +1557,7 @@
           <button class="btn-bookmark" id="proxy-bookmark-btn" onclick="toggleBookmark()" title="Bookmark">☆</button>
           <button class="btn-home" onclick="proxyHome()" title="Home">⌂</button>
         </div>
-        <div id="proxy-frame-container">
-          <iframe id="proxy-iframe" src="/"></iframe>
-        </div>
+        <div id="proxy-frame-container"></div>
       </div>
 
     </div>
@@ -2026,11 +2115,27 @@
 
   function toolNav(url) {
     showView('proxy');
-    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    document.querySelectorAll('.nav-item').forEach(n => {
+      if (n.getAttribute('onclick') && n.getAttribute('onclick').includes("'proxy'")) n.classList.add('active');
+      else n.classList.remove('active');
+    });
     document.getElementById('proxy-landing').classList.add('hidden');
     document.getElementById('proxy-browser').classList.add('visible');
     document.getElementById('proxy-url-bar').value = url;
-    navigateProxy(url);
+
+    if (!activeTabId || !tabs.find(t => t.id === activeTabId)) createTab('');
+    const tab = tabs.find(t => t.id === activeTabId);
+    if (!tab) return;
+    tab.wrapper.innerHTML = '';
+    tab.sjFrame = null;
+    const iframe = document.createElement('iframe');
+    iframe.style.cssText = 'width:100%;height:100%;border:none;display:block;';
+    const isLocal = url.startsWith('tools/') || url.startsWith('/tools/') || url.startsWith('gfiles/');
+    iframe.src = isLocal ? '/' + url.replace(/^\//, '') : url;
+    tab.wrapper.appendChild(iframe);
+    tab.url = url;
+    tab.title = 'Tool';
+    renderTabs();
   }
 
   // ── PROXY (Scramjet) ──
@@ -2045,62 +2150,171 @@
   scramjet.init();
 
   const connection = new BareMux.BareMuxConnection('/baremux/worker.js');
-  let sjFrame = null;
+
+  // ── MULTI-TAB STATE ──
+  let tabs = [];        // [{id, title, url, sjFrame, iframe}]
+  let activeTabId = null;
+  let tabCounter = 0;
+
+  function createTab(url) {
+    const id = ++tabCounter;
+    const container = document.getElementById('proxy-frame-container');
+
+    // Create iframe wrapper
+    const wrapper = document.createElement('div');
+    wrapper.id = `tab-wrapper-${id}`;
+    wrapper.style.cssText = 'width:100%;height:100%;display:none;';
+    container.appendChild(wrapper);
+
+    const tab = { id, title: 'New Tab', url: url || '', sjFrame: null, wrapper };
+    tabs.push(tab);
+
+    renderTabs();
+    switchTab(id);
+
+    if (url) _navigateTab(id, url);
+    return id;
+  }
+
+  function switchTab(id) {
+    activeTabId = id;
+    // Hide all wrappers
+    tabs.forEach(t => { t.wrapper.style.display = 'none'; });
+    // Show active
+    const tab = tabs.find(t => t.id === id);
+    if (tab) {
+      tab.wrapper.style.display = '';
+      document.getElementById('proxy-url-bar').value = tab.url || '';
+      updateBookmarkBtn(tab.url || '');
+    }
+    renderTabs();
+  }
+
+  function closeTab(id, e) {
+    if (e) { e.stopPropagation(); }
+    const idx = tabs.findIndex(t => t.id === id);
+    if (idx === -1) return;
+    const tab = tabs[idx];
+    tab.wrapper.remove();
+    tabs.splice(idx, 1);
+
+    if (!tabs.length) {
+      // No tabs left — go home
+      proxyHome();
+      return;
+    }
+    // Switch to adjacent tab
+    const newIdx = Math.min(idx, tabs.length - 1);
+    switchTab(tabs[newIdx].id);
+  }
+
+  function renderTabs() {
+    const bar = document.getElementById('proxy-tabs');
+    // Remove old tab elements (keep the + button)
+    bar.querySelectorAll('.proxy-tab').forEach(el => el.remove());
+    const btn = document.getElementById('proxy-new-tab-btn');
+
+    tabs.forEach(tab => {
+      const el = document.createElement('div');
+      el.className = 'proxy-tab' + (tab.id === activeTabId ? ' active' : '');
+      el.onclick = () => switchTab(tab.id);
+
+      // Favicon
+      let faviconHtml = '';
+      if (tab.url) {
+        try {
+          const origin = new URL(tab.url.startsWith('http') ? tab.url : 'https://' + tab.url).origin;
+          faviconHtml = `<img class="proxy-tab-favicon" src="${origin}/favicon.ico" onerror="this.style.display='none'"/>`;
+        } catch(e) {}
+      }
+
+      el.innerHTML = `${faviconHtml}<span class="proxy-tab-title">${tab.title}</span><button class="proxy-tab-close" title="Close tab">✕</button>`;
+      el.querySelector('.proxy-tab-close').onclick = (e) => closeTab(tab.id, e);
+      bar.insertBefore(el, btn);
+    });
+  }
+
+  function proxyNewTab() {
+    createTab('');
+    // Show landing
+    document.getElementById('proxy-landing').classList.remove('hidden');
+    document.getElementById('proxy-browser').classList.add('visible');
+    document.getElementById('proxy-url').value = '';
+    document.getElementById('proxy-url-bar').value = '';
+  }
 
   async function _doNavigate(url) {
-    // Register SW and wait until it's actually controlling the page
     try {
       await registerSW();
-      // Wait for the SW to be active and controlling this page
-      if (navigator.serviceWorker.controller) {
-        // Already controlled, good to go
-      } else {
-        // Wait for the SW to take control
+      if (!navigator.serviceWorker.controller) {
         await new Promise((resolve) => {
           navigator.serviceWorker.addEventListener('controllerchange', resolve, { once: true });
-          // Timeout fallback after 3s
           setTimeout(resolve, 3000);
         });
       }
-    } catch(e) {
-      console.error('SW registration failed', e);
-      return;
-    }
+    } catch(e) { console.error('SW registration failed', e); return; }
 
     const wispUrl = (location.protocol === 'https:' ? 'wss' : 'ws') + '://' + location.host + '/wisp/';
     if ((await connection.getTransport()) !== '/libcurl/index.mjs') {
       await connection.setTransport('/libcurl/index.mjs', [{ websocket: wispUrl }]);
     }
 
-    const container = document.getElementById('proxy-frame-container');
-    if (!sjFrame) {
-      const old = document.getElementById('proxy-iframe');
-      if (old) old.remove();
-      sjFrame = scramjet.createFrame();
-      sjFrame.frame.id = 'proxy-iframe';
-      sjFrame.frame.style.cssText = 'width:100%;height:100%;border:none;';
-      container.appendChild(sjFrame.frame);
+    // Ensure we have an active tab
+    if (!activeTabId || !tabs.find(t => t.id === activeTabId)) {
+      createTab(url);
+      return;
+    }
+    await _navigateTab(activeTabId, url);
+  }
+
+  async function _navigateTab(id, url) {
+    const tab = tabs.find(t => t.id === id);
+    if (!tab) return;
+
+    if (!tab.sjFrame) {
+      tab.sjFrame = scramjet.createFrame();
+      tab.sjFrame.frame.style.cssText = 'width:100%;height:100%;border:none;display:block;';
+      tab.wrapper.appendChild(tab.sjFrame.frame);
+
+      // Try to update tab title when the frame navigates
+      tab.sjFrame.frame.addEventListener('load', () => {
+        try {
+          const title = tab.sjFrame.frame.contentDocument?.title;
+          if (title) {
+            tab.title = title.slice(0, 24);
+            renderTabs();
+          }
+        } catch(e) {}
+      });
     }
 
-    sjFrame.go(url);
+    tab.url = url;
+    tab.sjFrame.go(url);
     addHistory(url);
     updateBookmarkBtn(url);
 
-    // Switch from landing to browser UI
+    if (id === activeTabId) {
+      document.getElementById('proxy-url-bar').value = url;
+    }
+
+    // Hide landing, show browser
     document.getElementById('proxy-landing').classList.add('hidden');
     document.getElementById('proxy-browser').classList.add('visible');
-    document.getElementById('proxy-url-bar').value = url;
+    renderTabs();
   }
 
   async function loadProxy() {
     let val = document.getElementById('proxy-url').value.trim();
     if (!val) return;
     const url = search(val, currentSearchEngine);
+    // Ensure there's an active tab
+    if (!activeTabId || !tabs.find(t => t.id === activeTabId)) createTab('');
     await _doNavigate(url);
   }
 
   async function quickNav(url) {
     document.getElementById('proxy-url').value = url;
+    if (!activeTabId || !tabs.find(t => t.id === activeTabId)) createTab('');
     await _doNavigate(url);
   }
 
@@ -2110,19 +2324,23 @@
       if (n.getAttribute('onclick') && n.getAttribute('onclick').includes("'proxy'")) n.classList.add('active');
       else n.classList.remove('active');
     });
+    if (!activeTabId || !tabs.find(t => t.id === activeTabId)) createTab('');
     await _doNavigate(url);
   }
 
   function proxyBack() {
-    if (sjFrame) sjFrame.frame.contentWindow.history.back();
+    const tab = tabs.find(t => t.id === activeTabId);
+    if (tab?.sjFrame) tab.sjFrame.frame.contentWindow.history.back();
   }
 
   function proxyForward() {
-    if (sjFrame) sjFrame.frame.contentWindow.history.forward();
+    const tab = tabs.find(t => t.id === activeTabId);
+    if (tab?.sjFrame) tab.sjFrame.frame.contentWindow.history.forward();
   }
 
   function proxyRefresh() {
-    if (sjFrame) sjFrame.frame.contentWindow.location.reload();
+    const tab = tabs.find(t => t.id === activeTabId);
+    if (tab?.sjFrame) tab.sjFrame.frame.contentWindow.location.reload();
   }
 
   function proxyHome() {
@@ -2138,7 +2356,9 @@
   document.getElementById('proxy-url-bar').addEventListener('keydown', async e => {
     if (e.key === 'Enter') {
       const url = search(e.target.value.trim(), 'https://www.google.com/search?q=%s');
-      if (sjFrame) { sjFrame.go(url); e.target.value = url; }
+      const tab = tabs.find(t => t.id === activeTabId);
+      if (tab?.sjFrame) { await _navigateTab(activeTabId, url); }
+      else await _doNavigate(url);
     }
   });
 
