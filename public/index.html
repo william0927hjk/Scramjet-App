@@ -1155,10 +1155,7 @@
     </div>
     
     <div class="nav-item" onclick="showView('history')">
-      <span class="icon">
-        <img src="history.svg" alt="" width="16" height="16" style="filter: invert(1); vertical-align: middle;">
-      </span> 
-      History
+      <span class="icon">⏳</span> History
     </div>
     
     <div class="nav-item" onclick="showView('bookmarks')">
@@ -1179,7 +1176,6 @@
     </div>
   </div>
 </div>
-
 <div id="main">
   <div id="topbar">
     <h2 id="page-title">Home</h2>
@@ -1203,7 +1199,40 @@
     
     <div class="view active" id="view-home">
       <div class="hero">
-        
+        <h2>WILLIE GAMES</h2>
+        <p>Your personal unblocked games hub. Play anywhere, anytime — no restrictions.</p>
+      </div>
+      <div class="stats-row">
+        <div class="stat-card">
+          <div class="stat-num" id="stat-games">80</div>
+          <div class="stat-label">Games</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">∞</div>
+          <div class="stat-label">Sites via Proxy</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">100%</div>
+          <div class="stat-label">Unblocked</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num" id="stat-viewers">1</div>
+          <div class="stat-label">Online Now</div>
+        </div>
+      </div>
+      <div class="section-title">games we have</div>
+      <div class="games-grid" id="featured-grid"></div>
+      <div id="recently-played-section" style="display:none;">
+        <div class="section-title">Recently Played</div>
+        <div class="games-grid" id="recently-played-grid"></div>
+      </div>
+      <div id="favorites-section" style="display:none;">
+        <div class="section-title">Favorites</div>
+        <div class="games-grid" id="favorites-grid"></div>
+      </div>
+    </div>
+
+    
     <div class="view" id="view-games">
       <div class="section-title">All Games</div>
       <div class="games-grid" id="all-games-grid"></div>
