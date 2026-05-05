@@ -3,10 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <meta name="description" content="Willie Games - Play games online">
-  <meta name="theme-color" content="#0a0a0c">
   <title>Willie Games</title>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600&display=swap" rel="stylesheet"/>
+  <script src="/scram/scramjet.all.js"></script>
+  <script src="/baremux/index.js"></script>
+  <script src="register-sw.js"></script>
+  <script src="search.js"></script>
   <style>
     :root {
       --bg: #0a0a0c;
@@ -35,7 +37,7 @@
       overflow: hidden;
     }
 
-    /* ── SIDEBAR ── */
+    
     #sidebar {
       width: 220px;
       min-width: 220px;
@@ -46,10 +48,7 @@
       padding: 0;
       position: relative;
       z-index: 10;
-      transition: width 0.2s, min-width 0.2s;
     }
-
-    #sidebar.collapsed { width: 0; min-width: 0; overflow: hidden; }
 
     #logo {
       padding: 28px 20px 24px;
@@ -136,7 +135,7 @@
       border-top: 1px solid var(--border);
     }
 
-    /* ── MAIN ── */
+    
     #main {
       flex: 1;
       display: flex;
@@ -180,7 +179,7 @@
     #search:focus { border-color: var(--silver); }
     #search::placeholder { color: var(--text-dim); }
 
-    /* ── CONTENT AREA ── */
+    
     #content {
       flex: 1;
       overflow-y: auto;
@@ -193,11 +192,11 @@
     #content::-webkit-scrollbar-track { background: transparent; }
     #content::-webkit-scrollbar-thumb { background: var(--border-bright); border-radius: 3px; }
 
-    /* VIEWS */
+    
     .view { display: none; }
     .view.active { display: block; }
 
-    /* ── GAMES GRID ── */
+    
     .section-title {
       font-family: 'Orbitron', monospace;
       font-size: 11px;
@@ -233,7 +232,6 @@
       transition: all 0.2s ease;
       text-decoration: none;
       display: block;
-      position: relative;
     }
 
     .game-card:hover {
@@ -283,50 +281,29 @@
       letter-spacing: 1px;
     }
 
-    .game-fav-btn {
-      position: absolute;
-      top: 6px;
-      right: 6px;
-      background: rgba(0,0,0,0.5);
-      border: none;
-      color: #888;
-      font-size: 16px;
-      cursor: pointer;
-      border-radius: 4px;
-      padding: 2px 4px;
-      line-height: 1;
-      z-index: 2;
-      transition: color 0.2s;
-    }
-
-    .game-fav-btn.starred { color: #ffd600; }
-    .game-fav-btn:hover { color: #ffd600; }
-
-    /* ── PROXY VIEW ── */
+    
     #view-proxy {
       position: relative;
       height: calc(100vh - 60px);
       overflow: hidden;
       margin: 0 -28px -28px -28px;
-      display: flex;
-      flex-direction: column;
     }
 
-    /* Landing screen */
+    
     #proxy-landing {
-      position: relative;
+      position: absolute;
+      inset: 0;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       background: transparent;
-      flex: 1;
       z-index: 2;
     }
 
     #proxy-landing.hidden { display: none; }
 
-    /* Particles canvas */
+    
     #proxy-particles {
       position: absolute;
       inset: 0;
@@ -413,7 +390,7 @@
 
     .proxy-landing-go:hover { color: #c0622a; }
 
-    /* Quick links */
+    
     .proxy-quicklinks {
       display: flex;
       gap: 16px;
@@ -459,15 +436,16 @@
       letter-spacing: 1px;
     }
 
-    /* Active browser bar (always visible now) */
+    
     #proxy-browser {
-      position: relative;
-      display: flex;
+      position: absolute;
+      inset: 0;
+      display: none;
       flex-direction: column;
       z-index: 2;
-      flex: 1;
-      overflow: hidden;
     }
+
+    #proxy-browser.visible { display: flex; }
 
     .proxy-bar {
       display: flex;
@@ -534,41 +512,9 @@
 
     .btn-home:hover { background: var(--card-hover); border-color: var(--border-bright); color: var(--silver-bright); }
 
-    #proxy-engine-select {
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      color: var(--silver);
-      border-radius: 8px;
-      padding: 6px 8px;
-      font-family: 'Rajdhani', sans-serif;
-      font-size: 13px;
-      outline: none;
-      flex-shrink: 0;
-    }
-
-    .btn-bookmark {
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      color: var(--silver);
-      width: 34px;
-      height: 34px;
-      border-radius: 8px;
-      font-size: 16px;
-      cursor: pointer;
-      transition: all 0.2s;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-
-    .btn-bookmark:hover { background: var(--card-hover); color: #ffd600; }
-    .btn-bookmark.bookmarked { color: #ffd600; border-color: #ffd600; }
-
     #proxy-frame-container {
       flex: 1;
       overflow: hidden;
-      position: relative;
     }
 
     #proxy-frame-container iframe {
@@ -595,7 +541,7 @@
       border-color: var(--silver);
     }
 
-    /* ── SETTINGS PANEL ── */
+    
     #settings-overlay {
       display: none;
       position: fixed;
@@ -693,7 +639,7 @@
       margin-top: 2px;
     }
 
-    /* Toggle switch */
+    
     .toggle {
       position: relative;
       width: 44px;
@@ -729,7 +675,7 @@
       background: #0a0a0c;
     }
 
-    /* Select */
+    
     .setting-select {
       background: var(--card-bg);
       border: 1px solid var(--border-bright);
@@ -742,7 +688,7 @@
       cursor: pointer;
     }
 
-    /* HOME VIEW */
+    
     .hero {
       background: linear-gradient(135deg, #101018, #141420);
       border: 1px solid var(--border);
@@ -809,8 +755,9 @@
       text-transform: uppercase;
       margin-top: 4px;
     }
-
-    /* ── SIDEBAR TOGGLE ── */
+    
+    #sidebar { transition: width 0.2s, min-width 0.2s; }
+    #sidebar.collapsed { width: 0; min-width: 0; overflow: hidden; }
     #sidebar-toggle {
       position: fixed;
       top: 14px;
@@ -829,12 +776,10 @@
       justify-content: center;
       transition: left 0.2s;
     }
-
     #sidebar-toggle.collapsed { left: 6px; }
 
-    /* ── HISTORY / BOOKMARKS ── */
+    
     .hb-list { display: flex; flex-direction: column; gap: 8px; padding-bottom: 28px; }
-
     .hb-item {
       display: flex;
       align-items: center;
@@ -846,27 +791,100 @@
       cursor: pointer;
       transition: background 0.2s, border-color 0.2s;
     }
-
     .hb-item:hover { background: var(--card-hover); border-color: var(--border-bright); }
-
     .hb-icon { font-size: 18px; flex-shrink: 0; }
-
     .hb-info { flex: 1; min-width: 0; }
-
     .hb-title { font-size: 14px; font-weight: 600; color: var(--silver-bright); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-
     .hb-url { font-size: 11px; color: var(--text-dim); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-
     .hb-time { font-size: 11px; color: var(--text-dim); flex-shrink: 0; }
-
     .hb-del { background: none; border: none; color: var(--text-dim); cursor: pointer; font-size: 16px; padding: 0 4px; flex-shrink: 0; }
-
     .hb-del:hover { color: #ef5350; }
-
     .hb-empty { color: var(--text-dim); font-size: 14px; text-align: center; padding: 40px 0; }
 
-    /* ── APPS / SETTINGS GRIDS ── */
+    
     .home-section { margin-bottom: 28px; }
+
+    
+    .game-card { position: relative; }
+    .game-fav-btn {
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      background: rgba(0,0,0,0.5);
+      border: none;
+      color: #888;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 4px;
+      padding: 2px 4px;
+      line-height: 1;
+      z-index: 2;
+      transition: color 0.2s;
+    }
+    .game-fav-btn.starred { color: #ffd600; }
+    .game-fav-btn:hover { color: #ffd600; }
+
+    
+    #proxy-engine-select {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      color: var(--silver);
+      border-radius: 8px;
+      padding: 6px 8px;
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 13px;
+      outline: none;
+      flex-shrink: 0;
+    }
+
+    
+    .btn-bookmark {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      color: var(--silver);
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .btn-bookmark:hover { background: var(--card-hover); color: #ffd600; }
+    .btn-bookmark.bookmarked { color: #ffd600; border-color: #ffd600; }
+
+    
+    #incognito-badge {
+      display: none;
+      position: fixed;
+      bottom: 16px;
+      right: 16px;
+      background: #1a1a2e;
+      border: 1px solid #7c4dff;
+      color: #b39ddb;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 12px;
+      z-index: 9999;
+      pointer-events: none;
+    }
+    #incognito-badge.visible { display: block; }
+
+    
+    #global-particles {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 0;
+    }
+    #content { position: relative; z-index: 1; }
+    #sidebar { position: relative; z-index: 10; }
+    #topbar { position: relative; z-index: 10; }
 
     .apps-grid {
       display: grid;
@@ -912,7 +930,7 @@
       letter-spacing: 0.5px;
       text-align: center;
     }
-
+    
     .settings-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
@@ -986,7 +1004,6 @@
     }
 
     .s-btn:hover { background: #1c1c26; border-color: var(--border-bright); color: var(--silver-bright); }
-
     .s-btn.active { border-color: #2ecc71; color: #2ecc71; }
 
     .s-input {
@@ -1003,7 +1020,6 @@
     }
 
     .s-input:focus { border-color: #2ecc71; }
-
     .s-input::placeholder { color: var(--text-dim); }
 
     .s-select {
@@ -1015,345 +1031,1963 @@
       font-family: 'Rajdhani', sans-serif;
       font-size: 13px;
       outline: none;
+      width: 100%;
       cursor: pointer;
     }
 
-    .s-select:focus { border-color: #2ecc71; }
-
-    /* ── INCOGNITO BADGE ── */
-    #incognito-badge {
+    
+    #tool-topbar {
       display: none;
       position: fixed;
-      bottom: 16px;
-      right: 16px;
-      background: #1a1a2e;
-      border: 1px solid #7c4dff;
-      color: #b39ddb;
-      padding: 6px 14px;
-      border-radius: 20px;
-      font-size: 12px;
+      top: 0;
+      left: 220px;
+      right: 0;
+      height: 42px;
+      background: #101014;
+      border-bottom: 1px solid var(--border);
+      align-items: center;
+      padding: 0 12px;
+      gap: 10px;
       z-index: 9999;
-      pointer-events: none;
     }
-
-    #incognito-badge.visible { display: block; }
-
-    /* ── RESPONSIVE ── */
-    @media (max-width: 768px) {
-      #sidebar {
-        width: 60px;
-        min-width: 60px;
-      }
-
-      .nav-section-label,
-      #logo span { display: none; }
-
-      #logo h1 { font-size: 14px; }
-
-      #topbar { padding: 0 16px; }
-
-      #search { width: 150px; }
-
-      .stats-row { grid-template-columns: 1fr; }
-
-      .games-grid { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); }
+    #tool-topbar.visible { display: flex; }
+    #tool-topbar-title {
+      flex: 1;
+      font-family: 'Orbitron', monospace;
+      font-size: 12px;
+      letter-spacing: 2px;
+      color: var(--silver);
+    }
+    #tool-close-btn {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      color: var(--silver);
+      width: 30px;
+      height: 30px;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+    #tool-close-btn:hover { background: #3a1a1a; border-color: #ef5350; color: #ef5350; }
+    #tool-fullscreen-btn {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      color: var(--silver);
+      width: 30px;
+      height: 30px;
+      border-radius: 6px;
+      font-size: 14px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+    #tool-fullscreen-btn:hover { background: var(--card-hover); border-color: var(--border-bright); }
+    #tool-iframe-container {
+      display: none;
+      position: fixed;
+      top: 42px;
+      left: 220px;
+      right: 0;
+      bottom: 0;
+      z-index: 9998;
+      background: #000;
+    }
+    #tool-iframe-container.visible { display: block; }
+    #tool-iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
     }
   </style>
-  <script src="/scram/scramjet.all.js" defer></script>
-  <script src="/baremux/index.js" defer></script>
-  <script src="register-sw.js" defer></script>
-  <script src="search.js" defer></script>
 </head>
 <body>
-  <!-- SIDEBAR -->
-  <aside id="sidebar">
-    <div id="logo">
-      <h1>WG</h1>
-      <span>Games</span>
+
+<canvas id="global-particles"></canvas>
+
+<div id="tool-topbar">
+  <span id="tool-topbar-title">TOOL</span>
+  <button id="tool-fullscreen-btn" onclick="toolFullscreen()" title="Fullscreen">⛶</button>
+  <button id="tool-close-btn" onclick="closeTool()" title="Close">✕</button>
+</div>
+
+<div id="tool-iframe-container">
+  <iframe id="tool-iframe" allowfullscreen></iframe>
+</div>
+
+<button id="sidebar-toggle" onclick="toggleSidebar()" title="Toggle sidebar">‹</button>
+
+<div id="sidebar">
+  <div id="logo">
+    <h1>Willie</h1>
+    <span>Games Hub</span>
+  </div>
+  <nav>
+    <div class="nav-section-label">Menu</div>
+    <div class="nav-item active" onclick="showView('home')">
+      <span class="icon">⬡</span> Home
     </div>
-    <nav>
-      <div class="nav-section-label">Navigation</div>
-      <a class="nav-item active" href="#" data-view="home" aria-label="Home">
-        <span class="icon">🏠</span>
-        <span>Home</span>
-      </a>
-      <a class="nav-item" href="#" data-view="games" aria-label="Games">
-        <span class="icon">🎮</span>
-        <span>Games</span>
-      </a>
-      <a class="nav-item" href="#" data-view="proxy" aria-label="Proxy Browser">
-        <span class="icon">🌐</span>
-        <span>Proxy</span>
-      </a>
-      <a class="nav-item" href="#" data-view="apps" aria-label="Applications">
-        <span class="icon">📱</span>
-        <span>Apps</span>
-      </a>
-      <a class="nav-item" href="#" data-view="settings" aria-label="Settings">
-        <span class="icon">⚙️</span>
-        <span>Settings</span>
-      </a>
-    </nav>
-    <div id="sidebar-bottom">
-      <a class="nav-item" href="#" aria-label="Bookmarks">
-        <span class="icon">⭐</span>
-        <span>Bookmarks</span>
-      </a>
+    <div class="nav-item" onclick="showView('games')">
+      <span class="icon">◈</span> Games
+      <span class="nav-badge" id="game-count">80</span>
     </div>
-  </aside>
-
-  <!-- MAIN CONTENT -->
-  <main id="main">
-    <!-- TOPBAR -->
-    <header id="topbar">
-      <h2>Willie Games</h2>
-      <input type="text" id="search" placeholder="Search games...">
-    </header>
-
-    <!-- CONTENT AREA -->
-    <div id="content">
-      <!-- HOME VIEW -->
-      <section class="view active" id="view-home">
-        <div class="hero">
-          <h2>Welcome to Willie Games</h2>
-          <p>Play your favorite games directly in your browser. Fast, secure, and always updated.</p>
-        </div>
-
-        <div class="stats-row">
-          <div class="stat-card">
-            <div class="stat-num">1.2K</div>
-            <div class="stat-label">Games Available</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-num">500K</div>
-            <div class="stat-label">Active Users</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-num">4.8★</div>
-            <div class="stat-label">User Rating</div>
-          </div>
-        </div>
-
-        <div class="home-section">
-          <h3 class="section-title">Recently Played</h3>
-          <div class="games-grid" id="recently-played">
-            <!-- Dynamically populated -->
-          </div>
-        </div>
-
-        <div class="home-section">
-          <h3 class="section-title">Popular Games</h3>
-          <div class="games-grid" id="popular-games">
-            <!-- Dynamically populated -->
-          </div>
-        </div>
-      </section>
-
-      <!-- GAMES VIEW -->
-      <section class="view" id="view-games">
-        <h3 class="section-title">All Games</h3>
-        <div class="games-grid" id="all-games">
-          <!-- Dynamically populated -->
-        </div>
-      </section>
-
-      <!-- PROXY VIEW -->
-      <section class="view" id="view-proxy">
-        <div id="proxy-browser">
-          <div class="proxy-bar">
-            <button class="nav-btn" aria-label="Back" title="Back">←</button>
-            <button class="nav-btn" aria-label="Forward" title="Forward">→</button>
-            <button class="nav-btn" aria-label="Reload" title="Reload">⟳</button>
-            <input type="text" id="proxy-url-bar" placeholder="Enter URL or search..." aria-label="URL Bar">
-            <select id="proxy-engine-select" aria-label="Search Engine">
-              <option value="google">Google</option>
-              <option value="bing">Bing</option>
-              <option value="duckduckgo">DuckDuckGo</option>
-            </select>
-            <button class="btn-bookmark" aria-label="Bookmark" title="Bookmark">⭐</button>
-            <button class="btn-home" aria-label="Home" title="Home">🏠</button>
-          </div>
-          <div id="proxy-frame-container">
-            <iframe id="proxy-frame" title="Web Proxy"></iframe>
-          </div>
-        </div>
-
-        <div id="proxy-landing">
-          <canvas id="proxy-particles"></canvas>
-          <div class="proxy-landing-inner">
-            <h2 class="proxy-landing-title">Search the Web</h2>
-            <p class="proxy-landing-sub">Browse the internet securely and privately</p>
-            <div class="proxy-landing-bar">
-              <div class="proxy-landing-bar-icon">🔍</div>
-              <input type="text" id="proxy-url" placeholder="Enter a URL or search term...">
-              <button class="proxy-landing-go" aria-label="Search">→</button>
-            </div>
-            <div class="proxy-quicklinks">
-              <a class="proxy-quicklink" href="#" data-url="https://google.com">
-                <div class="proxy-quicklink-icon">🔍</div>
-                <div class="proxy-quicklink-label">Google</div>
-              </a>
-              <a class="proxy-quicklink" href="#" data-url="https://youtube.com">
-                <div class="proxy-quicklink-icon">📺</div>
-                <div class="proxy-quicklink-label">YouTube</div>
-              </a>
-              <a class="proxy-quicklink" href="#" data-url="https://github.com">
-                <div class="proxy-quicklink-icon">🐙</div>
-                <div class="proxy-quicklink-label">GitHub</div>
-              </a>
-              <a class="proxy-quicklink" href="#" data-url="https://reddit.com">
-                <div class="proxy-quicklink-icon">🔴</div>
-                <div class="proxy-quicklink-label">Reddit</div>
-              </a>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- APPS VIEW -->
-      <section class="view" id="view-apps">
-        <h3 class="section-title">Applications</h3>
-        <div class="apps-grid">
-          <a class="app-card" href="#" data-app="notes">
-            <div class="app-icon">📝</div>
-            <div class="app-label">Notes</div>
-          </a>
-          <a class="app-card" href="#" data-app="calculator">
-            <div class="app-icon">🧮</div>
-            <div class="app-label">Calculator</div>
-          </a>
-          <a class="app-card" href="#" data-app="todolist">
-            <div class="app-icon">✓</div>
-            <div class="app-label">To-Do List</div>
-          </a>
-          <a class="app-card" href="#" data-app="timer">
-            <div class="app-icon">⏱️</div>
-            <div class="app-label">Timer</div>
-          </a>
-        </div>
-      </section>
-
-      <!-- SETTINGS VIEW -->
-      <section class="view" id="view-settings">
-        <h3 class="section-title">Settings</h3>
-        <div class="settings-grid">
-          <div class="settings-card">
-            <h4 class="settings-card-title">Dark Mode <span class="rec-badge">Recommended</span></h4>
-            <p class="settings-card-sub">Easy on the eyes with a sleek dark interface</p>
-            <div class="settings-btn-row">
-              <button class="s-btn active">On</button>
-              <button class="s-btn">Off</button>
-            </div>
-          </div>
-
-          <div class="settings-card">
-            <h4 class="settings-card-title">Performance Mode</h4>
-            <p class="settings-card-sub">Optimize for speed and efficiency</p>
-            <div class="settings-btn-row">
-              <button class="s-btn">Low</button>
-              <button class="s-btn active">Medium</button>
-              <button class="s-btn">High</button>
-            </div>
-          </div>
-
-          <div class="settings-card">
-            <h4 class="settings-card-title">Incognito Mode</h4>
-            <p class="settings-card-sub">Browse privately without history</p>
-            <div class="settings-btn-row">
-              <button class="s-btn">Enable</button>
-            </div>
-          </div>
-
-          <div class="settings-card">
-            <h4 class="settings-card-title">Cache Settings</h4>
-            <p class="settings-card-sub">Manage browser cache and data</p>
-            <div class="settings-btn-row">
-              <button class="s-btn">Clear Cache</button>
-              <button class="s-btn">Clear Cookies</button>
-            </div>
-          </div>
-        </div>
-      </section>
+    <div class="nav-item" onclick="showView('webapps')">
+      <span class="icon">◉</span> Apps
     </div>
-  </main>
-
-  <!-- SETTINGS PANEL OVERLAY -->
-  <div id="settings-overlay">
-    <div id="settings-panel">
-      <div id="settings-header">
-        <h3>Settings</h3>
-        <span id="settings-close" role="button" tabindex="0" aria-label="Close settings">✕</span>
-      </div>
-      <div id="settings-body">
-        <div class="setting-group">
-          <div class="setting-group-title">Appearance</div>
-          <div class="setting-row">
-            <label class="setting-label">Dark Mode</label>
-            <label class="toggle">
-              <input type="checkbox" checked>
-              <span class="toggle-slider"></span>
-            </label>
-          </div>
-        </div>
-
-        <div class="setting-group">
-          <div class="setting-group-title">Privacy</div>
-          <div class="setting-row">
-            <div>
-              <div class="setting-label">Incognito Mode</div>
-              <div class="setting-sub">Browse without saving history</div>
-            </div>
-            <label class="toggle">
-              <input type="checkbox">
-              <span class="toggle-slider"></span>
-            </label>
-          </div>
-        </div>
-      </div>
+    <div class="nav-item" onclick="showView('apps')">
+      <span class="icon">⊞</span> Tools
+    </div>
+    <div class="nav-item" onclick="showView('proxy')">
+      <span class="icon">◎</span> Proxy
+    </div>
+    <div class="nav-item" onclick="showView('history')">
+      <span class="icon">◷</span> History
+    </div>
+    <div class="nav-item" onclick="showView('bookmarks')">
+      <span class="icon">★</span> Bookmarks
+    </div>
+    <div class="nav-section-label" style="margin-top:12px">System</div>
+    <div class="nav-item" onclick="showView('settings')">
+      <span class="icon">◧</span> Settings
+    </div>
+  </nav>
+  <div id="sidebar-bottom">
+    <div class="nav-item" style="font-size:12px; color: var(--text-dim);">
+      <span class="icon">◌</span> Willie Games v1.0
     </div>
   </div>
+</div>
 
-  <!-- INCOGNITO BADGE -->
-  <div id="incognito-badge">🕵️ INCOGNITO MODE</div>
+<div id="main">
+  <div id="topbar">
+    <h2 id="page-title">Home</h2>
+    <div id="topbar-widgets" style="display:flex;align-items:center;gap:14px;margin-left:auto;margin-right:12px;">
+      <div id="topbar-clock" style="font-family:'Orbitron',monospace;font-size:12px;color:var(--silver);letter-spacing:2px;"></div>
+      <div id="topbar-battery" style="display:flex;align-items:center;gap:5px;font-family:'Orbitron',monospace;font-size:11px;color:var(--silver);letter-spacing:1px;">
+        <svg id="battery-icon" width="22" height="12" viewBox="0 0 22 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="0.5" y="0.5" width="18" height="11" rx="2" stroke="currentColor" stroke-width="1"/>
+          <rect id="battery-fill" x="2" y="2" width="14" height="8" rx="1" fill="currentColor"/>
+          <rect x="19" y="3.5" width="2.5" height="5" rx="1" fill="currentColor"/>
+        </svg>
+        <span id="battery-pct">--</span>
+        <span id="battery-charging" style="display:none;color:#66bb6a">⚡</span>
+      </div>
+    </div>
+    <input type="text" id="search" placeholder="Search games..." oninput="filterGames(this.value)" />
+  </div>
 
-  <!-- SIDEBAR TOGGLE -->
-  <button id="sidebar-toggle" aria-label="Toggle sidebar" title="Toggle sidebar">☰</button>
+  <div id="content">
 
-  <script>
-    // View switching
-    document.querySelectorAll('[data-view]').forEach(link => {
-      link.addEventListener('click', (e) => {
-        e.preventDefault();
-        const viewName = link.dataset.view;
-        document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-        document.getElementById('view-' + viewName).classList.add('active');
-        document.querySelectorAll('[data-view]').forEach(v => v.classList.remove('active'));
-        link.classList.add('active');
+    
+    <div class="view active" id="view-home">
+      <div class="hero">
+        <h2>WILLIE GAMES</h2>
+        <p>Your personal unblocked games hub. Play anywhere, anytime — no restrictions.</p>
+      </div>
+      <div class="stats-row">
+        <div class="stat-card">
+          <div class="stat-num" id="stat-games">80</div>
+          <div class="stat-label">Games</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">∞</div>
+          <div class="stat-label">Sites via Proxy</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">100%</div>
+          <div class="stat-label">Unblocked</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num" id="stat-viewers">1</div>
+          <div class="stat-label">Online Now</div>
+        </div>
+      </div>
+      <div class="section-title">Featured Games</div>
+      <div class="games-grid" id="featured-grid"></div>
+      <div id="recently-played-section" style="display:none;">
+        <div class="section-title">Recently Played</div>
+        <div class="games-grid" id="recently-played-grid"></div>
+      </div>
+      <div id="favorites-section" style="display:none;">
+        <div class="section-title">Favorites</div>
+        <div class="games-grid" id="favorites-grid"></div>
+      </div>
+    </div>
+
+    
+    <div class="view" id="view-games">
+      <div class="section-title">All Games</div>
+      <div class="games-grid" id="all-games-grid"></div>
+      <div class="section-title" style="margin-top:24px">Seraph Games</div>
+      <div class="games-grid" id="seraph-grid"></div>
+    </div>
+
+    
+    
+    <div class="view" id="view-webapps">
+      <div class="section-title">Social &amp; Web Apps</div>
+      <div class="apps-grid">
+        <a class="app-card" onclick="proxyNav('https://chat.openai.com')">
+          <div class="app-icon" style="background:#000;border-radius:12px;padding:6px;display:flex;align-items:center;justify-content:center"><img src="https://cdn.oaistatic.com/assets/favicon-o20kmmos.svg" width="44" height="44" style="border-radius:8px;object-fit:contain" onerror="this.style.display=\'none\'"/></div>
+          <span class="app-label">ChatGPT</span>
+        </a>
+        <a class="app-card" onclick="proxyNav('https://discord.com/app')">
+          <div class="app-icon" style="background:#5865f2;border-radius:12px;padding:6px;display:flex;align-items:center;justify-content:center"><img src="https://cdn.prod.website-files.com/6257adef93867e50d84d30e2/636e0a6ca814282eca7172c6_icon_clyde_white_RGB.svg" width="44" height="44" style="border-radius:8px;object-fit:contain" onerror="this.style.display=\'none\'"/></div>
+          <span class="app-label">Discord</span>
+        </a>
+        <a class="app-card" onclick="proxyNav('https://www.nvidia.com/en-us/geforce-now/')">
+          <div class="app-icon" style="background:#76b900;border-radius:12px;padding:6px;display:flex;align-items:center;justify-content:center"><img src="https://www.nvidia.com/favicon.ico" width="44" height="44" style="border-radius:8px;object-fit:contain" onerror="this.style.display=\'none\'"/></div>
+          <span class="app-label">GeForce NOW</span>
+        </a>
+        <a class="app-card" onclick="proxyNav('https://www.newgrounds.com')">
+          <div class="app-icon" style="background:#f5a623;border-radius:12px;padding:6px;display:flex;align-items:center;justify-content:center"><img src="https://www.newgrounds.com/favicon.ico" width="44" height="44" style="border-radius:8px;object-fit:contain" onerror="this.style.display=\'none\'"/></div>
+          <span class="app-label">Newgrounds</span>
+        </a>
+        <a class="app-card" onclick="proxyNav('https://proton.me/mail')">
+          <div class="app-icon" style="background:#6d4aff;border-radius:12px;padding:6px;display:flex;align-items:center;justify-content:center"><img src="https://proton.me/favicons/apple-touch-icon.png" width="44" height="44" style="border-radius:8px;object-fit:contain" onerror="this.style.display=\'none\'"/></div>
+          <span class="app-label">Proton Mail</span>
+        </a>
+        <a class="app-card" onclick="proxyNav('https://appetize.io')">
+          <div class="app-icon" style="background:#3ddc84;border-radius:12px;padding:6px;display:flex;align-items:center;justify-content:center"><img src="https://appetize.io/favicon.ico" width="44" height="44" style="border-radius:8px;object-fit:contain" onerror="this.style.display=\'none\'"/></div>
+          <span class="app-label">Android</span>
+        </a>
+        <a class="app-card" onclick="proxyNav('https://www.primevideo.com')">
+          <div class="app-icon" style="background:#232f3e;border-radius:12px;padding:6px;display:flex;align-items:center;justify-content:center"><img src="https://m.media-amazon.com/images/G/01/digital/video/web/prime-video-logo-1x._CB485935692_.png" width="44" height="44" style="border-radius:8px;object-fit:contain" onerror="this.style.display=\'none\'"/></div>
+          <span class="app-label">Movies</span>
+        </a>
+        <a class="app-card" onclick="proxyNav('https://web.snapchat.com')">
+          <div class="app-icon" style="background:#fffc00;border-radius:12px;padding:6px;display:flex;align-items:center;justify-content:center"><img src="https://static.snapchat.com/snapchat-app-icon.png" width="44" height="44" style="border-radius:8px;object-fit:contain" onerror="this.style.display=\'none\'"/></div>
+          <span class="app-label">Snapchat</span>
+        </a>
+        <a class="app-card" onclick="proxyNav('https://www.tiktok.com')">
+          <div class="app-icon" style="background:#000;border-radius:12px;padding:6px;display:flex;align-items:center;justify-content:center"><img src="https://sf16-website-login.neutral.ttwstatic.com/obj/tiktok_web_login_static/tiktok/webapp/main/webapp-desktop/favicon.ico" width="44" height="44" style="border-radius:8px;object-fit:contain" onerror="this.style.display=\'none\'"/></div>
+          <span class="app-label">TikTok</span>
+        </a>
+        <a class="app-card" onclick="proxyNav('https://www.twitch.tv')">
+          <div class="app-icon" style="background:#9147ff;border-radius:12px;padding:6px;display:flex;align-items:center;justify-content:center"><img src="https://static.twitchsvc.net/assets/uploads/glitch_474x356.png" width="44" height="44" style="border-radius:8px;object-fit:contain" onerror="this.style.display=\'none\'"/></div>
+          <span class="app-label">Twitch</span>
+        </a>
+        <a class="app-card" onclick="proxyNav('https://vscode.dev')">
+          <div class="app-icon" style="background:#0078d4;border-radius:12px;padding:6px;display:flex;align-items:center;justify-content:center"><img src="https://vscode.dev/static/stable/favicon.ico" width="44" height="44" style="border-radius:8px;object-fit:contain" onerror="this.style.display=\'none\'"/></div>
+          <span class="app-label">VS Code</span>
+        </a>
+        <a class="app-card" onclick="proxyNav('https://www.youtube.com')">
+          <div class="app-icon" style="background:#ff0000;border-radius:12px;padding:6px;display:flex;align-items:center;justify-content:center"><img src="https://www.youtube.com/favicon.ico" width="44" height="44" style="border-radius:8px;object-fit:contain" onerror="this.style.display=\'none\'"/></div>
+          <span class="app-label">YouTube</span>
+        </a>
+        <a class="app-card" onclick="proxyNav('https://soundcloud.com')">
+          <div class="app-icon" style="background:#ff5500;border-radius:12px;padding:6px;display:flex;align-items:center;justify-content:center"><img src="https://a-v2.sndcdn.com/assets/images/sc-icons/favicon-2cadd14bdb.ico" width="44" height="44" style="border-radius:8px;object-fit:contain" onerror="this.style.display=\'none\'"/></div>
+          <span class="app-label">SoundCloud</span>
+        </a>
+        <a class="app-card" onclick="proxyNav('https://www.piskelapp.com')">
+          <div class="app-icon" style="background:#c0392b;border-radius:12px;padding:6px;display:flex;align-items:center;justify-content:center"><img src="https://www.piskelapp.com/favicon.ico" width="44" height="44" style="border-radius:8px;object-fit:contain" onerror="this.style.display=\'none\'"/></div>
+          <span class="app-label">Piskel</span>
+        </a>
+        <a class="app-card" onclick="proxyNav('https://www.webtoons.com')">
+          <div class="app-icon" style="background:#00d564;border-radius:12px;padding:6px;display:flex;align-items:center;justify-content:center"><img src="https://www.webtoons.com/favicon.ico" width="44" height="44" style="border-radius:8px;object-fit:contain" onerror="this.style.display=\'none\'"/></div>
+          <span class="app-label">Webtoon</span>
+        </a>
+        <a class="app-card" onclick="proxyNav('https://www.pinterest.com')">
+          <div class="app-icon" style="background:#e60023;border-radius:12px;padding:6px;display:flex;align-items:center;justify-content:center"><img src="https://s.pinimg.com/webapp/favicon_144x144-b39f05b77a.png" width="44" height="44" style="border-radius:8px;object-fit:contain" onerror="this.style.display=\'none\'"/></div>
+          <span class="app-label">Pinterest</span>
+        </a>
+        <a class="app-card" onclick="proxyNav('https://open.spotify.com')">
+          <div class="app-icon" style="background:#1db954;border-radius:12px;padding:6px;display:flex;align-items:center;justify-content:center"><img src="https://open.spotifycdn.com/cdn/images/favicon.0f31d2ea.ico" width="44" height="44" style="border-radius:8px;object-fit:contain" onerror="this.style.display=\'none\'"/></div>
+          <span class="app-label">Spotify</span>
+        </a>
+        <a class="app-card" onclick="proxyNav('https://www.instagram.com')">
+          <div class="app-icon" style="background:#833ab4;border-radius:12px;padding:6px;display:flex;align-items:center;justify-content:center"><img src="https://static.cdninstagram.com/rsrc.php/v3/yI/r/VsNE-OHk_8a.png" width="44" height="44" style="border-radius:8px;object-fit:contain" onerror="this.style.display=\'none\'"/></div>
+          <span class="app-label">Instagram</span>
+        </a>
+        <a class="app-card" onclick="proxyNav('https://x.com')">
+          <div class="app-icon" style="background:#000;border-radius:12px;padding:6px;display:flex;align-items:center;justify-content:center"><img src="https://abs.twimg.com/favicons/twitter.3.ico" width="44" height="44" style="border-radius:8px;object-fit:contain" onerror="this.style.display=\'none\'"/></div>
+          <span class="app-label">X / Twitter</span>
+        </a>
+        <a class="app-card" onclick="proxyNav('https://www.reddit.com')">
+          <div class="app-icon" style="background:#ff4500;border-radius:12px;padding:6px;display:flex;align-items:center;justify-content:center"><img src="https://www.redditstatic.com/desktop2x/img/favicon/favicon-32x32.png" width="44" height="44" style="border-radius:8px;object-fit:contain" onerror="this.style.display=\'none\'"/></div>
+          <span class="app-label">Reddit</span>
+        </a>
+        <a class="app-card" onclick="proxyNav('https://www.roblox.com')">
+          <div class="app-icon" style="background:#e00;border-radius:12px;padding:6px;display:flex;align-items:center;justify-content:center"><img src="https://www.roblox.com/favicon.ico" width="44" height="44" style="border-radius:8px;object-fit:contain" onerror="this.style.display=\'none\'"/></div>
+          <span class="app-label">Roblox</span>
+        </a>
+        <a class="app-card" onclick="proxyNav('https://www.netflix.com')">
+          <div class="app-icon" style="background:#141414;border-radius:12px;padding:6px;display:flex;align-items:center;justify-content:center"><img src="https://assets.nflxext.com/us/ffe/siteui/common/icons/nficon2016.png" width="44" height="44" style="border-radius:8px;object-fit:contain" onerror="this.style.display=\'none\'"/></div>
+          <span class="app-label">Netflix</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="view" id="view-apps">
+      <div class="section-title">Tools</div>
+      <div class="apps-grid">
+        <a class="app-card" onclick="toolNav('https://ijnfem.github.io/seraph/apps/calculator/index.html')">
+          <div class="app-icon" style="background:#1a1a2e;border-radius:12px;font-size:32px;display:flex;align-items:center;justify-content:center">🧮</div>
+          <span class="app-label">Calculator</span>
+        </a>
+        <a class="app-card" onclick="toolNav('https://ijnfem.github.io/seraph/apps/emulatorjs/index.html')">
+          <div class="app-icon" style="background:#1a1a2e;border-radius:12px;font-size:32px;display:flex;align-items:center;justify-content:center">🕹️</div>
+          <span class="app-label">EmulatorJS</span>
+        </a>
+        <a class="app-card" onclick="toolNav('https://ijnfem.github.io/seraph/apps/etchasketch/index.html')">
+          <div class="app-icon" style="background:#e00;border-radius:12px;font-size:32px;display:flex;align-items:center;justify-content:center">✏️</div>
+          <span class="app-label">Etch A Sketch</span>
+        </a>
+        <a class="app-card" onclick="toolNav('https://ijnfem.github.io/seraph/apps/fluidsim/index.html')">
+          <div class="app-icon" style="background:#0078d4;border-radius:12px;font-size:32px;display:flex;align-items:center;justify-content:center">💧</div>
+          <span class="app-label">Fluid Sim</span>
+        </a>
+        <a class="app-card" onclick="toolNav('https://ijnfem.github.io/seraph/apps/godoblocks/index.html')">
+          <div class="app-icon" style="background:#478cbf;border-radius:12px;font-size:32px;display:flex;align-items:center;justify-content:center">🟦</div>
+          <span class="app-label">Godo Blocks</span>
+        </a>
+        <a class="app-card" onclick="toolNav('https://ijnfem.github.io/seraph/apps/htmlcoder/index.html')">
+          <div class="app-icon" style="background:#e34c26;border-radius:12px;font-size:32px;display:flex;align-items:center;justify-content:center">💻</div>
+          <span class="app-label">HTML Coder</span>
+        </a>
+        <a class="app-card" onclick="toolNav('https://ijnfem.github.io/seraph/apps/ruffle/index.html')">
+          <div class="app-icon" style="background:#ff0;border-radius:12px;font-size:32px;display:flex;align-items:center;justify-content:center">🎞️</div>
+          <span class="app-label">Ruffle</span>
+        </a>
+        <a class="app-card" onclick="toolNav('https://ijnfem.github.io/seraph/apps/thirtydollarwebsite/index.html')">
+          <div class="app-icon" style="background:#ff5500;border-radius:12px;font-size:32px;display:flex;align-items:center;justify-content:center">🎵</div>
+          <span class="app-label">30$ Website</span>
+        </a>
+        <a class="app-card" onclick="toolNav('https://ijnfem.github.io/seraph/apps/turbowarp/index.html')">
+          <div class="app-icon" style="background:#ff6680;border-radius:12px;font-size:32px;display:flex;align-items:center;justify-content:center">🐱</div>
+          <span class="app-label">TurboWarp</span>
+        </a>
+        <a class="app-card" onclick="toolNav('https://ijnfem.github.io/seraph/apps/turbowarppkg/index.html')">
+          <div class="app-icon" style="background:#ff6680;border-radius:12px;font-size:32px;display:flex;align-items:center;justify-content:center">📦</div>
+          <span class="app-label">TurboWarp Packager</span>
+        </a>
+        <a class="app-card" onclick="toolNav('https://ijnfem.github.io/seraph/apps/turbowarpunpkg/index.html')">
+          <div class="app-icon" style="background:#607d8b;border-radius:12px;font-size:32px;display:flex;align-items:center;justify-content:center">📂</div>
+          <span class="app-label">TurboWarp Unpkg</span>
+        </a>
+        <a class="app-card" onclick="toolNav('https://ijnfem.github.io/seraph/apps/v86/index.html')">
+          <div class="app-icon" style="background:#222;border-radius:12px;font-size:32px;display:flex;align-items:center;justify-content:center">🖥️</div>
+          <span class="app-label">v86 (x86 VM)</span>
+        </a>
+        <a class="app-card" onclick="toolNav('https://ijnfem.github.io/seraph/apps/weavesilk/index.html')">
+          <div class="app-icon" style="background:#6d4aff;border-radius:12px;font-size:32px;display:flex;align-items:center;justify-content:center">🕸️</div>
+          <span class="app-label">Weave Silk</span>
+        </a>
+        <a class="app-card" onclick="toolNav('https://ijnfem.github.io/seraph/apps/webretro/index.html')">
+          <div class="app-icon" style="background:#9147ff;border-radius:12px;font-size:32px;display:flex;align-items:center;justify-content:center">👾</div>
+          <span class="app-label">WebRetro</span>
+        </a>
+        <a class="app-card" onclick="toolNav('https://ijnfem.github.io/seraph/apps/windows11/index.html')">
+          <div class="app-icon" style="background:#0078d4;border-radius:12px;font-size:32px;display:flex;align-items:center;justify-content:center">🪟</div>
+          <span class="app-label">Windows 11</span>
+        </a>
+        <a class="app-card" onclick="toolNav('https://ijnfem.github.io/seraph/apps/zipopener/index.html')">
+          <div class="app-icon" style="background:#f5a623;border-radius:12px;font-size:32px;display:flex;align-items:center;justify-content:center">🗜️</div>
+          <span class="app-label">Zip Opener</span>
+        </a>
+      </div>
+    </div>
+
+    
+    <div class="view" id="view-proxy">
+
+      
+      <div id="proxy-landing">
+        <canvas id="proxy-particles"></canvas>
+        <div class="proxy-landing-inner">
+          <div class="proxy-landing-title">Willie Browser</div>
+          <div class="proxy-landing-sub">Search the web or visit a website</div>
+          <div class="proxy-landing-bar">
+            <span class="proxy-landing-bar-icon">🔍</span>
+            <input type="text" id="proxy-url" placeholder="Search or enter URL" />
+            <button class="proxy-landing-go" onclick="loadProxy()">→</button>
+          </div>
+          <div class="proxy-quicklinks">
+            <a class="proxy-quicklink" onclick="quickNav('https://youtube.com')">
+              <div class="proxy-quicklink-icon"><img src="https://static.vecteezy.com/system/resources/thumbnails/042/127/234/small/white-square-bordered-youtube-logo-on-transparent-background-free-png.png"/></div>
+              <span class="proxy-quicklink-label">YouTube</span>
+            </a>
+            <a class="proxy-quicklink" onclick="quickNav('https://tiktok.com')">
+              <div class="proxy-quicklink-icon"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSskn3UG5PHzksP0bC2GNp245KFrsP6mhxweg&s"/></div>
+              <span class="proxy-quicklink-label">TikTok</span>
+            </a>
+            <a class="proxy-quicklink" onclick="quickNav('https://discord.com')">
+              <div class="proxy-quicklink-icon"><img src="https://pngimg.com/uploads/discord/discord_PNG8.png"/></div>
+              <span class="proxy-quicklink-label">Discord</span>
+            </a>
+            <a class="proxy-quicklink" onclick="quickNav('https://chat.openai.com')">
+              <div class="proxy-quicklink-icon"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRt_I0AqTbvaxxFCoEWH_SZP49jpBiTMiCkCA&s"/></div>
+              <span class="proxy-quicklink-label">ChatGPT</span>
+            </a>
+            <a class="proxy-quicklink" onclick="quickNav('https://twitch.tv')">
+              <div class="proxy-quicklink-icon"><img src="https://cdn.m7g.twitch.tv/ba46b4e5e395b11efd34/assets/uploads/03-glitch.jpg"/></div>
+              <span class="proxy-quicklink-label">Twitch</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      
+      <div id="proxy-browser">
+        <div class="proxy-bar">
+          <button class="nav-btn" onclick="proxyBack()" title="Back">&#8592;</button>
+          <button class="nav-btn" onclick="proxyForward()" title="Forward">&#8594;</button>
+          <button class="nav-btn" onclick="proxyRefresh()" title="Refresh">&#8635;</button>
+          <input type="text" id="proxy-url-bar" placeholder="Enter a URL like google.com" />
+          <button class="btn-bookmark" id="proxy-bookmark-btn" onclick="toggleBookmark()" title="Bookmark">☆</button>
+          <button class="btn-home" onclick="proxyHome()" title="Home">⌂</button>
+        </div>
+        <div id="proxy-frame-container">
+          <iframe id="proxy-iframe" src="/"></iframe>
+        </div>
+      </div>
+
+    </div>
+
+    
+    <div class="view" id="view-history">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+        <div class="section-title" style="margin:0">History</div>
+        <button class="s-btn" onclick="clearHistory()">Clear All</button>
+      </div>
+      <div class="hb-list" id="history-list"></div>
+    </div>
+
+    
+    <div class="view" id="view-bookmarks">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+        <div class="section-title" style="margin:0">Bookmarks</div>
+        <button class="s-btn" onclick="clearBookmarks()">Clear All</button>
+      </div>
+      <div class="hb-list" id="bookmarks-list"></div>
+    </div>
+
+    
+    <div class="view" id="view-settings">
+      <div class="section-title">Settings</div>
+      <div class="settings-grid">
+
+        
+        <div class="settings-card">
+          <div class="settings-card-title">tab cloak</div>
+          <select class="s-select" id="cloak-preset">
+            <option value="none">None</option>
+            <option value="google">Google</option>
+            <option value="classroom">Google Classroom</option>
+            <option value="docs">Google Docs</option>
+          </select>
+          <button class="s-btn" onclick="applyTabCloak()">set cloak</button>
+          <button class="s-btn" onclick="resetCloak()">reset cloak</button>
+        </div>
+
+        
+        <div class="settings-card">
+          <div class="settings-card-title">custom cloak</div>
+          <input class="s-input" id="custom-cloak-title" placeholder="title" />
+          <input class="s-input" id="custom-cloak-icon" placeholder="favicon URL" />
+          <button class="s-btn" onclick="applyCustomCloak()">set cloak</button>
+        </div>
+
+        
+        <div class="settings-card">
+          <div class="settings-card-title">themes</div>
+          <select class="s-select" id="theme-select" onchange="changeTheme(this.value)">
+            <option value="silver">Default</option>
+            <option value="blue">Steel Blue</option>
+            <option value="green">Neon Green</option>
+            <option value="orange">Burnt Orange</option>
+          </select>
+        </div>
+
+        
+        <div class="settings-card">
+          <div class="settings-card-title">particles</div>
+          <div class="settings-btn-row">
+            <button class="s-btn" id="particles-enable-btn" onclick="setParticles(true)">enable</button>
+            <button class="s-btn" id="particles-disable-btn" onclick="setParticles(false)">disable</button>
+          </div>
+        </div>
+
+        
+        <div class="settings-card">
+          <div class="settings-card-title">mobile screen sizer</div>
+          <div class="settings-btn-row">
+            <button class="s-btn" id="mobile-enable-btn" onclick="setMobile(true)">enable</button>
+            <button class="s-btn" id="mobile-disable-btn" onclick="setMobile(false)">disable</button>
+          </div>
+        </div>
+
+        
+        <div class="settings-card">
+          <div class="settings-card-title">games sorted a - z</div>
+          <div class="settings-btn-row">
+            <button class="s-btn" id="sort-enable-btn" onclick="setSortGames(true)">enable</button>
+            <button class="s-btn" id="sort-disable-btn" onclick="setSortGames(false)">disable</button>
+          </div>
+        </div>
+
+        
+        <div class="settings-card">
+          <div class="settings-card-title">anti deledao</div>
+          <div class="settings-card-sub">adds a static image over your game that deledao game detection cant see through. might not always work.</div>
+          <div class="settings-btn-row">
+            <button class="s-btn" id="deledao-enable-btn" onclick="setDeledao(true)">enable</button>
+            <button class="s-btn" id="deledao-disable-btn" onclick="setDeledao(false)">disable</button>
+          </div>
+        </div>
+
+        
+        <div class="settings-card">
+          <div class="settings-card-title">about:blank cloaker <span class="rec-badge">recommended</span></div>
+          <div class="settings-card-sub">double click the button to cloak</div>
+          <div class="settings-btn-row">
+            <button class="s-btn" ondblclick="aboutBlankCloak()">cloak</button>
+          </div>
+        </div>
+
+        
+        <div class="settings-card">
+          <div class="settings-card-title">panic key</div>
+          <div class="settings-card-sub">press any key to set it as the panic key</div>
+          <input class="s-input" id="panic-key-display" placeholder="Current: Escape" readonly style="cursor:pointer;text-align:center;" onclick="listenForPanicKey()" />
+          <button class="s-btn" onclick="resetPanicKey()">reset to Escape</button>
+        </div>
+
+        
+        <div class="settings-card">
+          <div class="settings-card-title">search engine</div>
+          <select class="s-select" id="search-engine-select" onchange="setSearchEngine(this.value)">
+            <option value="google">Google</option>
+            <option value="bing">Bing</option>
+            <option value="duckduckgo">DuckDuckGo</option>
+            <option value="brave">Brave</option>
+          </select>
+        </div>
+
+        
+        <div class="settings-card">
+          <div class="settings-card-title">incognito mode <span class="rec-badge">recommended</span></div>
+          <div class="settings-card-sub">clears proxy history on close, disables history tracking</div>
+          <div class="settings-btn-row">
+            <button class="s-btn" id="incognito-enable-btn" onclick="setIncognito(true)">enable</button>
+            <button class="s-btn" id="incognito-disable-btn" onclick="setIncognito(false)">disable</button>
+          </div>
+        </div>
+
+        
+        <div class="settings-card">
+          <div class="settings-card-title">custom background</div>
+          <input class="s-input" id="bg-url-input" placeholder="Image URL or CSS color (e.g. #ff0000)" />
+          <div class="settings-btn-row">
+            <button class="s-btn" onclick="applyBackground()">apply</button>
+            <button class="s-btn" onclick="resetBackground()">reset</button>
+          </div>
+        </div>
+
+        
+        <div class="settings-card">
+          <div class="settings-card-title">weird text <span class="rec-badge">recommended</span></div>
+          <div class="settings-card-sub">makes text look աɨʀɖ to bypass content blockers that scan page text</div>
+          <div class="settings-btn-row">
+            <button class="s-btn" id="weirdtext-enable-btn" onclick="setWeirdText(true)">enable</button>
+            <button class="s-btn" id="weirdtext-disable-btn" onclick="setWeirdText(false)">disable</button>
+          </div>
+          <div id="weirdtext-preview" style="display:none;text-align:center;font-size:13px;color:var(--silver);letter-spacing:1px;margin-top:2px;"></div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div id="incognito-badge">🕵 Incognito Mode</div>
+
+<div id="deledao-overlay" style="display:none;position:fixed;inset:0;z-index:99998;pointer-events:none;">
+  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Google_Classroom_Logo.png/480px-Google_Classroom_Logo.png"
+    style="position:absolute;top:0;left:0;width:1px;height:1px;opacity:0.01;" />
+</div>
+
+<script>
+  const SERAPH = 'https://mspoi.github.io/seraph/games/';
+  const seraphGames = [
+    {name:"Slope",genre:"Runner",emoji:"🔺",url:"slope/index.html"},
+    {name:"Subway Surfers",genre:"Runner",emoji:"🛹",url:"subwaysurfers/index.html"},
+    {name:"Flappy Bird",genre:"Arcade",emoji:"🐦",url:"flappy/index.html"},
+    {name:"Papa's Pizzaria",genre:"Sim",emoji:"🍕",url:"papaspizzaria/index.html"},
+    {name:"Papa's Burgeria",genre:"Sim",emoji:"🍔",url:"papasburgeria/index.html"},
+    {name:"Super Mario 64",genre:"Platformer",emoji:"🍄",url:"sm64/index.html"},
+    {name:"Run 3",genre:"Runner",emoji:"🏃",url:"run3/index.html"},
+    {name:"BitLife",genre:"Sim",emoji:"👶",url:"bitlife/index.html"},
+    {name:"Crossy Road",genre:"Arcade",emoji:"🐔",url:"crossy/index.html"},
+    {name:"Minecraft v1.5.2",genre:"Sandbox",emoji:"⛏️",url:"mc/index.html"},
+    {name:"Cookie Clicker",genre:"Idle",emoji:"🍪",url:"cookieclicker/index.html"},
+    {name:"Temple Run 2",genre:"Runner",emoji:"🏛️",url:"templerun2/index.html"},
+    {name:"Duck Life 4",genre:"RPG",emoji:"🦆",url:"ducklife4/index.html"},
+    {name:"Chrome Dino",genre:"Runner",emoji:"🦕",url:"dinogame/index.html"},
+    {name:"Jetpack Joyride",genre:"Arcade",emoji:"🚀",url:"jetpackjoyride/index.html"},
+    {name:"Retro Bowl",genre:"Sports",emoji:"🏈",url:"retrobowl/index.html"},
+    {name:"Fruit Ninja",genre:"Arcade",emoji:"🍉",url:"fruitninja/index.html"},
+    {name:"Doodle Jump",genre:"Arcade",emoji:"🦘",url:"doodlejump/index.html"},
+    {name:"2048",genre:"Puzzle",emoji:"🔢",url:"2048/index.html"},
+    {name:"Tetris",genre:"Puzzle",emoji:"🟥",url:"tetris/index.html"},
+    {name:"Fancy Pants Adventure",genre:"Platformer",emoji:"👖",url:"fancypantsadventure/index.html"},
+    {name:"Happy Wheels",genre:"Action",emoji:"☠️",url:"happywheels/index.html"},
+    {name:"Papa's Hotdoggeria",genre:"Sim",emoji:"🌭",url:"papashotdoggeria/index.html"},
+    {name:"Paper IO 2",genre:"Arcade",emoji:"📄",url:"paperio2/index.html"},
+    {name:"Super Hot",genre:"FPS",emoji:"🔴",url:"superhot/index.html"},
+    {name:"Binding of Isaac",genre:"RPG",emoji:"😢",url:"thebindingofisaac/index.html"},
+    {name:"Townscaper",genre:"Sim",emoji:"🏘️",url:"townscaper/index.html"},
+    {name:"Tunnel Rush",genre:"Runner",emoji:"🌀",url:"tunnelrush/index.html"},
+    {name:"Theme Hotel",genre:"Sim",emoji:"🏨",url:"themehotel/index.html"},
+    {name:"Escaping the Prison",genre:"Adventure",emoji:"🔓",url:"escapingtheprison/index.html"},
+    {name:"Stealing the Diamond",genre:"Adventure",emoji:"💎",url:"stealingthediamond/index.html"},
+    {name:"Infiltrating the Airship",genre:"Adventure",emoji:"✈️",url:"infiltratingtheairship/index.html"},
+    {name:"Fleeing the Complex",genre:"Adventure",emoji:"🏃",url:"fleeingthecomplex/index.html"},
+    {name:"The Impossible Quiz",genre:"Puzzle",emoji:"❓",url:"theimpossiblequiz/index.html"},
+    {name:"The Impossible Quiz 2",genre:"Puzzle",emoji:"❓",url:"theimpossiblequiz2/index.html"},
+    {name:"Solitaire",genre:"Card",emoji:"🃏",url:"solitaire/index.html"},
+    {name:"Drift Hunters",genre:"Racing",emoji:"💨",url:"drifthunters/index.html"},
+    {name:"Vex 3",genre:"Platformer",emoji:"🏅",url:"vex3/index.html"},
+    {name:"Vex 4",genre:"Platformer",emoji:"🏅",url:"vex4/index.html"},
+    {name:"Vex 6",genre:"Platformer",emoji:"🏅",url:"vex6/index.html"},
+    {name:"Among Us Fangame",genre:"Action",emoji:"🔴",url:"amongus/index.html"},
+    {name:"Edge Surf",genre:"Runner",emoji:"🏄",url:"surf/index.html"},
+    {name:"Moto X3M",genre:"Racing",emoji:"🏍️",url:"motox3m/index.html"},
+    {name:"FNAF 1",genre:"Horror",emoji:"🐻",url:"fnaf/index.html"},
+    {name:"FNAF 2",genre:"Horror",emoji:"🐻",url:"fnaf-2/index.html"},
+    {name:"FNAF 3",genre:"Horror",emoji:"🐻",url:"fnaf-3/index.html"},
+    {name:"FNAF 4",genre:"Horror",emoji:"🐻",url:"fnaf-4/index.html"},
+    {name:"Riddle School",genre:"Adventure",emoji:"🏫",url:"riddleschool/riddleschool1/index.html"},
+    {name:"Riddle School 2",genre:"Adventure",emoji:"🏫",url:"riddleschool/riddleschool2/index.html"},
+    {name:"Riddle School 3",genre:"Adventure",emoji:"🏫",url:"riddleschool/riddleschool3/index.html"},
+    {name:"Riddle School 4",genre:"Adventure",emoji:"🏫",url:"riddleschool/riddleschool4/index.html"},
+    {name:"Riddle School 5",genre:"Adventure",emoji:"🏫",url:"riddleschool/riddleschool5/index.html"},
+    {name:"Riddle Transfer",genre:"Adventure",emoji:"🏫",url:"riddleschool/riddletransfer/index.html"},
+    {name:"Riddle Transfer 2",genre:"Adventure",emoji:"🏫",url:"riddleschool/riddletransfer2/index.html"},
+    {name:"Drift Boss",genre:"Racing",emoji:"🏎️",url:"driftboss/index.html"},
+    {name:"Friday Night Funkin",genre:"Rhythm",emoji:"🎵",url:"fnf/index.html"},
+    {name:"Pac-Man",genre:"Arcade",emoji:"👻",url:"pacman/index.html"},
+    {name:"Papa's Pancakeria",genre:"Sim",emoji:"🥞",url:"papaspancakeria/index.html"},
+    {name:"Rooftop Snipers",genre:"Shooter",emoji:"🔭",url:"rooftop/index.html"},
+    {name:"Rooftop Snipers 2",genre:"Shooter",emoji:"🔭",url:"rooftop2/index.html"},
+    {name:"Baldi's Basics",genre:"Horror",emoji:"😱",url:"baldisbasics/index.html"},
+    {name:"Bob the Robber 2",genre:"Adventure",emoji:"🥷",url:"bobtherobber2/index.html"},
+    {name:"Minesweeper",genre:"Puzzle",emoji:"💣",url:"minesweeper/index.html"},
+    {name:"Pokemon Emerald",genre:"RPG",emoji:"🟢",url:"pokemonemerald/index.html"},
+    {name:"Pokemon Fire Red",genre:"RPG",emoji:"🔴",url:"pokemonfirered/index.html"},
+    {name:"Pokemon Leaf Green",genre:"RPG",emoji:"🟢",url:"pokemonleafgreen/index.html"},
+    {name:"Pokemon Ruby",genre:"RPG",emoji:"🔴",url:"pokemonruby/index.html"},
+    {name:"Pokemon Sapphire",genre:"RPG",emoji:"🔵",url:"pokemonsapphire/index.html"},
+    {name:"Pokemon Diamond",genre:"RPG",emoji:"💎",url:"pokemondiamond/index.html"},
+    {name:"Pokemon Platinum",genre:"RPG",emoji:"⚪",url:"pokemonplatinum/index.html"},
+    {name:"Pokemon SoulSilver",genre:"RPG",emoji:"🥈",url:"pokemonsoulsilver/index.html"},
+    {name:"Pokemon Unbound",genre:"RPG",emoji:"🎮",url:"pokemonunbound/index.html"},
+    {name:"Pokemon Mystery Dungeon",genre:"RPG",emoji:"🌀",url:"pokemonmysterydungeon/index.html"},
+    {name:"Pokemon Stadium",genre:"RPG",emoji:"🏟️",url:"pokemonstadium/index.html"},
+    {name:"Pokemon Snap",genre:"RPG",emoji:"📸",url:"pokemonsnap/index.html"},
+    {name:"Super Mario Bros",genre:"Platformer",emoji:"🍄",url:"supermariobros/index.html"},
+    {name:"Super Mario Bros 2",genre:"Platformer",emoji:"🍄",url:"supermariobros2/index.html"},
+    {name:"Super Mario Bros 3",genre:"Platformer",emoji:"🍄",url:"supermariobros3/index.html"},
+    {name:"Super Mario Kart",genre:"Racing",emoji:"🏎️",url:"supermariokart/index.html"},
+    {name:"Super Mario World",genre:"Platformer",emoji:"🍄",url:"supermarioworld/index.html"},
+    {name:"Super Mario 64 DS",genre:"Platformer",emoji:"🍄",url:"sm64ds/index.html"},
+    {name:"Super Mario Land",genre:"Platformer",emoji:"🍄",url:"supermarioland/index.html"},
+    {name:"Super Mario Flash",genre:"Platformer",emoji:"🍄",url:"supermarioflash/index.html"},
+    {name:"New Super Mario Bros",genre:"Platformer",emoji:"🍄",url:"newsupermariobros/index.html"},
+    {name:"Unfair Mario",genre:"Platformer",emoji:"🍄",url:"unfairmario/index.html"},
+    {name:"Mario Kart 64",genre:"Racing",emoji:"🏎️",url:"mariokart64/index.html"},
+    {name:"Mario Kart DS",genre:"Racing",emoji:"🏎️",url:"mariokartds/index.html"},
+    {name:"Mario Kart Super Circuit",genre:"Racing",emoji:"🏎️",url:"mariokartsupercircuit/index.html"},
+    {name:"Mario Party",genre:"Party",emoji:"🎉",url:"marioparty/index.html"},
+    {name:"Mario Party 2",genre:"Party",emoji:"🎉",url:"marioparty2/index.html"},
+    {name:"Mario Party 3",genre:"Party",emoji:"🎉",url:"marioparty3/index.html"},
+    {name:"Mario Party DS",genre:"Party",emoji:"🎉",url:"mariopartyds/index.html"},
+    {name:"Mario Golf",genre:"Sports",emoji:"⛳",url:"mariogolf/index.html"},
+    {name:"Mario Tennis",genre:"Sports",emoji:"🎾",url:"mariotennis/index.html"},
+    {name:"Mario Combat",genre:"Action",emoji:"👊",url:"mariocombat/index.html"},
+    {name:"Paper Mario",genre:"RPG",emoji:"📄",url:"papermario/index.html"},
+    {name:"Superstar Saga",genre:"RPG",emoji:"⭐",url:"superstarsaga/index.html"},
+    {name:"There Is No Game",genre:"Puzzle",emoji:"🎮",url:"thereisnogame/index.html"},
+    {name:"World's Hardest Game",genre:"Puzzle",emoji:"🔴",url:"worldshardestgame/index.html"},
+    {name:"Castlevania",genre:"Action",emoji:"🧛",url:"castlevania/index.html"},
+    {name:"Donkey Kong",genre:"Platformer",emoji:"🦍",url:"donkeykong/index.html"},
+    {name:"Donkey Kong 64",genre:"Platformer",emoji:"🦍",url:"donkeykong64/index.html"},
+    {name:"Donkey Kong Land",genre:"Platformer",emoji:"🦍",url:"donkeykongland/index.html"},
+    {name:"Dr Mario",genre:"Puzzle",emoji:"💊",url:"drmario/index.html"},
+    {name:"Metroid",genre:"Action",emoji:"👽",url:"metroid/index.html"},
+    {name:"Metroid Fusion",genre:"Action",emoji:"👽",url:"metroidfusion/index.html"},
+    {name:"Legend of Zelda",genre:"Adventure",emoji:"🗡️",url:"thelegendofzelda/index.html"},
+    {name:"Ocarina of Time",genre:"Adventure",emoji:"🎵",url:"ocarinaoftime/index.html"},
+    {name:"Majora's Mask",genre:"Adventure",emoji:"🎭",url:"majorasmask/index.html"},
+    {name:"WarioWare",genre:"Arcade",emoji:"🤑",url:"warioware/index.html"},
+    {name:"Wario Land 4",genre:"Platformer",emoji:"🤑",url:"warioland4/index.html"},
+    {name:"Yoshi's Island",genre:"Platformer",emoji:"🦕",url:"yoshisisland/index.html"},
+    {name:"Kirby's Dream Land",genre:"Platformer",emoji:"🌸",url:"kirbysdreamland/index.html"},
+    {name:"Kirby Mass Attack",genre:"Platformer",emoji:"🌸",url:"kirbymassattack/index.html"},
+    {name:"Kirby 64",genre:"Platformer",emoji:"🌸",url:"kirby64/index.html"},
+    {name:"Banjo Kazooie",genre:"Platformer",emoji:"🐻",url:"banjokazooie/index.html"},
+    {name:"Banjo Pilot",genre:"Racing",emoji:"🐻",url:"banjopilot/index.html"},
+    {name:"Star Fox 64",genre:"Action",emoji:"🦊",url:"starfox64/index.html"},
+    {name:"GoldenEye 007",genre:"FPS",emoji:"🔫",url:"goldeneye007/index.html"},
+    {name:"F-Zero X",genre:"Racing",emoji:"🏎️",url:"fzerox/index.html"},
+    {name:"Excitebike 64",genre:"Racing",emoji:"🏍️",url:"excitebike64/index.html"},
+    {name:"Super Smash Bros",genre:"Fighting",emoji:"💥",url:"supersmashbros/index.html"},
+    {name:"Super Smash Flash",genre:"Fighting",emoji:"💥",url:"supersmashflash/index.html"},
+    {name:"Street Fighter 2",genre:"Fighting",emoji:"🥊",url:"streetfighter2/index.html"},
+    {name:"DBZ Supersonic Warriors",genre:"Fighting",emoji:"🐉",url:"dbzsupersonicwarriors/index.html"},
+    {name:"Animal Crossing",genre:"Sim",emoji:"🌿",url:"animalcrossingwildworld/index.html"},
+    {name:"Nintendogs",genre:"Sim",emoji:"🐶",url:"nintendogs/index.html"},
+    {name:"Golden Sun",genre:"RPG",emoji:"☀️",url:"goldensun/index.html"},
+    {name:"Fire Emblem",genre:"Strategy",emoji:"⚔️",url:"fireemblem/index.html"},
+    {name:"Advance Wars",genre:"Strategy",emoji:"💣",url:"advancewars/index.html"},
+    {name:"Advance Wars 2",genre:"Strategy",emoji:"💣",url:"advancewars2/index.html"},
+    {name:"Harvest Moon",genre:"Sim",emoji:"🌾",url:"harvestmoon/index.html"},
+    {name:"Mega Man Zero",genre:"Action",emoji:"🤖",url:"megamanzero/index.html"},
+    {name:"Ace Attorney",genre:"Adventure",emoji:"⚖️",url:"aceattorney/index.html"},
+    {name:"Professor Layton",genre:"Puzzle",emoji:"🎩",url:"professorlayton/index.html"},
+    {name:"Scribblenauts",genre:"Puzzle",emoji:"✏️",url:"scribblenauts/index.html"},
+    {name:"Metal Gear Solid",genre:"Action",emoji:"🐍",url:"metalgearsolid/index.html"},
+    {name:"Mother 3",genre:"RPG",emoji:"🎮",url:"mother3/index.html"},
+    {name:"Sonic Advance",genre:"Platformer",emoji:"💨",url:"sonicadvance/index.html"},
+    {name:"Sonic Advance 2",genre:"Platformer",emoji:"💨",url:"sonicadvance2/index.html"},
+    {name:"Super Monkey Ball Jr",genre:"Arcade",emoji:"🐵",url:"supermonkeyballjr/index.html"},
+    {name:"Ice Climber",genre:"Platformer",emoji:"🧊",url:"iceclimber/index.html"},
+    {name:"Bomberman",genre:"Action",emoji:"💣",url:"bomberman/index.html"},
+    {name:"Worms World Party",genre:"Strategy",emoji:"🪱",url:"wormsworldparty/index.html"},
+    {name:"BTD",genre:"Strategy",emoji:"🎈",url:"btd/btd/index.html"},
+    {name:"BTD 2",genre:"Strategy",emoji:"🎈",url:"btd/btd2/index.html"},
+    {name:"BTD 3",genre:"Strategy",emoji:"🎈",url:"btd/btd3/index.html"},
+    {name:"BTD 4",genre:"Strategy",emoji:"🎈",url:"btd/btd4/index.html"},
+    {name:"ADOFAI",genre:"Rhythm",emoji:"🎵",url:"adofai/index.html"},
+    {name:"Super Meat Boy",genre:"Platformer",emoji:"🥩",url:"supermeatboy/index.html"},
+    {name:"Stickman Hook",genre:"Arcade",emoji:"🕷️",url:"stickmanhook/index.html"},
+    {name:"Defend the Tank",genre:"Strategy",emoji:"🪖",url:"defendthetank/index.html"},
+    {name:"Sort the Court",genre:"Sim",emoji:"👑",url:"sortthecourt/index.html"},
+    {name:"This Is the Only Level",genre:"Puzzle",emoji:"🐘",url:"thisistheonlylevel/index.html"},
+    {name:"Run",genre:"Runner",emoji:"🏃",url:"run/index.html"},
+    {name:"Run 2",genre:"Runner",emoji:"🏃",url:"run2/index.html"},
+    {name:"Battleships",genre:"Strategy",emoji:"⚓",url:"battleships/index.html"},
+    {name:"Breaking the Bank",genre:"Adventure",emoji:"🏦",url:"breakingthebank/index.html"},
+    {name:"Duck Life",genre:"RPG",emoji:"🦆",url:"ducklife/index.html"},
+    {name:"Duck Life 2",genre:"RPG",emoji:"🦆",url:"ducklife2/index.html"},
+    {name:"Duck Life 3",genre:"RPG",emoji:"🦆",url:"ducklife3/index.html"},
+    {name:"Duck Life 5",genre:"RPG",emoji:"🦆",url:"ducklife5/index.html"},
+    {name:"Duck Life 6",genre:"RPG",emoji:"🦆",url:"ducklife6/index.html"},
+    {name:"Line Rider",genre:"Arcade",emoji:"🎿",url:"linerider/index.html"},
+    {name:"Raft Wars",genre:"Action",emoji:"🚣",url:"raftwars/index.html"},
+    {name:"Raft Wars 2",genre:"Action",emoji:"🚣",url:"raftwars2/index.html"},
+    {name:"Space Invaders",genre:"Arcade",emoji:"👾",url:"spaceinvaders/index.html"},
+    {name:"Gun Mayhem",genre:"Shooter",emoji:"🔫",url:"gunmayhem/index.html"},
+    {name:"Gun Mayhem 2",genre:"Shooter",emoji:"🔫",url:"gunmayhem2/index.html"},
+    {name:"Gun Mayhem Redux",genre:"Shooter",emoji:"🔫",url:"gunmayhemredux/index.html"},
+    {name:"Learn to Fly",genre:"Arcade",emoji:"🐧",url:"learntofly/index.html"},
+    {name:"Learn to Fly 2",genre:"Arcade",emoji:"🐧",url:"learntofly2/index.html"},
+    {name:"Learn to Fly 3",genre:"Arcade",emoji:"🐧",url:"learntofly3/index.html"},
+    {name:"Fireboy and Watergirl",genre:"Puzzle",emoji:"🔥",url:"fireboywatergirl/index.html"},
+    {name:"Chibi Knight",genre:"RPG",emoji:"⚔️",url:"chibiknight/index.html"},
+    {name:"Cluster Rush",genre:"Runner",emoji:"🚛",url:"clusterrush/index.html"},
+    {name:"Doodle Defender",genre:"Arcade",emoji:"✏️",url:"doodledefender/index.html"},
+    {name:"Papa's Scooperia",genre:"Sim",emoji:"🍦",url:"papasscooperia/index.html"},
+    {name:"Papa's Sushiria",genre:"Sim",emoji:"🍣",url:"papassushiria/index.html"},
+    {name:"Papa's Wingeria",genre:"Sim",emoji:"🍗",url:"papaswingeria/index.html"},
+    {name:"Papa's Freezeria",genre:"Sim",emoji:"🍦",url:"papasfreezeria/index.html"},
+    {name:"Papa's Cheeseria",genre:"Sim",emoji:"🧀",url:"papascheeseria/index.html"},
+    {name:"Papa's Cupcakeria",genre:"Sim",emoji:"🧁",url:"papascupcakeria/index.html"},
+    {name:"Papa's Bakeria",genre:"Sim",emoji:"🥧",url:"papasbakeria/index.html"},
+    {name:"Papa's Pastaria",genre:"Sim",emoji:"🍝",url:"papaspastaria/index.html"},
+    {name:"Papa's Donuteria",genre:"Sim",emoji:"🍩",url:"papasdonuteria/index.html"},
+    {name:"Boxing Physics 2",genre:"Fighting",emoji:"🥊",url:"boxingphysics2/index.html"},
+    {name:"Boxing Random",genre:"Fighting",emoji:"🥊",url:"boxingrandom/index.html"},
+    {name:"Getaway Shootout",genre:"Action",emoji:"🔫",url:"getawayshootout/index.html"},
+    {name:"Rabbit Samurai",genre:"Action",emoji:"🐰",url:"rabbitsamurai/index.html"},
+    {name:"Fancy Pants Adventure 2",genre:"Platformer",emoji:"👖",url:"fancypantsadventure2/index.html"},
+    {name:"Tiny Fishing",genre:"Casual",emoji:"🎣",url:"tinyfishing/index.html"},
+    {name:"Big Red Button",genre:"Casual",emoji:"🔴",url:"bigredbutton/index.html"},
+    {name:"Achievement Unlocked",genre:"Puzzle",emoji:"🏆",url:"achievementunlocked/index.html"},
+    {name:"Achievement Unlocked 2",genre:"Puzzle",emoji:"🏆",url:"achievementunlocked2/index.html"},
+    {name:"Achievement Unlocked 3",genre:"Puzzle",emoji:"🏆",url:"achievementunlocked3/index.html"},
+    {name:"Factory Balls",genre:"Puzzle",emoji:"⚽",url:"factoryballs/index.html"},
+    {name:"Skywire",genre:"Arcade",emoji:"🚡",url:"skywire/index.html"},
+    {name:"Skywire 2",genre:"Arcade",emoji:"🚡",url:"skywire2/index.html"},
+    {name:"Adventure Capitalist",genre:"Idle",emoji:"💰",url:"adventurecapitalist/index.html"},
+    {name:"Monkey Mart",genre:"Sim",emoji:"🐒",url:"monkeymart/index.html"},
+    {name:"Doom 64",genre:"FPS",emoji:"👹",url:"doom64/index.html"},
+    {name:"Bloxors",genre:"Puzzle",emoji:"🟫",url:"bloxors/index.html"},
+    {name:"Electric Man 2",genre:"Fighting",emoji:"⚡",url:"electricman2/index.html"},
+    {name:"Portal",genre:"Puzzle",emoji:"🌀",url:"portal/index.html"},
+    {name:"Portal 2",genre:"Puzzle",emoji:"🌀",url:"portal2/index.html"},
+    {name:"Cell Machine",genre:"Puzzle",emoji:"🔲",url:"cellmachine/index.html"},
+    {name:"Stickman Boost",genre:"Platformer",emoji:"🏃",url:"stickmanboost/index.html"},
+    {name:"Skibidi 1v100",genre:"Action",emoji:"🚽",url:"skibidi1v100/index.html"},
+    {name:"Super Smash Bros N64",genre:"Fighting",emoji:"💥",url:"supersmashbros/index.html"},
+    {name:"Doge Miner",genre:"Idle",emoji:"🐕",url:"dogeminer/index.html"},
+    {name:"Tanuki Sunset",genre:"Racing",emoji:"🦝",url:"tanukisunset/index.html"},
+    {name:"Aquapark Slides",genre:"Arcade",emoji:"💦",url:"aquaparkslides/index.html"},
+    {name:"Color Switch",genre:"Arcade",emoji:"🎨",url:"colorswitch/index.html"},
+    {name:"Unfair Mario",genre:"Platformer",emoji:"🍄",url:"unfairmario/index.html"},
+  ];
+
+  function makeSeraphCard(g) {
+    const fullUrl = SERAPH + g.url;
+    return `<a class="game-card" style="cursor:pointer" onclick="proxyNav('${fullUrl}')">
+      <div class="game-thumb">${g.emoji}</div>
+      <div class="game-info">
+        <div class="game-name">${g.name}</div>
+        <div class="game-genre">${g.genre}</div>
+      </div>
+    </a>`;
+  }
+
+  const games = [
+    {name:"1v1 LOL",genre:"Shooter",emoji:"🎯",path:"https://a456pur.github.io/seraph/games/1v1lol/index.html",useProxy:true},
+    {name:"2048",genre:"Puzzle",emoji:"🔢",path:"https://mspoi.github.io/seraph/games/2048/index.html",useProxy:true},
+    {name:"A Dark Room",genre:"Idle",emoji:"🕯️",path:"https://a456pur.github.io/seraph/games/adarkroom/index.html",useProxy:true},
+    {name:"Ascii Space",genre:"Arcade",emoji:"🚀",path:"https://a456pur.github.io/seraph/games/asciispace/index.html",useProxy:true},
+    {name:"Asteroids",genre:"Arcade",emoji:"☄️",path:"https://a456pur.github.io/seraph/games/asteroids/index.html",useProxy:true},
+    {name:"Astray",genre:"Maze",emoji:"🌀",path:"https://a456pur.github.io/seraph/games/astray/index.html",useProxy:true},
+    {name:"Baldi's Basics",genre:"Horror",emoji:"😱",path:"https://mspoi.github.io/seraph/games/baldisbasics/index.html",useProxy:true},
+    {name:"Basketball Legends",genre:"Sports",emoji:"🏀",path:"https://a456pur.github.io/seraph/games/basketballlegends/index.html",useProxy:true},
+    {name:"Basketball Stars",genre:"Sports",emoji:"⭐",path:"https://a456pur.github.io/seraph/games/basketballstars/index.html",useProxy:true},
+    {name:"Basket Random",genre:"Sports",emoji:"🎲",path:"https://a456pur.github.io/seraph/games/basketrandom/index.html",useProxy:true},
+    {name:"BitLife",genre:"Sim",emoji:"👶",path:"https://mspoi.github.io/seraph/games/bitlife/index.html",useProxy:true},
+    {name:"Breakout",genre:"Arcade",emoji:"🧱",path:"https://a456pur.github.io/seraph/games/breakout/index.html",useProxy:true},
+    {name:"BTD4",genre:"Strategy",emoji:"🎈",path:"https://mspoi.github.io/seraph/games/btd/btd4/index.html",useProxy:true},
+    {name:"Chess",genre:"Strategy",emoji:"♟️",path:"https://a456pur.github.io/seraph/games/chess/index.html",useProxy:true},
+    {name:"Chrome Dino",genre:"Runner",emoji:"🦕",path:"https://mspoi.github.io/seraph/games/dinogame/index.html",useProxy:true},
+    {name:"Clicker Heroes",genre:"Idle",emoji:"⚔️",path:"https://a456pur.github.io/seraph/games/clickerheroes/index.html",useProxy:true},
+    {name:"Cluster Rush",genre:"Runner",emoji:"🚛",path:"https://mspoi.github.io/seraph/games/clusterrush/index.html",useProxy:true},
+    {name:"Cookie Clicker",genre:"Idle",emoji:"🍪",path:"https://mspoi.github.io/seraph/games/cookieclicker/index.html",useProxy:true},
+    {name:"Crossy Road",genre:"Arcade",emoji:"🐔",path:"https://mspoi.github.io/seraph/games/crossy/index.html",useProxy:true},
+    {name:"Cubefield",genre:"Arcade",emoji:"🟦",path:"https://a456pur.github.io/seraph/games/cubefield/index.html",useProxy:true},
+    {name:"Cut the Rope",genre:"Puzzle",emoji:"🍬",path:"https://a456pur.github.io/seraph/games/cuttherope/index.html",useProxy:true},
+    {name:"Death Run 3D",genre:"Runner",emoji:"💀",path:"https://a456pur.github.io/seraph/games/deathrun3d/index.html",useProxy:true},
+    {name:"Doom",genre:"FPS",emoji:"👹",path:"https://a456pur.github.io/seraph/games/doom/index.html",useProxy:true},
+    {name:"Doodle Jump",genre:"Arcade",emoji:"🦘",path:"https://mspoi.github.io/seraph/games/doodlejump/index.html",useProxy:true},
+    {name:"Drift",genre:"Racing",emoji:"🏎️",path:"https://a456pur.github.io/seraph/games/drift/index.html",useProxy:true},
+    {name:"Drift Hunters",genre:"Racing",emoji:"💨",path:"https://mspoi.github.io/seraph/games/drifthunters/index.html",useProxy:true},
+    {name:"Drive Mad",genre:"Racing",emoji:"🚗",path:"https://a456pur.github.io/seraph/games/drivemad/index.html",useProxy:true},
+    {name:"Duck Life",genre:"RPG",emoji:"🦆",path:"https://mspoi.github.io/seraph/games/ducklife/index.html",useProxy:true},
+    {name:"Duck Life 2",genre:"RPG",emoji:"🦆",path:"https://mspoi.github.io/seraph/games/ducklife2/index.html",useProxy:true},
+    {name:"Duck Life 3",genre:"RPG",emoji:"🦆",path:"https://mspoi.github.io/seraph/games/ducklife3/index.html",useProxy:true},
+    {name:"Duck Life 4",genre:"RPG",emoji:"🦆",path:"https://mspoi.github.io/seraph/games/ducklife4/index.html",useProxy:true},
+    {name:"Duck Life 5",genre:"RPG",emoji:"🦆",path:"https://mspoi.github.io/seraph/games/ducklife5/index.html",useProxy:true},
+    {name:"Earn to Die",genre:"Racing",emoji:"🧟",path:"https://a456pur.github.io/seraph/games/earntodie/index.html",useProxy:true},
+    {name:"Eggy Car",genre:"Arcade",emoji:"🥚",path:"https://a456pur.github.io/seraph/games/eggycar/index.html",useProxy:true},
+    {name:"Flappy Bird",genre:"Arcade",emoji:"🐦",path:"https://mspoi.github.io/seraph/games/flappy/index.html",useProxy:true},
+    {name:"Flappy 2048",genre:"Arcade",emoji:"🐦",path:"https://a456pur.github.io/seraph/games/flappy2048/index.html",useProxy:true},
+    {name:"Flight Simulator",genre:"Sim",emoji:"✈️",path:"https://a456pur.github.io/seraph/games/flightsimulator/index.html",useProxy:true},
+    {name:"Friday Night Funkin",genre:"Rhythm",emoji:"🎵",path:"https://a456pur.github.io/seraph/games/fnf/index.html",useProxy:true},
+    {name:"Fruit Ninja",genre:"Arcade",emoji:"🍉",path:"https://mspoi.github.io/seraph/games/fruitninja/index.html",useProxy:true},
+    {name:"Geometry Dash",genre:"Rhythm",emoji:"🔷",path:"https://a456pur.github.io/seraph/games/geometrydash/index.html",useProxy:true},
+    {name:"Getaway Shootout",genre:"Action",emoji:"🔫",path:"https://a456pur.github.io/seraph/games/getawayshootout/index.html",useProxy:true},
+    {name:"Gladihoppers",genre:"Fighting",emoji:"🗡️",path:"https://a456pur.github.io/seraph/games/gladihoppers/index.html",useProxy:true},
+    {name:"Google Snake",genre:"Arcade",emoji:"🐍",path:"https://a456pur.github.io/seraph/games/googlesnake/index.html",useProxy:true},
+    {name:"Grindcraft",genre:"Idle",emoji:"⛏️",path:"https://a456pur.github.io/seraph/games/grindcraft/index.html",useProxy:true},
+    {name:"HexGL",genre:"Racing",emoji:"🔺",path:"https://a456pur.github.io/seraph/games/hexgl/index.html",useProxy:true},
+    {name:"Hextris",genre:"Puzzle",emoji:"⬡",path:"https://a456pur.github.io/seraph/games/hextris/index.html",useProxy:true},
+    {name:"Highway Traffic",genre:"Racing",emoji:"🛣️",path:"https://a456pur.github.io/seraph/games/highwaytraffic/index.html",useProxy:true},
+    {name:"Learn to Fly",genre:"Arcade",emoji:"🐧",path:"https://mspoi.github.io/seraph/games/learntofly/index.html",useProxy:true},
+    {name:"Little Alchemy",genre:"Puzzle",emoji:"⚗️",path:"https://a456pur.github.io/seraph/games/littlealchemy/index.html",useProxy:true},
+    {name:"Monkey Mart",genre:"Sim",emoji:"🐒",path:"https://mspoi.github.io/seraph/games/monkeymart/index.html",useProxy:true},
+    {name:"Moto X3M",genre:"Racing",emoji:"🏍️",path:"https://mspoi.github.io/seraph/games/motox3m/index.html",useProxy:true},
+    {name:"OvO",genre:"Platformer",emoji:"🏃",path:"https://a456pur.github.io/seraph/games/ovo/index.html",useProxy:true},
+    {name:"OvO 2",genre:"Platformer",emoji:"🏃",path:"https://a456pur.github.io/seraph/games/ovo2/index.html",useProxy:true},
+    {name:"Pac-Man",genre:"Arcade",emoji:"👻",path:"https://mspoi.github.io/seraph/games/pacman/index.html",useProxy:true},
+    {name:"Paper IO",genre:"Arcade",emoji:"📄",path:"https://mspoi.github.io/seraph/games/paperio2/index.html",useProxy:true},
+    {name:"Retro Bowl",genre:"Sports",emoji:"🏈",path:"https://mspoi.github.io/seraph/games/retrobowl/index.html",useProxy:true},
+    {name:"Riddle School 2",genre:"Adventure",emoji:"🏫",path:"https://mspoi.github.io/seraph/games/riddleschool/riddleschool2/index.html",useProxy:true},
+    {name:"Rooftop Snipers",genre:"Shooter",emoji:"🔭",path:"https://mspoi.github.io/seraph/games/rooftop/index.html",useProxy:true},
+    {name:"Run 3",genre:"Runner",emoji:"🏃",path:"https://mspoi.github.io/seraph/games/run3/index.html",useProxy:true},
+    {name:"Slope",genre:"Runner",emoji:"🔺",path:"https://mspoi.github.io/seraph/games/slope/index.html",useProxy:true},
+    {name:"Slope 2",genre:"Runner",emoji:"🔻",path:"https://a456pur.github.io/seraph/games/slope2/index.html",useProxy:true},
+    {name:"Snake",genre:"Arcade",emoji:"🐍",path:"https://a456pur.github.io/seraph/games/snake/index.html",useProxy:true},
+    {name:"Solitaire",genre:"Card",emoji:"🃏",path:"https://mspoi.github.io/seraph/games/solitaire/index.html",useProxy:true},
+    {name:"Space Invaders",genre:"Arcade",emoji:"👾",path:"https://mspoi.github.io/seraph/games/spaceinvaders/index.html",useProxy:true},
+    {name:"Stack Ball",genre:"Arcade",emoji:"🔮",path:"https://a456pur.github.io/seraph/games/stackball/index.html",useProxy:true},
+    {name:"Stickman Hook",genre:"Arcade",emoji:"🕷️",path:"https://mspoi.github.io/seraph/games/stickmanhook/index.html",useProxy:true},
+    {name:"Subway Surfers",genre:"Runner",emoji:"🛹",path:"https://mspoi.github.io/seraph/games/subwaysurfers/index.html",useProxy:true},
+    {name:"Tetris",genre:"Puzzle",emoji:"🟥",path:"https://mspoi.github.io/seraph/games/tetris/index.html",useProxy:true},
+    {name:"Time Shooter",genre:"Shooter",emoji:"⏱️",path:"https://a456pur.github.io/seraph/games/timeshooter/index.html",useProxy:true},
+    {name:"Time Shooter 2",genre:"Shooter",emoji:"⏱️",path:"https://a456pur.github.io/seraph/games/timeshooter2/index.html",useProxy:true},
+    {name:"Time Shooter 3",genre:"Shooter",emoji:"⏱️",path:"https://a456pur.github.io/seraph/games/timeshooter3/index.html",useProxy:true},
+    {name:"Tiny Fishing",genre:"Casual",emoji:"🎣",path:"https://mspoi.github.io/seraph/games/tinyfishing/index.html",useProxy:true},
+    {name:"Tomb of the Mask",genre:"Arcade",emoji:"💀",path:"https://a456pur.github.io/seraph/games/tombofthemask/index.html",useProxy:true},
+    {name:"Tunnel Rush",genre:"Runner",emoji:"🌀",path:"https://mspoi.github.io/seraph/games/tunnelrush/index.html",useProxy:true},
+    {name:"Vex 3",genre:"Platformer",emoji:"🏅",path:"https://mspoi.github.io/seraph/games/vex3/index.html",useProxy:true},
+    {name:"Vex 4",genre:"Platformer",emoji:"🏅",path:"https://mspoi.github.io/seraph/games/vex4/index.html",useProxy:true},
+    {name:"Vex 5",genre:"Platformer",emoji:"🏅",path:"https://a456pur.github.io/seraph/games/vex5/index.html",useProxy:true},
+    {name:"Vex 6",genre:"Platformer",emoji:"🏅",path:"https://mspoi.github.io/seraph/games/vex6/index.html",useProxy:true},
+    {name:"World's Hardest Game 2",genre:"Puzzle",emoji:"🔴",path:"https://a456pur.github.io/seraph/games/worldshardestgame2/index.html",useProxy:true},
+    {name:"Zombs Royale",genre:"Battle Royale",emoji:"🧟",path:"https://a456pur.github.io/seraph/games/zombsroyale/index.html",useProxy:true},
+  ];
+
+  let settings = JSON.parse(localStorage.getItem('willie-settings') || '{}');
+  const featured = games.slice(0, 6);
+
+  function makeCard(game) {
+    const newTab = settings.newTab;
+    const isFav = (settings.favorites || []).includes(game.name);
+    const safeName = game.name.replace(/'/g,"\\'");
+
+    if (game.useProxy) {
+      
+      return `
+      <a class="game-card" style="cursor:pointer" onclick="trackPlayed('${safeName}');proxyNav('${game.path}')">
+        <div class="game-thumb">${game.emoji}</div>
+        <div class="game-info">
+          <div class="game-name">${game.name}</div>
+          <div class="game-genre">${game.genre}</div>
+        </div>
+        <button class="game-fav-btn ${isFav ? 'starred' : ''}" onclick="toggleFav(event,'${safeName}')">★</button>
+      </a>`;
+    }
+
+    
+    const target = newTab ? '_blank' : '_self';
+    const href = newTab ? game.path : `game.html?src=${encodeURIComponent(game.path)}&name=${encodeURIComponent(game.name)}`;
+    return `
+      <a class="game-card" href="${href}" target="${target}" onclick="trackPlayed('${safeName}')">
+        <div class="game-thumb">${game.emoji}</div>
+        <div class="game-info">
+          <div class="game-name">${game.name}</div>
+          <div class="game-genre">${game.genre}</div>
+        </div>
+        <button class="game-fav-btn ${isFav ? 'starred' : ''}" onclick="toggleFav(event,'${safeName}')">★</button>
+      </a>`;
+  }
+
+  function renderGrids(list = games) {
+    const displayList = settings.sortGames ? [...list].sort((a,b) => a.name.localeCompare(b.name)) : list;
+    const displayFeatured = settings.sortGames ? [...featured].sort((a,b) => a.name.localeCompare(b.name)) : featured;
+    document.getElementById('all-games-grid').innerHTML = displayList.map(makeCard).join('');
+    document.getElementById('featured-grid').innerHTML = displayFeatured.map(makeCard).join('');
+    document.getElementById('game-count').textContent = games.length;
+    document.getElementById('stat-games').textContent = games.length;
+    renderRecentlyPlayed();
+    renderFavorites();
+  }
+
+  function filterGames(q) {
+    const filtered = games.filter(g =>
+      g.name.toLowerCase().includes(q.toLowerCase()) ||
+      g.genre.toLowerCase().includes(q.toLowerCase())
+    );
+    document.getElementById('all-games-grid').innerHTML = filtered.map(makeCard).join('');
+    if (q) showView('games');
+  }
+
+  
+  function showView(id) {
+    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    document.getElementById('view-' + id).classList.add('active');
+    const titles = { home: 'Home', games: 'Games', apps: 'Tools', proxy: 'Proxy', history: 'History', bookmarks: 'Bookmarks', settings: 'Settings' };
+    document.getElementById('page-title').textContent = titles[id] || id;
+    event?.currentTarget?.classList.add('active');
+  }
+
+  async function appNav(url) {
+    showView('proxy');
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    await quickNav(url);
+  }
+
+  function toolNav(url) {
+    showView('proxy');
+    document.querySelectorAll('.nav-item').forEach(n => {
+      if (n.getAttribute('onclick') && n.getAttribute('onclick').includes("'proxy'")) n.classList.add('active');
+      else n.classList.remove('active');
+    });
+    _doNavigate(url);
+  }
+
+  
+  const { ScramjetController } = $scramjetLoadController();
+  const scramjet = new ScramjetController({
+    files: {
+      wasm: '/scram/scramjet.wasm.wasm',
+      all: '/scram/scramjet.all.js',
+      sync: '/scram/scramjet.sync.js',
+    },
+  });
+  scramjet.init();
+
+  const connection = new BareMux.BareMuxConnection('/baremux/worker.js');
+  let sjFrame = null;
+
+  async function _doNavigate(url) {
+    
+    try {
+      await registerSW();
+      
+      if (navigator.serviceWorker.controller) {
+        
+      } else {
+        
+        await new Promise((resolve) => {
+          navigator.serviceWorker.addEventListener('controllerchange', resolve, { once: true });
+          
+          setTimeout(resolve, 3000);
+        });
+      }
+    } catch(e) {
+      console.error('SW registration failed', e);
+      return;
+    }
+
+    const wispUrl = (location.protocol === 'https:' ? 'wss' : 'ws') + '://' + location.host + '/wisp/';
+    if ((await connection.getTransport()) !== '/libcurl/index.mjs') {
+      await connection.setTransport('/libcurl/index.mjs', [{ websocket: wispUrl }]);
+    }
+
+    const container = document.getElementById('proxy-frame-container');
+    if (!sjFrame) {
+      const old = document.getElementById('proxy-iframe');
+      if (old) old.remove();
+      sjFrame = scramjet.createFrame();
+      sjFrame.frame.id = 'proxy-iframe';
+      sjFrame.frame.style.cssText = 'width:100%;height:100%;border:none;';
+      container.appendChild(sjFrame.frame);
+    }
+
+    sjFrame.go(url);
+    addHistory(url);
+    updateBookmarkBtn(url);
+
+    
+    document.getElementById('proxy-landing').classList.add('hidden');
+    document.getElementById('proxy-browser').classList.add('visible');
+    document.getElementById('proxy-url-bar').value = url;
+  }
+
+  async function loadProxy() {
+    let val = document.getElementById('proxy-url').value.trim();
+    if (!val) return;
+    const url = search(val, currentSearchEngine);
+    await _doNavigate(url);
+  }
+
+  async function quickNav(url) {
+    document.getElementById('proxy-url').value = url;
+    await _doNavigate(url);
+  }
+
+  async function proxyNav(url) {
+    showView('proxy');
+    document.querySelectorAll('.nav-item').forEach(n => {
+      if (n.getAttribute('onclick') && n.getAttribute('onclick').includes("'proxy'")) n.classList.add('active');
+      else n.classList.remove('active');
+    });
+    await _doNavigate(url);
+  }
+
+  function proxyBack() {
+    if (sjFrame) sjFrame.frame.contentWindow.history.back();
+  }
+
+  function proxyForward() {
+    if (sjFrame) sjFrame.frame.contentWindow.history.forward();
+  }
+
+  function proxyRefresh() {
+    if (sjFrame) sjFrame.frame.contentWindow.location.reload();
+  }
+
+  function proxyHome() {
+    document.getElementById('proxy-landing').classList.remove('hidden');
+    document.getElementById('proxy-browser').classList.remove('visible');
+    document.getElementById('proxy-url').value = '';
+  }
+
+  document.getElementById('proxy-url').addEventListener('keydown', e => {
+    if (e.key === 'Enter') loadProxy();
+  });
+
+  document.getElementById('proxy-url-bar').addEventListener('keydown', async e => {
+    if (e.key === 'Enter') {
+      const url = search(e.target.value.trim(), 'https://www.google.com/search?q=%s');
+      if (sjFrame) { sjFrame.go(url); e.target.value = url; }
+    }
+  });
+
+  
+  function initParticles() {
+    
+    const canvas = document.getElementById('global-particles');
+    if (canvas) {
+      const ctx = canvas.getContext('2d');
+      let W, H, particles;
+
+      function resize() {
+        W = canvas.width = window.innerWidth;
+        H = canvas.height = window.innerHeight;
+      }
+
+      function makeParticle() {
+        return {
+          x: Math.random() * W,
+          y: Math.random() * H,
+          r: Math.random() * 2.5 + 0.5,
+          dx: (Math.random() - 0.5) * 0.35,
+          dy: (Math.random() - 0.5) * 0.35,
+          a: Math.random() * 0.35 + 0.05,
+        };
+      }
+
+      function init() {
+        resize();
+        particles = Array.from({ length: 100 }, makeParticle);
+      }
+
+      function draw() {
+        ctx.clearRect(0, 0, W, H);
+        if (particlesEnabled) {
+          for (const p of particles) {
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(180,180,190,${p.a})`;
+            ctx.fill();
+            p.x += p.dx;
+            p.y += p.dy;
+            if (p.x < 0 || p.x > W) p.dx *= -1;
+            if (p.y < 0 || p.y > H) p.dy *= -1;
+          }
+        }
+        requestAnimationFrame(draw);
+      }
+
+      window.addEventListener('resize', resize);
+      init();
+      draw();
+    }
+
+    
+    const proxyCanvas = document.getElementById('proxy-particles');
+    if (proxyCanvas) proxyCanvas.style.display = 'none';
+  }
+
+  
+  let particlesInited = false;
+  const origShowView = showView;
+  
+
+  
+  function openSettings() { showView('settings'); }
+  function closeSettings() {}
+  function closeSettingsOutside() {}
+
+  function saveSettings() {
+    localStorage.setItem('willie-settings', JSON.stringify(settings));
+    renderGrids();
+  }
+
+  function changeTheme(val) {
+    const themes = {
+      silver: { '--silver': '#b0bec5', '--silver-bright': '#e0e8ef', '--accent': '#78909c' },
+      blue:   { '--silver': '#64b5f6', '--silver-bright': '#90caf9', '--accent': '#42a5f5' },
+      green:  { '--silver': '#69f0ae', '--silver-bright': '#b9f6ca', '--accent': '#00e676' },
+      orange: { '--silver': '#ffa040', '--silver-bright': '#ffcc80', '--accent': '#ff8c00' },
+    };
+    const t = themes[val] || themes.silver;
+    Object.entries(t).forEach(([k, v]) => document.documentElement.style.setProperty(k, v));
+    settings.theme = val;
+    saveSettings();
+  }
+
+  function toggleCompact(el) {
+    document.querySelectorAll('.games-grid').forEach(g => {
+      g.style.gridTemplateColumns = el.checked
+        ? 'repeat(auto-fill, minmax(130px, 1fr))'
+        : 'repeat(auto-fill, minmax(180px, 1fr))';
+    });
+    saveSettings();
+  }
+
+  function applyTabCloak() {
+    const val = document.getElementById('cloak-preset').value;
+    const cloaks = {
+      none:      { title: 'Willie Games', icon: '' },
+      google:    { title: 'Google', icon: 'https://www.google.com/favicon.ico' },
+      classroom: { title: 'Google Classroom', icon: 'https://ssl.gstatic.com/classroom/favicon.png' },
+      docs:      { title: 'Google Docs', icon: 'https://ssl.gstatic.com/docs/documents/images/kix-favicon7.ico' },
+    };
+    const c = cloaks[val] || cloaks.none;
+    document.title = c.title;
+    if (c.icon) {
+      let link = document.querySelector("link[rel~='icon']");
+      if (!link) { link = document.createElement('link'); link.rel = 'icon'; document.head.appendChild(link); }
+      link.href = c.icon;
+    }
+    settings.cloak = val;
+    saveSettings();
+  }
+
+  function cloakTab(val) {
+    if (document.getElementById('cloak-preset')) document.getElementById('cloak-preset').value = val;
+    applyTabCloak();
+  }
+
+  function resetCloak() {
+    document.title = 'Willie Games';
+    let link = document.querySelector("link[rel~='icon']");
+    if (link) link.href = '';
+    settings.cloak = 'none';
+    if (document.getElementById('cloak-preset')) document.getElementById('cloak-preset').value = 'none';
+    saveSettings();
+  }
+
+  function applyCustomCloak() {
+    const title = document.getElementById('custom-cloak-title').value.trim();
+    const icon = document.getElementById('custom-cloak-icon').value.trim();
+    if (title) document.title = title;
+    if (icon) {
+      let link = document.querySelector("link[rel~='icon']");
+      if (!link) { link = document.createElement('link'); link.rel = 'icon'; document.head.appendChild(link); }
+      link.href = icon;
+    }
+    settings.customCloak = { title, icon };
+    saveSettings();
+  }
+
+  let particlesEnabled = true;
+  let particlesAnimId = null;
+
+  function setParticles(enabled) {
+    particlesEnabled = enabled;
+    settings.particles = enabled;
+    saveSettings();
+    const canvas = document.getElementById('global-particles');
+    if (canvas) canvas.style.opacity = enabled ? '1' : '0';
+    document.getElementById('particles-enable-btn').classList.toggle('active', enabled);
+    document.getElementById('particles-disable-btn').classList.toggle('active', !enabled);
+  }
+
+  function setMobile(enabled) {
+    settings.mobile = enabled;
+    saveSettings();
+    const vp = document.querySelector('meta[name=viewport]');
+    if (enabled) {
+      vp.content = 'width=480, initial-scale=1.0';
+    } else {
+      vp.content = 'width=device-width, initial-scale=1.0';
+    }
+    document.getElementById('mobile-enable-btn').classList.toggle('active', enabled);
+    document.getElementById('mobile-disable-btn').classList.toggle('active', !enabled);
+  }
+
+  function setSortGames(enabled) {
+    settings.sortGames = enabled;
+    saveSettings();
+    renderGrids();
+    document.getElementById('sort-enable-btn').classList.toggle('active', enabled);
+    document.getElementById('sort-disable-btn').classList.toggle('active', !enabled);
+  }
+
+  function setDeledao(enabled) {
+    settings.deledao = enabled;
+    saveSettings();
+    document.getElementById('deledao-overlay').style.display = enabled ? 'block' : 'none';
+    document.getElementById('deledao-enable-btn').classList.toggle('active', enabled);
+    document.getElementById('deledao-disable-btn').classList.toggle('active', !enabled);
+  }
+
+  function aboutBlankCloak() {
+    const w = window.open('about:blank', '_blank');
+    const doc = w.document;
+    doc.open();
+    doc.write(`<!DOCTYPE html><html><head><title>New Tab</title></head><body style="margin:0;padding:0;overflow:hidden;">
+      <iframe src="${location.href}" style="width:100vw;height:100vh;border:none;"></iframe>
+    </body></html>`);
+    doc.close();
+  }
+
+  
+  function toggleSidebar() {
+    const sb = document.getElementById('sidebar');
+    const btn = document.getElementById('sidebar-toggle');
+    sb.classList.toggle('collapsed');
+    btn.classList.toggle('collapsed');
+    btn.textContent = sb.classList.contains('collapsed') ? '›' : '‹';
+  }
+
+  
+  function getHistory() { return JSON.parse(localStorage.getItem('willie-history') || '[]'); }
+  function saveHistory(h) { localStorage.setItem('willie-history', JSON.stringify(h)); }
+
+  function addHistory(url) {
+    if (settings.incognito) return;
+    const h = getHistory().filter(x => x.url !== url);
+    h.unshift({ url, time: Date.now() });
+    saveHistory(h.slice(0, 100));
+    renderHistory();
+  }
+
+  function renderHistory() {
+    const list = document.getElementById('history-list');
+    if (!list) return;
+    const h = getHistory();
+    if (!h.length) { list.innerHTML = '<div class="hb-empty">No history yet</div>'; return; }
+    list.innerHTML = h.map((item, i) => `
+      <div class="hb-item" onclick="quickNavFromHB('${item.url.replace(/'/g,"\\'")}')">
+        <span class="hb-icon">🌐</span>
+        <div class="hb-info">
+          <div class="hb-title">${item.url}</div>
+          <div class="hb-url">${new Date(item.time).toLocaleString()}</div>
+        </div>
+        <button class="hb-del" onclick="deleteHistory(event,${i})">✕</button>
+      </div>`).join('');
+  }
+
+  function deleteHistory(e, i) {
+    e.stopPropagation();
+    const h = getHistory();
+    h.splice(i, 1);
+    saveHistory(h);
+    renderHistory();
+  }
+
+  function clearHistory() {
+    saveHistory([]);
+    renderHistory();
+  }
+
+  
+  function getBookmarks() { return JSON.parse(localStorage.getItem('willie-bookmarks') || '[]'); }
+  function saveBookmarks(b) { localStorage.setItem('willie-bookmarks', JSON.stringify(b)); }
+
+  function toggleBookmark() {
+    const url = document.getElementById('proxy-url-bar').value;
+    if (!url) return;
+    const b = getBookmarks();
+    const idx = b.findIndex(x => x.url === url);
+    const btn = document.getElementById('proxy-bookmark-btn');
+    if (idx >= 0) {
+      b.splice(idx, 1);
+      btn.textContent = '☆';
+      btn.classList.remove('bookmarked');
+    } else {
+      b.unshift({ url, time: Date.now() });
+      btn.textContent = '★';
+      btn.classList.add('bookmarked');
+    }
+    saveBookmarks(b);
+    renderBookmarks();
+  }
+
+  function renderBookmarks() {
+    const list = document.getElementById('bookmarks-list');
+    if (!list) return;
+    const b = getBookmarks();
+    if (!b.length) { list.innerHTML = '<div class="hb-empty">No bookmarks yet — click ☆ while browsing</div>'; return; }
+    list.innerHTML = b.map((item, i) => `
+      <div class="hb-item" onclick="quickNavFromHB('${item.url.replace(/'/g,"\\'")}')">
+        <span class="hb-icon">★</span>
+        <div class="hb-info">
+          <div class="hb-title">${item.url}</div>
+          <div class="hb-url">${new Date(item.time).toLocaleString()}</div>
+        </div>
+        <button class="hb-del" onclick="deleteBookmark(event,${i})">✕</button>
+      </div>`).join('');
+  }
+
+  function deleteBookmark(e, i) {
+    e.stopPropagation();
+    const b = getBookmarks();
+    b.splice(i, 1);
+    saveBookmarks(b);
+    renderBookmarks();
+  }
+
+  function clearBookmarks() { saveBookmarks([]); renderBookmarks(); }
+
+  function quickNavFromHB(url) {
+    showView('proxy');
+    quickNav(url);
+  }
+
+  function updateBookmarkBtn(url) {
+    const b = getBookmarks();
+    const btn = document.getElementById('proxy-bookmark-btn');
+    if (!btn) return;
+    const isBookmarked = b.some(x => x.url === url);
+    btn.textContent = isBookmarked ? '★' : '☆';
+    btn.classList.toggle('bookmarked', isBookmarked);
+  }
+
+  
+  function toggleFav(e, name) {
+    e.preventDefault(); e.stopPropagation();
+    const favs = settings.favorites || [];
+    const idx = favs.indexOf(name);
+    if (idx >= 0) favs.splice(idx, 1);
+    else favs.push(name);
+    settings.favorites = favs;
+    saveSettings();
+    renderGrids();
+  }
+
+  function renderFavorites() {
+    const favs = settings.favorites || [];
+    const section = document.getElementById('favorites-section');
+    const grid = document.getElementById('favorites-grid');
+    if (!section || !grid) return;
+    if (!favs.length) { section.style.display = 'none'; return; }
+    const favGames = games.filter(g => favs.includes(g.name));
+    section.style.display = '';
+    grid.innerHTML = favGames.map(makeCard).join('');
+  }
+
+  
+  function trackPlayed(name) {
+    if (settings.incognito) return;
+    const recent = JSON.parse(localStorage.getItem('willie-recent') || '[]').filter(x => x !== name);
+    recent.unshift(name);
+    localStorage.setItem('willie-recent', JSON.stringify(recent.slice(0, 5)));
+    renderRecentlyPlayed();
+  }
+
+  function renderRecentlyPlayed() {
+    const section = document.getElementById('recently-played-section');
+    const grid = document.getElementById('recently-played-grid');
+    if (!section || !grid) return;
+    const recent = JSON.parse(localStorage.getItem('willie-recent') || '[]');
+    if (!recent.length) { section.style.display = 'none'; return; }
+    const recentGames = recent.map(name => games.find(g => g.name === name)).filter(Boolean);
+    section.style.display = '';
+    grid.innerHTML = recentGames.map(makeCard).join('');
+  }
+
+  
+  let listeningForPanic = false;
+  function listenForPanicKey() {
+    listeningForPanic = true;
+    document.getElementById('panic-key-display').value = 'Press any key...';
+    document.getElementById('panic-key-display').style.borderColor = '#c0622a';
+  }
+  function resetPanicKey() {
+    settings.panicKey = 'Escape';
+    saveSettings();
+    document.getElementById('panic-key-display').value = 'Current: Escape';
+    document.getElementById('panic-key-display').style.borderColor = '';
+  }
+
+  
+  const searchEngines = {
+    google: 'https://www.google.com/search?q=%s',
+    bing: 'https://www.bing.com/search?q=%s',
+    duckduckgo: 'https://duckduckgo.com/?q=%s',
+    brave: 'https://search.brave.com/search?q=%s',
+  };
+  let currentSearchEngine = 'https://www.google.com/search?q=%s';
+
+  function setSearchEngine(val) {
+    currentSearchEngine = searchEngines[val] || searchEngines.google;
+    settings.searchEngine = val;
+    saveSettings();
+  }
+
+  
+  function setIncognito(enabled) {
+    settings.incognito = enabled;
+    saveSettings();
+    document.getElementById('incognito-badge').classList.toggle('visible', enabled);
+    document.getElementById('incognito-enable-btn').classList.toggle('active', enabled);
+    document.getElementById('incognito-disable-btn').classList.toggle('active', !enabled);
+    if (enabled) { saveHistory([]); renderHistory(); }
+  }
+
+  
+  function applyBackground() {
+    const val = document.getElementById('bg-url-input').value.trim();
+    if (!val) return;
+    const isColor = val.startsWith('#') || val.startsWith('rgb') || /^[a-z]+$/i.test(val);
+    if (isColor) {
+      document.body.style.background = val;
+      document.documentElement.style.setProperty('--bg', val);
+    } else {
+      document.body.style.backgroundImage = `url('${val}')`;
+      document.body.style.backgroundSize = 'cover';
+      document.body.style.backgroundPosition = 'center';
+    }
+    settings.bgValue = val;
+    saveSettings();
+  }
+
+  function resetBackground() {
+    document.body.style.background = '';
+    document.body.style.backgroundImage = '';
+    document.documentElement.style.setProperty('--bg', '#0a0a0c');
+    settings.bgValue = '';
+    saveSettings();
+  }
+
+  
+  const weirdMap = {
+    a:'ǟ',b:'ɮ',c:'ƈ',d:'ɖ',e:'ɛ',f:'ʄ',g:'ɢ',h:'ɦ',i:'ɨ',j:'ʝ',
+    k:'ӄ',l:'ʟ',m:'ʍ',n:'ռ',o:'օ',p:'ք',q:'զ',r:'ʀ',s:'ֆ',t:'ȶ',
+    u:'ʊ',v:'ʋ',w:'աɨ',x:'Ӽ',y:'ʏ',z:'ʑ',
+    A:'ǟ',B:'ɮ',C:'ƈ',D:'ɖ',E:'ɛ',F:'ʄ',G:'ɢ',H:'ɦ',I:'ɨ',J:'ʝ',
+    K:'ӄ',L:'ʟ',M:'ʍ',N:'ռ',O:'օ',P:'ք',Q:'զ',R:'ʀ',S:'ֆ',T:'ȶ',
+    U:'ʊ',V:'ʋ',W:'աɨ',X:'Ӽ',Y:'ʏ',Z:'ʑ'
+  };
+
+  function weirdify(str) {
+    return str.split('').map(c => weirdMap[c] || c).join('');
+  }
+
+  
+  function weirdifyNode(node) {
+    if (node.nodeType === Node.TEXT_NODE) {
+      if (node._origText === undefined) node._origText = node.textContent;
+      node.textContent = weirdify(node._origText);
+    } else if (node.nodeType === Node.ELEMENT_NODE) {
+      const tag = node.tagName;
+      
+      if (['SCRIPT','STYLE','INPUT','SELECT','TEXTAREA','CANVAS'].includes(tag)) return;
+      for (const child of node.childNodes) weirdifyNode(child);
+    }
+  }
+
+  function restoreNode(node) {
+    if (node.nodeType === Node.TEXT_NODE) {
+      if (node._origText !== undefined) {
+        node.textContent = node._origText;
+        delete node._origText;
+      }
+    } else if (node.nodeType === Node.ELEMENT_NODE) {
+      const tag = node.tagName;
+      if (['SCRIPT','STYLE','INPUT','SELECT','TEXTAREA','CANVAS'].includes(tag)) return;
+      for (const child of node.childNodes) restoreNode(child);
+    }
+  }
+
+  let weirdObserver = null;
+
+  function setWeirdText(enabled) {
+    settings.weirdText = enabled;
+    saveSettings();
+
+    if (enabled) {
+      weirdifyNode(document.body);
+      
+      weirdObserver = new MutationObserver(mutations => {
+        for (const m of mutations) {
+          for (const node of m.addedNodes) weirdifyNode(node);
+          if (m.type === 'characterData' && m.target._origText === undefined) {
+            m.target._origText = m.target.textContent;
+            m.target.textContent = weirdify(m.target._origText);
+          }
+        }
       });
+      weirdObserver.observe(document.body, { childList: true, subtree: true, characterData: true });
+      const preview = document.getElementById('weirdtext-preview');
+      if (preview) { preview.style.display = ''; preview.textContent = weirdify('Willie Games'); }
+    } else {
+      if (weirdObserver) { weirdObserver.disconnect(); weirdObserver = null; }
+      restoreNode(document.body);
+      const preview = document.getElementById('weirdtext-preview');
+      if (preview) preview.style.display = 'none';
+    }
+
+    document.getElementById('weirdtext-enable-btn').classList.toggle('active', enabled);
+    document.getElementById('weirdtext-disable-btn').classList.toggle('active', !enabled);
+  }
+
+  
+  document.addEventListener('keydown', e => {
+    if (listeningForPanic) {
+      listeningForPanic = false;
+      settings.panicKey = e.key;
+      saveSettings();
+      document.getElementById('panic-key-display').value = `Current: ${e.key}`;
+      document.getElementById('panic-key-display').style.borderColor = '';
+      return;
+    }
+    const panicKey = settings.panicKey || 'Escape';
+    if (e.key === panicKey && settings.panic !== false) {
+      document.body.innerHTML = '';
+      document.title = 'New Tab';
+      history.pushState({}, '', 'about:blank');
+    }
+  });
+
+  
+  renderGrids();
+  renderHistory();
+  renderBookmarks();
+  const seraphGrid = document.getElementById('seraph-grid');
+  if (seraphGrid) seraphGrid.innerHTML = seraphGames.map(makeSeraphCard).join('');
+
+  
+  function updateClock() {
+    const now = new Date();
+    let h = now.getHours();
+    const ampm = h >= 12 ? 'PM' : 'AM';
+    h = h % 12 || 12;
+    const m = now.getMinutes().toString().padStart(2,'0');
+    const s = now.getSeconds().toString().padStart(2,'0');
+    const el = document.getElementById('topbar-clock');
+    if (el) el.textContent = `${h}:${m}:${s} ${ampm}`;
+  }
+  updateClock();
+  setInterval(updateClock, 1000);
+
+  
+  async function initBattery() {
+    if (!navigator.getBattery) return;
+    try {
+      const battery = await navigator.getBattery();
+      function updateBattery() {
+        const pct = Math.round(battery.level * 100);
+        const pctEl = document.getElementById('battery-pct');
+        const fill = document.getElementById('battery-fill');
+        const charging = document.getElementById('battery-charging');
+        if (pctEl) pctEl.textContent = pct + '%';
+        if (fill) fill.setAttribute('width', Math.max(1, Math.round(14 * battery.level)));
+        if (charging) charging.style.display = battery.charging ? 'inline' : 'none';
+        
+        const icon = document.getElementById('battery-icon');
+        if (icon) {
+          if (battery.charging) icon.style.color = '#66bb6a';
+          else if (pct <= 20) icon.style.color = '#ef5350';
+          else if (pct <= 50) icon.style.color = '#ffa726';
+          else icon.style.color = 'var(--silver)';
+        }
+      }
+      updateBattery();
+      battery.addEventListener('levelchange', updateBattery);
+      battery.addEventListener('chargingchange', updateBattery);
+    } catch(e) {}
+  }
+  initBattery();
+
+  
+  if (settings.theme) changeTheme(settings.theme);
+  if (settings.cloak) cloakTab(settings.cloak);
+  if (settings.customCloak) {
+    if (settings.customCloak.title) document.title = settings.customCloak.title;
+    if (settings.customCloak.icon) {
+      let link = document.querySelector("link[rel~='icon']");
+      if (!link) { link = document.createElement('link'); link.rel = 'icon'; document.head.appendChild(link); }
+      link.href = settings.customCloak.icon;
+    }
+  }
+  if (settings.mobile) setMobile(true);
+  if (settings.sortGames) setSortGames(true);
+  if (settings.deledao) setDeledao(true);
+  if (settings.particles === false) {
+    particlesEnabled = false;
+    const canvas = document.getElementById('global-particles');
+    if (canvas) canvas.style.opacity = '0';
+    document.getElementById('particles-disable-btn').classList.add('active');
+  }
+  if (settings.incognito) setIncognito(true);
+  if (settings.searchEngine) {
+    setSearchEngine(settings.searchEngine);
+    const sel = document.getElementById('search-engine-select');
+    if (sel) sel.value = settings.searchEngine;
+  }
+  if (settings.panicKey) {
+    const el = document.getElementById('panic-key-display');
+    if (el) el.value = `Current: ${settings.panicKey}`;
+  }
+  if (settings.bgValue) {
+    const el = document.getElementById('bg-url-input');
+    if (el) el.value = settings.bgValue;
+    applyBackground();
+  }
+  if (settings.weirdText) setWeirdText(true);
+
+  
+  const _origShowView = showView;
+  window.showView = function(id) {
+    _origShowView(id);
+  };
+
+  
+  if (!particlesInited) {
+    particlesInited = true;
+    setTimeout(initParticles, 50);
+  }
+
+  
+  document.querySelectorAll('.nav-item').forEach(el => {
+    el.addEventListener('click', () => {});
+  });
+</script>
+
+<style>
+  #chat-toggle {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #1e2a32, #253035);
+    border: 1px solid #37474f;
+    color: #e0e8ef;
+    font-size: 22px;
+    cursor: pointer;
+    z-index: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+    transition: all 0.2s;
+  }
+  #chat-toggle:hover { border-color: #b0bec5; transform: scale(1.05); }
+  #chat-unread {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    background: #ef5350;
+    color: #fff;
+    font-size: 10px;
+    font-family: 'Orbitron', monospace;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    display: none;
+    align-items: center;
+    justify-content: center;
+  }
+  #chat-unread.show { display: flex; }
+  #chat-panel {
+    position: fixed;
+    bottom: 88px;
+    right: 24px;
+    width: 320px;
+    height: 480px;
+    background: #0e0e14;
+    border: 1px solid #37474f;
+    border-radius: 14px;
+    display: flex;
+    flex-direction: column;
+    z-index: 499;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.6);
+    transform: scale(0.95) translateY(10px);
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.2s cubic-bezier(0.4,0,0.2,1);
+    overflow: hidden;
+  }
+  #chat-panel.open { transform: scale(1) translateY(0); opacity: 1; pointer-events: all; }
+  #chat-header { padding: 14px 16px; border-bottom: 1px solid #1e2a32; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
+  #chat-header-left { display: flex; align-items: center; gap: 10px; }
+  #chat-status-dot { width: 8px; height: 8px; border-radius: 50%; background: #ef5350; transition: background 0.3s; }
+  #chat-status-dot.connected { background: #66bb6a; }
+  #chat-title { font-family: 'Orbitron', monospace; font-size: 11px; font-weight: 700; color: #e0e8ef; letter-spacing: 2px; text-transform: uppercase; }
+  #chat-online { font-size: 11px; color: #546e7a; letter-spacing: 1px; }
+  #chat-close { color: #546e7a; cursor: pointer; font-size: 16px; transition: color 0.2s; line-height: 1; }
+  #chat-close:hover { color: #e0e8ef; }
+  #chat-username-bar { padding: 8px 12px; border-bottom: 1px solid #1e2a32; display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+  #chat-username-bar label { font-size: 11px; color: #546e7a; letter-spacing: 1px; white-space: nowrap; }
+  #chat-username { flex: 1; background: #14141a; border: 1px solid #1e2a32; color: #cfd8dc; padding: 4px 8px; border-radius: 6px; font-family: 'Rajdhani', sans-serif; font-size: 13px; outline: none; }
+  #chat-username:focus { border-color: #607d8b; }
+  #chat-messages { flex: 1; overflow-y: auto; padding: 12px; display: flex; flex-direction: column; gap: 8px; scrollbar-width: thin; scrollbar-color: #1e2a32 transparent; }
+  #chat-messages::-webkit-scrollbar { width: 3px; }
+  #chat-messages::-webkit-scrollbar-thumb { background: #1e2a32; border-radius: 2px; }
+  .chat-msg { background: #14141a; border: 1px solid #1e2a32; border-radius: 8px; padding: 8px 10px; animation: msgIn 0.15s ease; }
+  @keyframes msgIn { from { opacity:0; transform:translateY(4px); } to { opacity:1; transform:translateY(0); } }
+  .chat-msg-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; }
+  .chat-msg-user { font-family: 'Orbitron', monospace; font-size: 10px; font-weight: 700; color: #b0bec5; letter-spacing: 1px; }
+  .chat-msg-time { font-size: 10px; color: #37474f; }
+  .chat-msg-text { font-size: 13px; color: #cfd8dc; line-height: 1.4; word-break: break-word; }
+  .chat-msg.mine { border-color: #1e3040; background: #101820; }
+  .chat-msg.mine .chat-msg-user { color: #64b5f6; }
+  .chat-system { text-align: center; font-size: 11px; color: #37474f; letter-spacing: 1px; font-family: 'Orbitron', monospace; padding: 4px 0; }
+  #chat-input-area { padding: 10px 12px; border-top: 1px solid #1e2a32; display: flex; gap: 8px; flex-shrink: 0; }
+  #chat-input { flex: 1; background: #14141a; border: 1px solid #1e2a32; color: #cfd8dc; padding: 8px 12px; border-radius: 8px; font-family: 'Rajdhani', sans-serif; font-size: 14px; outline: none; transition: border-color 0.2s; }
+  #chat-input:focus { border-color: #607d8b; }
+  #chat-input::placeholder { color: #37474f; }
+  #chat-send { background: linear-gradient(135deg, #1e2a32, #253035); border: 1px solid #37474f; color: #b0bec5; width: 36px; height: 36px; border-radius: 8px; cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center; transition: all 0.2s; flex-shrink: 0; }
+  #chat-send:hover { border-color: #b0bec5; color: #e0e8ef; }
+</style>
+
+<button id="chat-toggle" onclick="toggleChat()">
+  💬
+  <span id="chat-unread"></span>
+</button>
+
+<div id="chat-panel">
+  <div id="chat-header">
+    <div id="chat-header-left">
+      <div id="chat-status-dot"></div>
+      <span id="chat-title">Global Chat</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:12px">
+      <span id="chat-online">0 online</span>
+      <span id="chat-close" onclick="toggleChat()">✕</span>
+    </div>
+  </div>
+  <div id="chat-username-bar">
+    <label>Name:</label>
+    <input id="chat-username" maxlength="20" placeholder="Anonymous"/>
+  </div>
+  <div id="chat-messages">
+    <div class="chat-system">WILLIE GAMES — GLOBAL CHAT</div>
+  </div>
+  <div id="chat-input-area">
+    <input id="chat-input" placeholder="Say something..." maxlength="300"/>
+    <button id="chat-send" onclick="chatSend()">➤</button>
+  </div>
+</div>
+
+<script>
+(function() {
+  let chatWs = null;
+  let chatOpen = false;
+  let unreadCount = 0;
+  let joined = false;
+  const AudioCtx = window.AudioContext || window.webkitAudioContext;
+  let audioCtx = null;
+
+  
+  function playPing() {
+    try {
+      if (!audioCtx) audioCtx = new AudioCtx();
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.frequency.setValueAtTime(880, audioCtx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(440, audioCtx.currentTime + 0.15);
+      gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.3);
+      osc.start(audioCtx.currentTime);
+      osc.stop(audioCtx.currentTime + 0.3);
+    } catch(e) {}
+  }
+
+  
+  const savedName = localStorage.getItem('willie-chat-username');
+  if (savedName) document.getElementById('chat-username').value = savedName;
+
+  document.getElementById('chat-username').addEventListener('change', () => {
+    localStorage.setItem('willie-chat-username', document.getElementById('chat-username').value.trim());
+  });
+
+  
+  function toggleChat() {
+    chatOpen = !chatOpen;
+    document.getElementById('chat-panel').classList.toggle('open', chatOpen);
+    if (chatOpen) {
+      unreadCount = 0;
+      document.getElementById('chat-unread').classList.remove('show');
+      document.getElementById('chat-input').focus();
+      scrollChatBottom();
+      if (!chatWs || chatWs.readyState > 1) connectChat();
+    }
+  }
+
+  
+  function connectChat() {
+    const proto = location.protocol === 'https:' ? 'wss' : 'ws';
+    chatWs = new WebSocket(`${proto}://${location.host}/chat/`);
+
+    chatWs.addEventListener('open', () => {
+      document.getElementById('chat-status-dot').classList.add('connected');
+      addSystemMsg('Connected to global chat');
+      
+      const username = document.getElementById('chat-username').value.trim() || 'Anonymous';
+      chatWs.send(JSON.stringify({ type: 'join', username }));
+      joined = true;
     });
 
-    // Sidebar toggle
-    document.getElementById('sidebar-toggle').addEventListener('click', () => {
-      document.getElementById('sidebar').classList.toggle('collapsed');
-      document.getElementById('sidebar-toggle').classList.toggle('collapsed');
+    chatWs.addEventListener('close', () => {
+      joined = false;
+      document.getElementById('chat-status-dot').classList.remove('connected');
+      addSystemMsg('Disconnected — reconnecting in 3s...');
+      setTimeout(connectChat, 3000);
     });
 
-    // Settings panel
-    document.querySelectorAll('[data-settings]').forEach(btn => {
-      btn.addEventListener('click', () => {
-        document.getElementById('settings-overlay').classList.add('open');
-      });
-    });
-
-    document.getElementById('settings-close').addEventListener('click', () => {
-      document.getElementById('settings-overlay').classList.remove('open');
-    });
-
-    document.getElementById('settings-overlay').addEventListener('click', (e) => {
-      if (e.target === document.getElementById('settings-overlay')) {
-        document.getElementById('settings-overlay').classList.remove('open');
+    chatWs.addEventListener('message', (e) => {
+      let data; try { data = JSON.parse(e.data); } catch { return; }
+      if (data.type === 'history') {
+        data.messages.forEach(m => {
+          if (m.type === 'system') addSystemMsg(m.text);
+          else appendMsg(m, false);
+        });
+        scrollChatBottom();
+      } else if (data.type === 'message') {
+        appendMsg(data, true);
+      } else if (data.type === 'system') {
+        addSystemMsg(data.text);
+        if (!chatOpen) playPing();
+      } else if (data.type === 'online') {
+        document.getElementById('chat-online').textContent = `${data.count} online`;
+        const sv = document.getElementById('stat-viewers');
+        if (sv) sv.textContent = data.count;
       }
     });
-  </script>
+  }
+
+  
+  function appendMsg(msg, animate) {
+    const myName = document.getElementById('chat-username').value.trim() || 'Anonymous';
+    const isMe = msg.username === myName;
+    const el = document.createElement('div');
+    el.className = 'chat-msg' + (isMe ? ' mine' : '');
+    const t = new Date(msg.time);
+    const timeStr = t.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    el.innerHTML = `<div class="chat-msg-header"><span class="chat-msg-user">${esc(msg.username)}</span><span class="chat-msg-time">${timeStr}</span></div><div class="chat-msg-text">${esc(msg.text)}</div>`;
+    document.getElementById('chat-messages').appendChild(el);
+    if (animate && !isMe) {
+      playPing();
+      if (!chatOpen) {
+        unreadCount++;
+        const badge = document.getElementById('chat-unread');
+        badge.textContent = unreadCount > 9 ? '9+' : unreadCount;
+        badge.classList.add('show');
+      }
+    }
+    if (animate) scrollChatBottom();
+  }
+
+  
+  function addSystemMsg(text) {
+    const el = document.createElement('div');
+    el.className = 'chat-system';
+    el.textContent = text;
+    document.getElementById('chat-messages').appendChild(el);
+    scrollChatBottom();
+  }
+
+  function scrollChatBottom() {
+    const el = document.getElementById('chat-messages');
+    el.scrollTop = el.scrollHeight;
+  }
+
+  
+  function chatSend() {
+    const input = document.getElementById('chat-input');
+    const text = input.value.trim();
+    if (!text) return;
+    if (!chatWs || chatWs.readyState !== 1) { connectChat(); return; }
+    const username = document.getElementById('chat-username').value.trim() || 'Anonymous';
+    localStorage.setItem('willie-chat-username', username);
+    chatWs.send(JSON.stringify({ type: 'message', username, text }));
+    input.value = '';
+  }
+
+  function esc(s) {
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  document.getElementById('chat-input').addEventListener('keydown', e => { if (e.key === 'Enter') chatSend(); });
+
+  connectChat();
+  window.toggleChat = toggleChat;
+  window.chatSend = chatSend;
+})();
+</script>
+
 </body>
 </html>
