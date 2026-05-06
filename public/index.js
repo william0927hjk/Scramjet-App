@@ -1,23 +1,13 @@
 "use strict";
-/**
- * @type {HTMLFormElement}
- */
+
 const form = document.getElementById("sj-form");
-/**
- * @type {HTMLInputElement}
- */
+
 const address = document.getElementById("sj-address");
-/**
- * @type {HTMLInputElement}
- */
+
 const searchEngine = document.getElementById("sj-search-engine");
-/**
- * @type {HTMLParagraphElement}
- */
+
 const error = document.getElementById("sj-error");
-/**
- * @type {HTMLPreElement}
- */
+
 const errorCode = document.getElementById("sj-error-code");
 
 const { ScramjetController } = $scramjetLoadController();
@@ -34,7 +24,7 @@ scramjet.init();
 
 const connection = new BareMux.BareMuxConnection("/baremux/worker.js");
 
-// Back button to return to the home UI
+
 const backBtn = document.createElement("button");
 backBtn.id = "sj-back";
 backBtn.textContent = "← Back";
@@ -58,7 +48,7 @@ backBtn.addEventListener("click", () => {
 	const existingFrame = document.getElementById("sj-frame");
 	if (existingFrame) existingFrame.remove();
 	backBtn.style.display = "none";
-	// Show the main UI again
+	
 	document.querySelectorAll(".sj-hide-on-proxy").forEach((el) => {
 		el.style.display = "";
 	});
@@ -88,16 +78,16 @@ form.addEventListener("submit", async (event) => {
 		]);
 	}
 
-	// Remove any existing frame
+	
 	const existingFrame = document.getElementById("sj-frame");
 	if (existingFrame) existingFrame.remove();
 
-	// Hide the main UI elements
+	
 	document.querySelectorAll(".sj-hide-on-proxy").forEach((el) => {
 		el.style.display = "none";
 	});
 
-	// Create and show the frame fullscreen
+	
 	const frame = scramjet.createFrame();
 	frame.frame.id = "sj-frame";
 	frame.frame.style.cssText = `
