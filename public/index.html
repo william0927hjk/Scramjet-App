@@ -29,12 +29,15 @@
     * { margin: 0; padding: 0; box-sizing: border-box; cursor: none !important; }
 
     #custom-cursor {
-      width: 40px;
-      height: 40px;
+      width: 10px;
+      height: 10px;
+      background: white;
+      border-radius: 50%;
       position: fixed;
       pointer-events: none;
       z-index: 99999;
-      transform: translate(-4px, -4px);
+      transform: translate(-50%, -50%);
+      box-shadow: 0 0 8px 4px rgba(255,255,255,0.6), 0 0 24px 10px rgba(255,255,255,0.25);
       opacity: 0;
       transition: opacity 0.2s;
     }
@@ -3565,11 +3568,10 @@
 })();
 </script>
 
-
-<img id="custom-cursor" src="Frame_68.png" alt="" />
+<div id="custom-cursor"></div>
 <script>
 (function() {
-  const cursor = document.getElementById('custom-cursor');
+  var cursor = document.getElementById('custom-cursor');
   document.addEventListener('mousemove', function(e) {
     cursor.style.opacity = '1';
     cursor.style.left = e.clientX + 'px';
@@ -3580,6 +3582,5 @@
   });
 })();
 </script>
-
 </body>
 </html>
