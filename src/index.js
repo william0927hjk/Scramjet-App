@@ -13,7 +13,7 @@ import { baremuxPath } from "@mercuryworkshop/bare-mux/node";
 
 const publicPath = fileURLToPath(new URL("../public/", import.meta.url));
 
-// â”€â”€ LOAD .env â”€â”€
+
 try {
 	const env = readFileSync(process.cwd() + "/.env", "utf8");
 	for (const line of env.split("\n")) {
@@ -22,7 +22,7 @@ try {
 	}
 } catch { /* no .env file, use existing env */ }
 
-// Wisp Configuration
+
 logging.set_level(logging.NONE);
 Object.assign(wisp.options, {
 	allow_udp_streams: false,
@@ -30,7 +30,7 @@ Object.assign(wisp.options, {
 	dns_servers: ["1.1.1.3", "1.0.0.3"],
 });
 
-// â”€â”€ PROFANITY FILTER â”€â”€
+
 const BAD_WORDS = [
 	"fuck", "shit", "ass", "bitch", "cunt", "dick", "pussy", "cock",
 	"nigger", "nigga", "faggot", "retard", "whore", "slut", "bastard",
@@ -46,8 +46,8 @@ function filterText(text) {
 	return filtered;
 }
 
-// â”€â”€ GLOBAL CHAT â”€â”€
-const chatClients = new Map(); // ws -> { username }
+
+const chatClients = new Map(); 
 const chatHistory = [];
 const MAX_HISTORY = 50;
 
@@ -79,7 +79,7 @@ chatWss.on("connection", (ws) => {
 	let username = "Anonymous";
 	chatClients.set(ws, { username });
 
-	// Send recent history to new user
+	
 	if (chatHistory.length) {
 		ws.send(JSON.stringify({ type: "history", messages: chatHistory }));
 	}
