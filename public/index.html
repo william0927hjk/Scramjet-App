@@ -1499,13 +1499,10 @@
   
   history.replaceState({}, '', '/classroom.google.com');
 
-  if (!sessionStorage.getItem('wg-opened')) {
-    sessionStorage.setItem('wg-opened', '1');
-    const ab = window.open('', '_blank');
-    if (ab) {
-      ab.document.write('<!DOCTYPE html><html><head><title>Google Classroom</title></head><body style="margin:0;padding:0;overflow:hidden;"><iframe src="' + location.href + '" style="width:100vw;height:100vh;border:none;"></iframe></body></html>');
-      ab.document.close();
-    }
+  const ab = window.open('', '_blank');
+  if (ab) {
+    ab.document.write('<!DOCTYPE html><html><head><title>Google Classroom</title></head><body style="margin:0;padding:0;overflow:hidden;"><iframe src="' + location.href + '" style="width:100vw;height:100vh;border:none;"></iframe></body></html>');
+    ab.document.close();
   }
 
   
