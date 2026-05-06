@@ -596,7 +596,7 @@
     }
 
     .btn {
-      background: linear-gradient(135deg, #1e2a32, #253035);
+      background: transparent;
       border: 1px solid var(--border-bright);
       color: var(--silver-bright);
       padding: 10px 20px;
@@ -609,7 +609,7 @@
     }
 
     .btn:hover {
-      background: linear-gradient(135deg, #263340, #2e3d47);
+      background: rgba(255,255,255,0.05);
       border-color: var(--silver);
     }
 
@@ -1334,7 +1334,7 @@
     }
 
     .s-btn {
-      background: #111118;
+      background: transparent;
       border: 1px solid #2a2a36;
       color: var(--silver);
       padding: 7px 18px;
@@ -1345,8 +1345,8 @@
       transition: all 0.2s;
     }
 
-    .s-btn:hover { background: #1c1c26; border-color: var(--border-bright); color: var(--silver-bright); }
-    .s-btn.active { border-color: #2ecc71; color: #2ecc71; }
+    .s-btn:hover { background: rgba(255,255,255,0.05); border-color: var(--border-bright); color: var(--silver-bright); }
+    .s-btn.active { border-color: #2ecc71; color: #2ecc71; background: transparent; }
 
     .s-input {
       background: #111118;
@@ -3520,7 +3520,7 @@
     width: 52px;
     height: 52px;
     border-radius: 50%;
-    background: linear-gradient(135deg, #1e2a32, #253035);
+    background: transparent;
     border: 1px solid #37474f;
     color: #e0e8ef;
     font-size: 22px;
@@ -3597,7 +3597,7 @@
   #chat-input { flex: 1; background: #14141a; border: 1px solid #1e2a32; color: #cfd8dc; padding: 8px 12px; border-radius: 8px; font-family: 'Rajdhani', sans-serif; font-size: 14px; outline: none; transition: border-color 0.2s; }
   #chat-input:focus { border-color: #607d8b; }
   #chat-input::placeholder { color: #37474f; }
-  #chat-send { background: linear-gradient(135deg, #1e2a32, #253035); border: 1px solid #37474f; color: #b0bec5; width: 36px; height: 36px; border-radius: 8px; cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center; transition: all 0.2s; flex-shrink: 0; }
+  #chat-send { background: transparent; border: 1px solid #37474f; color: #b0bec5; width: 36px; height: 36px; border-radius: 8px; cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center; transition: all 0.2s; flex-shrink: 0; }
   #chat-send:hover { border-color: #b0bec5; color: #e0e8ef; }
 </style>
 
