@@ -42,11 +42,10 @@
   const loading = document.getElementById('loading');
   frame.onload = () => { loading.style.display = 'none'; };
 
-  // If it's a local path (gfiles/... or starts with /), load directly
-  // without going through the Scramjet service worker
+  
   const isLocal = src.startsWith('gfiles/') || src.startsWith('/gfiles/') || src.startsWith('./');
   if (isLocal) {
-    // Unregister scramjet SW for this frame by using a direct absolute path
+    
     frame.src = '/' + src.replace(/^\//, '');
   } else {
     frame.src = src;
