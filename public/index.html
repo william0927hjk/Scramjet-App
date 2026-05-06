@@ -1536,7 +1536,7 @@
 <div id="sidebar">
   <div id="logo">
     <h1>WILLIE</h1>
-    <span>join our discord <a href="https://discord.gg" target="_blank" style="color: #7289da; text-decoration: none;">here</a></span>
+    <span>join our discord <a href="https://discord.gg/vDDnt9QRjZ" target="_blank" style="color: #7289da; text-decoration: none;">here</a></span>
   </div>
   <nav>
     <div class="nav-section-label">Menu</div>
@@ -1971,6 +1971,11 @@
             <option value="blue">Steel Blue</option>
             <option value="green">Neon Green</option>
             <option value="orange">Burnt Orange</option>
+            <option value="purple">Neon Purple</option>
+            <option value="red">Crimson Red</option>
+            <option value="pink">Hot Pink</option>
+            <option value="teal">Teal</option>
+            <option value="gold">Gold</option>
           </select>
         </div>
 
@@ -2929,6 +2934,11 @@
       blue:   { '--silver': '#64b5f6', '--silver-bright': '#90caf9', '--accent': '#42a5f5' },
       green:  { '--silver': '#69f0ae', '--silver-bright': '#b9f6ca', '--accent': '#00e676' },
       orange: { '--silver': '#ffa040', '--silver-bright': '#ffcc80', '--accent': '#ff8c00' },
+      purple: { '--silver': '#ce93d8', '--silver-bright': '#f3e5f5', '--accent': '#ab47bc' },
+      red:    { '--silver': '#ef9a9a', '--silver-bright': '#ffcdd2', '--accent': '#e53935' },
+      pink:   { '--silver': '#f48fb1', '--silver-bright': '#fce4ec', '--accent': '#e91e63' },
+      teal:   { '--silver': '#4db6ac', '--silver-bright': '#b2dfdb', '--accent': '#00897b' },
+      gold:   { '--silver': '#ffd54f', '--silver-bright': '#fff9c4', '--accent': '#ffb300' },
     };
     const t = themes[val] || themes.silver;
     Object.entries(t).forEach(([k, v]) => document.documentElement.style.setProperty(k, v));
