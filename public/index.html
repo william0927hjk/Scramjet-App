@@ -1450,6 +1450,67 @@
 </head>
 <body>
 
+<!-- Fake Google Classroom loading screen -->
+<div id="fake-loading">
+  <style>
+    #fake-loading {
+      position: fixed;
+      inset: 0;
+      background: #fff;
+      z-index: 999999;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 24px;
+      font-family: 'Google Sans', Roboto, Arial, sans-serif;
+    }
+    #fake-loading img { width: 64px; height: 64px; }
+    #fake-loading .gc-title {
+      font-size: 22px;
+      color: #3c4043;
+      font-weight: 400;
+    }
+    #fake-loading .gc-bar-wrap {
+      width: 240px;
+      height: 4px;
+      background: #e0e0e0;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    #fake-loading .gc-bar {
+      height: 100%;
+      width: 0%;
+      background: #1a73e8;
+      border-radius: 4px;
+      animation: gcLoad 1.4s ease forwards;
+    }
+    @keyframes gcLoad {
+      0%   { width: 0%; }
+      60%  { width: 75%; }
+      100% { width: 100%; }
+    }
+  </style>
+  <img src="https://ssl.gstatic.com/classroom/favicon.png" onerror="this.src='https://www.gstatic.com/images/branding/product/2x/classroom_2020q4_48dp.png'" alt="" />
+  <div class="gc-title">Google Classroom</div>
+  <div class="gc-bar-wrap"><div class="gc-bar"></div></div>
+</div>
+
+<script>
+  // URL masking — make it look like Google Classroom
+  history.replaceState({}, '', '/classroom.google.com');
+
+  // Hide fake loading screen after 1.6s
+  setTimeout(function() {
+    var el = document.getElementById('fake-loading');
+    if (el) {
+      el.style.transition = 'opacity 0.4s ease';
+      el.style.opacity = '0';
+      setTimeout(function() { el.style.display = 'none'; }, 400);
+    }
+  }, 1600);
+</script>
+
 <canvas id="global-particles"></canvas>
 
 <div id="tool-topbar">
