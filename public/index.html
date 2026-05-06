@@ -11,10 +11,10 @@
   <script src="search.js"></script>
   <style>
     :root {
-      --bg: #0a0a0c;
-      --sidebar-bg: #101014;
-      --card-bg: #14141a;
-      --card-hover: #1c1c26;
+      --bg: rgba(10,10,12,0.55);
+      --sidebar-bg: rgba(16,16,20,0.55);
+      --card-bg: rgba(20,20,26,0.5);
+      --card-hover: rgba(28,28,38,0.6);
       --silver: #b0bec5;
       --silver-bright: #e0e8ef;
       --silver-dim: #607d8b;
@@ -44,6 +44,10 @@
 
     body {
       background: var(--bg);
+      background-image: url('https://i.redd.it/after-weeks-i-finally-managed-to-create-a-personal-chill-v0-33hd30u6j3e71.png?width=1920&format=png&auto=webp&s=531f944dc855186c05478a8e3d6a570059e84ba4');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
       color: var(--text);
       font-family: 'Rajdhani', sans-serif;
       display: flex;
@@ -631,7 +635,8 @@
       top: 0;
       bottom: 0;
       width: 360px;
-      background: #0e0e14;
+      background: rgba(14,14,20,0.6);
+      backdrop-filter: blur(12px);
       border-left: 1px solid var(--border-bright);
       z-index: 101;
       padding: 0;
@@ -1281,7 +1286,7 @@
     }
 
     .settings-card {
-      background: var(--card-bg);
+      background: rgba(20,20,26,0.45);
       border: 1px solid #1a3a2a;
       border-radius: 14px;
       padding: 20px;
@@ -3552,7 +3557,8 @@
     right: 24px;
     width: 320px;
     height: 480px;
-    background: #0e0e14;
+    background: rgba(14,14,20,0.55);
+    backdrop-filter: blur(12px);
     border: 1px solid #37474f;
     border-radius: 14px;
     display: flex;
