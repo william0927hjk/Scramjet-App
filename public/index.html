@@ -976,6 +976,99 @@
     .engine-option.selected { color: #c0622a; }
     .engine-option-icon { font-size: 16px; width: 20px; text-align: center; }
 
+    /* Per-tab new-tab page */
+    .tab-newtab-page {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: var(--bg);
+      gap: 12px;
+      padding: 0 24px;
+      z-index: 2;
+    }
+    .tab-newtab-page.hidden { display: none; }
+    .tab-newtab-title {
+      font-family: 'Orbitron', monospace;
+      font-size: 32px;
+      font-weight: 900;
+      color: #c0622a;
+      letter-spacing: 2px;
+      margin-bottom: 4px;
+    }
+    .tab-newtab-sub {
+      font-size: 15px;
+      color: #888;
+      margin-bottom: 16px;
+      letter-spacing: 1px;
+    }
+    .tab-newtab-bar {
+      display: flex;
+      width: 100%;
+      max-width: 600px;
+      background: #1a1a1e;
+      border: 1px solid #2a2a30;
+      border-radius: 50px;
+      overflow: hidden;
+      transition: border-color 0.2s;
+    }
+    .tab-newtab-bar:focus-within { border-color: #c0622a; }
+    .tab-newtab-bar-icon {
+      padding: 0 16px;
+      display: flex;
+      align-items: center;
+      color: #555;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+    .tab-newtab-input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      color: #e0e0e0;
+      padding: 13px 4px;
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 16px;
+      outline: none;
+    }
+    .tab-newtab-input::placeholder { color: #555; }
+    .tab-newtab-engine-btn {
+      background: none;
+      border: none;
+      border-left: 1px solid #2a2a30;
+      color: #888;
+      padding: 0 14px;
+      cursor: pointer;
+      transition: color 0.2s;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 13px;
+    }
+    .tab-newtab-engine-btn:hover { color: #c0622a; }
+    .tab-newtab-go {
+      background: transparent;
+      border: none;
+      color: #888;
+      padding: 0 20px;
+      font-size: 20px;
+      cursor: pointer;
+      transition: color 0.2s;
+      flex-shrink: 0;
+    }
+    .tab-newtab-go:hover { color: #c0622a; }
+    .tab-newtab-quicklinks {
+      display: flex;
+      gap: 16px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
     /* Landing engine picker (inside search bar) */
     .landing-engine-btn {
       background: none;
@@ -1595,7 +1688,7 @@
           <div class="proxy-landing-bar">
             <span class="proxy-landing-bar-icon">⌯⌲</span>
             <input type="text" id="proxy-url" placeholder="Search or enter URL" />
-            <button class="landing-engine-btn" id="landing-engine-btn" onclick="toggleLandingEngine(event)" title="Choose search engine">🔍 <span id="landing-engine-label">Google</span></button>
+            <button class="landing-engine-btn" id="landing-engine-btn" onclick="toggleLandingEngine(event)" title="Choose search engine">🔍 <span class="engine-label-span">Google</span></button>
             <button class="proxy-landing-go" onclick="loadProxy()">→</button>
           </div>
           <div id="landing-engine-dropdown">
@@ -1646,7 +1739,7 @@
           <input type="text" id="proxy-url-bar" placeholder="Enter a URL like google.com" />
           <!-- Engine picker -->
           <div style="position:relative;flex-shrink:0;">
-            <button class="engine-picker-btn" id="bar-engine-btn" onclick="toggleBarEngine(event)" title="Search engine">🔍 <span id="bar-engine-label">Google</span></button>
+            <button class="engine-picker-btn" id="bar-engine-btn" onclick="toggleBarEngine(event)" title="Search engine">🔍 <span class="engine-label-span">Google</span></button>
             <div id="engine-dropdown">
               <div class="engine-option selected" onclick="setEngine('google',this)"><span class="engine-option-icon">🔵</span>Google</div>
               <div class="engine-option" onclick="setEngine('brave',this)"><span class="engine-option-icon">🦁</span>Brave</div>
@@ -2237,11 +2330,7 @@
 
   const connection = new BareMux.BareMuxConnection('/baremux/worker.js');
 
-  // ── Multi-Tab System ──
-  let tabs = [];       // { id, sjFrame, url, title }
-  let activeTabId = null;
-  let tabCounter = 0;
-
+  // ── Engine System ──
   const ENGINES = {
     google:     { label: 'Google',     icon: '🔵', url: 'https://www.google.com/search?q=%s' },
     brave:      { label: 'Brave',      icon: '🦁', url: 'https://search.brave.com/search?q=%s' },
@@ -2251,23 +2340,19 @@
     ecosia:     { label: 'Ecosia',     icon: '🌿', url: 'https://www.ecosia.org/search?q=%s' },
   };
   let currentEngineKey = localStorage.getItem('willie-engine') || 'google';
-
   function getEngineUrl() { return (ENGINES[currentEngineKey] || ENGINES.google).url; }
 
   function setEngine(key, el) {
     currentEngineKey = key;
     localStorage.setItem('willie-engine', key);
     const eng = ENGINES[key] || ENGINES.google;
-    // update all labels
-    ['landing-engine-label','bar-engine-label'].forEach(id => {
-      const el2 = document.getElementById(id);
-      if (el2) el2.textContent = eng.label;
-    });
-    // update selected class in both dropdowns
+    document.querySelectorAll('.engine-label-span').forEach(s => s.textContent = eng.label);
     document.querySelectorAll('.engine-option').forEach(o => o.classList.remove('selected'));
     document.querySelectorAll('.engine-option').forEach(o => {
       if (o.textContent.trim().toLowerCase().includes(eng.label.toLowerCase())) o.classList.add('selected');
     });
+    // also update any open newtab page engine labels
+    document.querySelectorAll('.tab-newtab-engine-label').forEach(s => s.textContent = eng.label);
     closeEngineDropdowns();
   }
 
@@ -2284,26 +2369,21 @@
   }
 
   function closeEngineDropdowns() {
-    document.getElementById('landing-engine-dropdown').classList.remove('open');
-    document.getElementById('engine-dropdown').classList.remove('open');
+    document.querySelectorAll('#landing-engine-dropdown, #engine-dropdown, .tab-newtab-engine-dropdown').forEach(d => d.classList.remove('open'));
   }
 
   document.addEventListener('click', closeEngineDropdowns);
 
-  // init engine label
+  // init engine labels
   (function() {
     const eng = ENGINES[currentEngineKey] || ENGINES.google;
-    ['landing-engine-label','bar-engine-label'].forEach(id => {
-      const el = document.getElementById(id);
-      if (el) el.textContent = eng.label;
-    });
+    document.querySelectorAll('.engine-label-span').forEach(s => s.textContent = eng.label);
     document.querySelectorAll('.engine-option').forEach(o => {
-      if (o.textContent.trim().toLowerCase().includes(eng.label.toLowerCase())) o.classList.add('selected');
-      else o.classList.remove('selected');
+      o.classList.toggle('selected', o.textContent.trim().toLowerCase().includes(eng.label.toLowerCase()));
     });
   })();
 
-  // ── SW init (shared) ──
+  // ── SW init ──
   async function _ensureSW() {
     try {
       await registerSW();
@@ -2320,11 +2400,102 @@
     }
   }
 
+  // ── Multi-Tab System ──
+  // Each tab: { id, sjFrame|null, ntPage (newtab div), url, title }
+  let tabs = [];
+  let activeTabId = null;
+  let tabCounter = 0;
+
+  function getActiveTab() { return tabs.find(t => t.id === activeTabId) || null; }
+
+  function shortenTitle(url) {
+    try { return new URL(url).hostname.replace('www.',''); } catch { return url.slice(0,20); }
+  }
+
+  // Build a new-tab-page div for a tab
+  function makeNewTabPage(tabId) {
+    const eng = ENGINES[currentEngineKey] || ENGINES.google;
+    const div = document.createElement('div');
+    div.className = 'tab-newtab-page';
+    div.dataset.ntTabId = tabId;
+    div.innerHTML = `
+      <div class="tab-newtab-title">Willie Browser</div>
+      <div class="tab-newtab-sub">search a link or open a site</div>
+      <div style="position:relative;width:100%;max-width:600px;">
+        <div class="tab-newtab-bar">
+          <span class="tab-newtab-bar-icon" style="padding:0 16px;display:flex;align-items:center;color:#555;font-size:18px;flex-shrink:0;">⌯⌲</span>
+          <input class="tab-newtab-input" placeholder="Search or enter URL" data-nt-input="${tabId}" />
+          <button class="tab-newtab-engine-btn" onclick="toggleNTEngine(event,'${tabId}')">🔍 <span class="tab-newtab-engine-label">${eng.label}</span></button>
+          <button class="tab-newtab-go" data-nt-go="${tabId}">→</button>
+        </div>
+        <div class="tab-newtab-engine-dropdown engine-dropdown-inner" id="nt-engine-${tabId}" style="position:absolute;top:calc(100% + 8px);left:50%;transform:translateX(-50%);background:#0e0e14;border:1px solid var(--border-bright);border-radius:10px;padding:6px;display:none;flex-direction:column;gap:2px;z-index:9999;min-width:170px;box-shadow:0 8px 32px rgba(0,0,0,.5);">
+          <div class="engine-option${currentEngineKey==='google'?' selected':''}" onclick="setEngine('google',this)"><span class="engine-option-icon">🔵</span>Google</div>
+          <div class="engine-option${currentEngineKey==='brave'?' selected':''}" onclick="setEngine('brave',this)"><span class="engine-option-icon">🦁</span>Brave</div>
+          <div class="engine-option${currentEngineKey==='duckduckgo'?' selected':''}" onclick="setEngine('duckduckgo',this)"><span class="engine-option-icon">🦆</span>DuckDuckGo</div>
+          <div class="engine-option${currentEngineKey==='bing'?' selected':''}" onclick="setEngine('bing',this)"><span class="engine-option-icon">🟦</span>Bing</div>
+          <div class="engine-option${currentEngineKey==='yahoo'?' selected':''}" onclick="setEngine('yahoo',this)"><span class="engine-option-icon">💜</span>Yahoo</div>
+          <div class="engine-option${currentEngineKey==='ecosia'?' selected':''}" onclick="setEngine('ecosia',this)"><span class="engine-option-icon">🌿</span>Ecosia</div>
+        </div>
+      </div>
+      <div class="tab-newtab-quicklinks">
+        <a class="proxy-quicklink" style="cursor:pointer" data-nt-quick="https://youtube.com">
+          <div class="proxy-quicklink-icon"><img src="https://static.vecteezy.com/system/resources/thumbnails/042/127/234/small/white-square-bordered-youtube-logo-on-transparent-background-free-png.png"/></div>
+          <span class="proxy-quicklink-label">YouTube</span>
+        </a>
+        <a class="proxy-quicklink" style="cursor:pointer" data-nt-quick="https://tiktok.com">
+          <div class="proxy-quicklink-icon"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSskn3UG5PHzksP0bC2GNp245KFrsP6mhxweg&s"/></div>
+          <span class="proxy-quicklink-label">TikTok</span>
+        </a>
+        <a class="proxy-quicklink" style="cursor:pointer" data-nt-quick="https://discord.com">
+          <div class="proxy-quicklink-icon"><img src="https://pngimg.com/uploads/discord/discord_PNG8.png"/></div>
+          <span class="proxy-quicklink-label">Discord</span>
+        </a>
+        <a class="proxy-quicklink" style="cursor:pointer" data-nt-quick="https://chat.openai.com">
+          <div class="proxy-quicklink-icon"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRt_I0AqTbvaxxFCoEWH_SZP49jpBiTMiCkCA&s"/></div>
+          <span class="proxy-quicklink-label">ChatGPT</span>
+        </a>
+        <a class="proxy-quicklink" style="cursor:pointer" data-nt-quick="https://twitch.tv">
+          <div class="proxy-quicklink-icon"><img src="https://cdn.m7g.twitch.tv/ba46b4e5e395b11efd34/assets/uploads/03-glitch.jpg"/></div>
+          <span class="proxy-quicklink-label">Twitch</span>
+        </a>
+      </div>
+    `;
+    // wire up go button
+    div.querySelector(`[data-nt-go="${tabId}"]`).addEventListener('click', () => {
+      const val = div.querySelector(`[data-nt-input="${tabId}"]`).value.trim();
+      if (val) _doNavigateInTab(tabId, search(val, getEngineUrl()));
+    });
+    div.querySelector(`[data-nt-input="${tabId}"]`).addEventListener('keydown', e => {
+      if (e.key === 'Enter') {
+        const val = e.target.value.trim();
+        if (val) _doNavigateInTab(tabId, search(val, getEngineUrl()));
+      }
+    });
+    div.querySelectorAll('[data-nt-quick]').forEach(a => {
+      a.addEventListener('click', () => _doNavigateInTab(tabId, a.dataset.ntQuick));
+    });
+    return div;
+  }
+
+  function toggleNTEngine(e, tabId) {
+    e.stopPropagation();
+    const dd = document.getElementById('nt-engine-' + tabId);
+    const wasOpen = dd.style.display === 'flex';
+    closeEngineDropdowns();
+    if (!wasOpen) dd.style.display = 'flex';
+  }
+
+  // closeEngineDropdowns also needs to handle newtab dropdowns
+  const _origCloseEng = closeEngineDropdowns;
+  closeEngineDropdowns = function() {
+    document.querySelectorAll('#landing-engine-dropdown, #engine-dropdown').forEach(d => d.classList.remove('open'));
+    document.querySelectorAll('.engine-dropdown-inner').forEach(d => d.style.display = 'none');
+  };
+
   // ── Tab rendering ──
   function renderTabs() {
     const bar = document.getElementById('proxy-tabbar');
     const newBtn = document.getElementById('proxy-tab-new');
-    // remove old tab elements
     bar.querySelectorAll('.proxy-tab').forEach(t => t.remove());
     tabs.forEach(tab => {
       const el = document.createElement('div');
@@ -2337,18 +2508,25 @@
     });
   }
 
-  function getActiveTab() { return tabs.find(t => t.id === activeTabId) || null; }
+  function showTabContent(tab) {
+    // Hide everything first
+    const container = document.getElementById('proxy-frame-container');
+    container.querySelectorAll('.tab-newtab-page').forEach(p => p.style.display = 'none');
+    container.querySelectorAll('iframe').forEach(f => f.style.display = 'none');
+    // Show this tab's content
+    if (tab.url && tab.sjFrame) {
+      tab.sjFrame.frame.style.display = '';
+    } else {
+      tab.ntPage.style.display = 'flex';
+    }
+    document.getElementById('proxy-url-bar').value = tab.url || '';
+    updateBookmarkBtn(tab.url || '');
+  }
 
   function switchTab(id) {
-    const prev = getActiveTab();
-    if (prev && prev.sjFrame) prev.sjFrame.frame.style.display = 'none';
     activeTabId = id;
     const tab = getActiveTab();
-    if (tab && tab.sjFrame) {
-      tab.sjFrame.frame.style.display = '';
-      document.getElementById('proxy-url-bar').value = tab.url || '';
-      updateBookmarkBtn(tab.url || '');
-    }
+    if (tab) showTabContent(tab);
     renderTabs();
   }
 
@@ -2357,90 +2535,90 @@
     if (idx < 0) return;
     const tab = tabs[idx];
     if (tab.sjFrame) tab.sjFrame.frame.remove();
+    if (tab.ntPage) tab.ntPage.remove();
     tabs.splice(idx, 1);
     if (tabs.length === 0) {
       activeTabId = null;
-      proxyHome();
+      // go back to the main landing
+      document.getElementById('proxy-landing').classList.remove('hidden');
+      document.getElementById('proxy-browser').classList.remove('visible');
       return;
     }
     if (activeTabId === id) {
-      const next = tabs[Math.min(idx, tabs.length - 1)];
-      switchTab(next.id);
+      switchTab(tabs[Math.min(idx, tabs.length - 1)].id);
     } else {
       renderTabs();
     }
   }
 
   async function proxyNewTab(url) {
-    await _ensureSW();
     const id = ++tabCounter;
     const container = document.getElementById('proxy-frame-container');
-    // hide current frame
-    if (getActiveTab() && getActiveTab().sjFrame) getActiveTab().sjFrame.frame.style.display = 'none';
-    const sjFrame = scramjet.createFrame();
-    sjFrame.frame.style.cssText = 'width:100%;height:100%;border:none;position:absolute;inset:0;';
     container.style.position = 'relative';
-    container.appendChild(sjFrame.frame);
-    const tab = { id, sjFrame, url: url || '', title: url ? shortenTitle(url) : 'New Tab' };
+
+    // Build the newtab page for this tab
+    const ntPage = makeNewTabPage(id);
+    container.appendChild(ntPage);
+
+    const tab = { id, sjFrame: null, ntPage, url: '', title: 'New Tab' };
     tabs.push(tab);
     activeTabId = id;
+
+    // Show proxy-browser (hides the big landing)
     document.getElementById('proxy-landing').classList.add('hidden');
     document.getElementById('proxy-browser').classList.add('visible');
-    if (url) {
-      sjFrame.go(url);
-      document.getElementById('proxy-url-bar').value = url;
-      addHistory(url);
-      updateBookmarkBtn(url);
-    } else {
-      document.getElementById('proxy-url-bar').value = '';
-    }
+
+    showTabContent(tab);
     renderTabs();
+
+    // If a URL was passed, navigate immediately
+    if (url) await _doNavigateInTab(id, url);
   }
 
-  function shortenTitle(url) {
-    try { return new URL(url).hostname.replace('www.',''); } catch { return url.slice(0,20); }
-  }
-
-  async function _doNavigate(url) {
+  // Navigate a specific tab to a URL
+  async function _doNavigateInTab(tabId, url) {
     await _ensureSW();
-    if (!getActiveTab()) {
-      await proxyNewTab(url);
-      return;
-    }
-    const tab = getActiveTab();
+    const tab = tabs.find(t => t.id === tabId);
+    if (!tab) return;
     if (!tab.sjFrame) {
-      await proxyNewTab(url);
-      return;
+      const container = document.getElementById('proxy-frame-container');
+      const sjFrame = scramjet.createFrame();
+      sjFrame.frame.style.cssText = 'width:100%;height:100%;border:none;position:absolute;inset:0;display:none;';
+      container.appendChild(sjFrame.frame);
+      tab.sjFrame = sjFrame;
     }
     tab.url = url;
     tab.title = shortenTitle(url);
     tab.sjFrame.go(url);
     addHistory(url);
-    updateBookmarkBtn(url);
+    if (tab.id === activeTabId) {
+      showTabContent(tab);
+      document.getElementById('proxy-url-bar').value = url;
+      updateBookmarkBtn(url);
+    }
+    renderTabs();
+  }
+
+  async function _doNavigate(url) {
+    if (!getActiveTab()) {
+      await proxyNewTab(url);
+      return;
+    }
+    await _doNavigateInTab(activeTabId, url);
     document.getElementById('proxy-landing').classList.add('hidden');
     document.getElementById('proxy-browser').classList.add('visible');
-    document.getElementById('proxy-url-bar').value = url;
-    renderTabs();
   }
 
   async function loadProxy() {
     let val = document.getElementById('proxy-url').value.trim();
     if (!val) return;
     const url = search(val, getEngineUrl());
-    if (!getActiveTab()) {
-      await proxyNewTab(url);
-    } else {
-      await _doNavigate(url);
-    }
+    await _doNavigate(url);
   }
 
   async function quickNav(url) {
     document.getElementById('proxy-url').value = url;
-    if (!getActiveTab()) {
-      await proxyNewTab(url);
-    } else {
-      await _doNavigate(url);
-    }
+    await _doNavigate(url);
   }
 
   async function proxyNav(url) {
@@ -2449,11 +2627,7 @@
       if (n.getAttribute('onclick') && n.getAttribute('onclick').includes("'proxy'")) n.classList.add('active');
       else n.classList.remove('active');
     });
-    if (!getActiveTab()) {
-      await proxyNewTab(url);
-    } else {
-      await _doNavigate(url);
-    }
+    await _doNavigate(url);
   }
 
   function proxyBack() {
@@ -2472,8 +2646,11 @@
   }
 
   function proxyHome() {
-    // hide all frames
-    tabs.forEach(t => { if (t.sjFrame) t.sjFrame.frame.style.display = 'none'; });
+    // No tabs open — go back to the big landing page
+    tabs.forEach(t => {
+      if (t.sjFrame) t.sjFrame.frame.style.display = 'none';
+      if (t.ntPage) t.ntPage.style.display = 'none';
+    });
     document.getElementById('proxy-landing').classList.remove('hidden');
     document.getElementById('proxy-browser').classList.remove('visible');
     document.getElementById('proxy-url').value = '';
