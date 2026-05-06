@@ -69,7 +69,15 @@
       border-bottom: 1px solid var(--border);
     }
 
-    #logo h1-removed {
+    #logo h1 {
+      font-family: 'Orbitron', monospace;
+      font-size: 18px;
+      font-weight: 900;
+      color: var(--silver-bright);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      line-height: 1;
+    }
 
     #logo span {
       font-family: 'Rajdhani', sans-serif;
@@ -200,50 +208,7 @@
 
     
     .view { display: none; }
-    .view.active { display: block; animation: viewFadeIn 0.25s ease; }
-
-    @keyframes viewFadeIn {
-      from { opacity: 0; transform: translateY(8px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-
-    /* Typing animation for logo */
-    #logo h1 {
-      font-family: 'Orbitron', monospace;
-      font-size: 18px;
-      font-weight: 900;
-      color: var(--silver-bright);
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      line-height: 1;
-      overflow: hidden;
-      white-space: nowrap;
-      border-right: 2px solid var(--silver-bright);
-      width: 0;
-      animation: typing 0.8s steps(6, end) 0.3s forwards, blink 0.75s step-end 1.1s 4;
-    }
-
-    @keyframes typing {
-      from { width: 0; }
-      to   { width: 100%; }
-    }
-
-    @keyframes blink {
-      50% { border-color: transparent; }
-    }
-
-    /* Cursor trail dot */
-    .cursor-trail {
-      width: 6px;
-      height: 6px;
-      background: white;
-      border-radius: 50%;
-      position: fixed;
-      pointer-events: none;
-      z-index: 99998;
-      transform: translate(-50%, -50%);
-      box-shadow: 0 0 4px 2px rgba(255,255,255,0.3);
-    }
+    .view.active { display: block; }
 
     
     .section-title {
@@ -281,32 +246,6 @@
       transition: all 0.2s ease;
       text-decoration: none;
       display: block;
-      position: relative;
-    }
-
-    .game-card::before {
-      content: '';
-      position: absolute;
-      inset: -1px;
-      border-radius: 11px;
-      padding: 1px;
-      background: linear-gradient(var(--grad-angle, 0deg), #00e5ff, #7c4dff, #00e5ff);
-      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-      -webkit-mask-composite: xor;
-      mask-composite: exclude;
-      opacity: 0;
-      transition: opacity 0.3s ease;
-      background-size: 200% 200%;
-    }
-
-    .game-card:hover::before {
-      opacity: 1;
-      animation: gradientSpin 2s linear infinite;
-    }
-
-    @keyframes gradientSpin {
-      0% { background-position: 0% 50%; filter: hue-rotate(0deg); }
-      100% { background-position: 100% 50%; filter: hue-rotate(360deg); }
     }
 
     .game-card:hover {
@@ -3641,43 +3580,6 @@
   document.addEventListener('mouseleave', function() {
     cursor.style.opacity = '0';
   });
-})();
-
-// Cursor trail
-(function() {
-  var trail = [];
-  var numDots = 8;
-  for (var i = 0; i < numDots; i++) {
-    var dot = document.createElement('div');
-    dot.className = 'cursor-trail';
-    dot.style.opacity = '0';
-    document.body.appendChild(dot);
-    trail.push({ el: dot, x: 0, y: 0 });
-  }
-
-  var mouseX = 0, mouseY = 0;
-  document.addEventListener('mousemove', function(e) {
-    mouseX = e.clientX;
-    mouseY = e.clientY;
-  });
-
-  function animateTrail() {
-    var x = mouseX, y = mouseY;
-    for (var i = 0; i < trail.length; i++) {
-      var dot = trail[i];
-      var next = trail[i - 1] || { x: mouseX, y: mouseY };
-      dot.x += (next.x - dot.x) * 0.35;
-      dot.y += (next.y - dot.y) * 0.35;
-      var scale = 1 - (i / trail.length) * 0.7;
-      var opacity = (1 - i / trail.length) * 0.5;
-      dot.el.style.left = dot.x + 'px';
-      dot.el.style.top = dot.y + 'px';
-      dot.el.style.opacity = opacity;
-      dot.el.style.transform = 'translate(-50%,-50%) scale(' + scale + ')';
-    }
-    requestAnimationFrame(animateTrail);
-  }
-  animateTrail();
 })();
 </script>
 </body>
