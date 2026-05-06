@@ -1995,6 +1995,30 @@
           <div id="weirdtext-preview" style="display:none;text-align:center;font-size:13px;color:var(--silver);letter-spacing:1px;margin-top:2px;"></div>
         </div>
 
+        <div class="settings-card">
+          <div class="settings-card-title">cursor color</div>
+          <div class="settings-card-sub">choose your cursor glow color</div>
+          <div class="settings-btn-row">
+            <button class="s-btn" onclick="setCursorColor('#ffffff','rgba(255,255,255,0.6)','rgba(255,255,255,0.25)')" id="cursor-color-white">white</button>
+            <button class="s-btn" onclick="setCursorColor('#00e5ff','rgba(0,229,255,0.6)','rgba(0,229,255,0.25)')" id="cursor-color-cyan">cyan</button>
+            <button class="s-btn" onclick="setCursorColor('#7c4dff','rgba(124,77,255,0.6)','rgba(124,77,255,0.25)')" id="cursor-color-purple">purple</button>
+            <button class="s-btn" onclick="setCursorColor('#ff1744','rgba(255,23,68,0.6)','rgba(255,23,68,0.25)')" id="cursor-color-red">red</button>
+            <button class="s-btn" onclick="setCursorColor('#00e676','rgba(0,230,118,0.6)','rgba(0,230,118,0.25)')" id="cursor-color-green">green</button>
+          </div>
+        </div>
+
+        <div class="settings-card">
+          <div class="settings-card-title">cursor size</div>
+          <div class="settings-card-sub">drag to resize your cursor</div>
+          <div style="display:flex;align-items:center;gap:12px;justify-content:center;">
+            <span style="font-size:12px;color:var(--text-dim)">small</span>
+            <input type="range" id="cursor-size-slider" min="6" max="24" value="10"
+              style="flex:1;max-width:180px;accent-color:var(--silver);"
+              oninput="setCursorSize(this.value)" />
+            <span style="font-size:12px;color:var(--text-dim)">large</span>
+          </div>
+        </div>
+
       </div>
     </div>
 
@@ -3340,6 +3364,39 @@
     applyBackground();
   }
   if (settings.weirdText) setWeirdText(true);
+
+  // Cursor color
+  function setCursorColor(color, glow1, glow2) {
+    const cursor = document.getElementById('custom-cursor');
+    if (!cursor) return;
+    cursor.style.background = color;
+    cursor.style.boxShadow = `0 0 8px 4px ${glow1}, 0 0 24px 10px ${glow2}`;
+    settings.cursorColor = { color, glow1, glow2 };
+    saveSettings();
+  }
+  window.setCursorColor = setCursorColor;
+
+  // Cursor size
+  function setCursorSize(size) {
+    const cursor = document.getElementById('custom-cursor');
+    if (!cursor) return;
+    cursor.style.width = size + 'px';
+    cursor.style.height = size + 'px';
+    settings.cursorSize = size;
+    saveSettings();
+  }
+  window.setCursorSize = setCursorSize;
+
+  // Load saved cursor settings
+  if (settings.cursorColor) {
+    const c = settings.cursorColor;
+    setCursorColor(c.color, c.glow1, c.glow2);
+  }
+  if (settings.cursorSize) {
+    setCursorSize(settings.cursorSize);
+    const slider = document.getElementById('cursor-size-slider');
+    if (slider) slider.value = settings.cursorSize;
+  }
 
   
   const _origShowView = showView;
