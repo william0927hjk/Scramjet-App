@@ -1450,7 +1450,6 @@
 </head>
 <body>
 
-<!-- Fake Google Classroom loading screen -->
 <div id="fake-loading">
   <style>
     #fake-loading {
@@ -1497,10 +1496,10 @@
 </div>
 
 <script>
-  // URL masking — make it look like Google Classroom
+  
   history.replaceState({}, '', '/classroom.google.com');
 
-  // Instantly open about:blank on first visit to mask in browser history
+  
   if (!sessionStorage.getItem('wg-opened')) {
     sessionStorage.setItem('wg-opened', '1');
     const ab = window.open('about:blank', '_blank');
@@ -1511,7 +1510,7 @@
     }
   }
 
-  // Hide fake loading screen after 1.6s
+  
   setTimeout(function() {
     var el = document.getElementById('fake-loading');
     if (el) {
@@ -2727,7 +2726,7 @@
     tabs.splice(idx, 1);
     if (tabs.length === 0) {
       activeTabId = null;
-      // go back to the main landing
+      
       document.getElementById('proxy-landing').classList.remove('hidden');
       document.getElementById('proxy-browser').classList.remove('visible');
       return;
@@ -2763,7 +2762,7 @@
     if (url) await _doNavigateInTab(id, url);
   }
 
-  // Navigate a specific tab to a URL
+  
   async function _doNavigateInTab(tabId, url) {
     await _ensureSW();
     const tab = tabs.find(t => t.id === tabId);
@@ -3354,7 +3353,7 @@
       document.title = 'New Tab';
       history.pushState({}, '', 'about:blank');
     }
-    // B key opens browser
+    
     const tag = document.activeElement.tagName;
     if (e.key === 'b' && tag !== 'INPUT' && tag !== 'TEXTAREA') {
       showView('proxy');
@@ -3452,7 +3451,7 @@
   }
   if (settings.weirdText) setWeirdText(true);
 
-  // Cursor color
+  
   function setCursorColor(color, glow1, glow2) {
     const cursor = document.getElementById('custom-cursor');
     if (!cursor) return;
@@ -3463,7 +3462,7 @@
   }
   window.setCursorColor = setCursorColor;
 
-  // Cursor size
+  
   function setCursorSize(size) {
     const cursor = document.getElementById('custom-cursor');
     if (!cursor) return;
@@ -3474,7 +3473,7 @@
   }
   window.setCursorSize = setCursorSize;
 
-  // Load saved cursor settings
+  
   if (settings.cursorColor) {
     const c = settings.cursorColor;
     setCursorColor(c.color, c.glow1, c.glow2);
@@ -3783,7 +3782,7 @@
     cursor.style.opacity = '0';
   });
 
-  // Hide custom cursor when over iframes
+  
   window.addEventListener('blur', function() {
     cursor.style.opacity = '0';
   });
