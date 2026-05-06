@@ -6,7 +6,7 @@ const scramjet = new ScramjetServiceWorker();
 async function handleRequest(event) {
 	const url = new URL(event.request.url);
 
-	// Don't intercept local API/WebSocket endpoints or local game files
+	
 	if (
 		url.pathname.startsWith("/ai") ||
 		url.pathname.startsWith("/chat") ||
