@@ -837,6 +837,182 @@
       flex-shrink: 0;
     }
 
+    /* ── Proxy Tab Bar ── */
+    #proxy-tabbar {
+      display: flex;
+      align-items: center;
+      background: #0c0c10;
+      border-bottom: 1px solid var(--border);
+      padding: 0 6px;
+      height: 38px;
+      gap: 4px;
+      overflow-x: auto;
+      scrollbar-width: none;
+      flex-shrink: 0;
+    }
+    #proxy-tabbar::-webkit-scrollbar { display: none; }
+
+    .proxy-tab {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      padding: 0 10px 0 12px;
+      height: 28px;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px 8px 0 0;
+      cursor: pointer;
+      color: var(--text-dim);
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.4px;
+      white-space: nowrap;
+      max-width: 180px;
+      min-width: 80px;
+      transition: background 0.15s, color 0.15s, border-color 0.15s;
+      flex-shrink: 0;
+      position: relative;
+    }
+    .proxy-tab:hover { background: var(--card-hover); color: var(--silver); border-color: var(--border-bright); }
+    .proxy-tab.active {
+      background: #101014;
+      color: var(--silver-bright);
+      border-color: #c0622a;
+      border-bottom-color: #101014;
+    }
+    .proxy-tab-title {
+      flex: 1;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .proxy-tab-close {
+      background: none;
+      border: none;
+      color: var(--text-dim);
+      cursor: pointer;
+      font-size: 13px;
+      padding: 0;
+      line-height: 1;
+      border-radius: 4px;
+      width: 16px;
+      height: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: background 0.15s, color 0.15s;
+    }
+    .proxy-tab-close:hover { background: rgba(239,83,80,0.18); color: #ef5350; }
+
+    #proxy-tab-new {
+      background: none;
+      border: 1px solid var(--border);
+      color: var(--silver-dim);
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: background 0.15s, color 0.15s, border-color 0.15s;
+    }
+    #proxy-tab-new:hover { background: var(--card-hover); color: var(--silver-bright); border-color: var(--border-bright); }
+
+    /* ── Engine Picker Button ── */
+    .engine-picker-btn {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      color: var(--silver);
+      height: 34px;
+      padding: 0 10px;
+      border-radius: 8px;
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 13px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      flex-shrink: 0;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+    .engine-picker-btn:hover { background: var(--card-hover); border-color: var(--border-bright); color: var(--silver-bright); }
+
+    #engine-dropdown {
+      position: absolute;
+      top: calc(100% + 6px);
+      right: 0;
+      background: #0e0e14;
+      border: 1px solid var(--border-bright);
+      border-radius: 10px;
+      padding: 6px;
+      display: none;
+      flex-direction: column;
+      gap: 2px;
+      z-index: 9999;
+      min-width: 160px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+    }
+    #engine-dropdown.open { display: flex; }
+    .engine-option {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      padding: 8px 12px;
+      border-radius: 7px;
+      cursor: pointer;
+      color: var(--text);
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      transition: background 0.15s;
+    }
+    .engine-option:hover { background: var(--card-hover); color: var(--silver-bright); }
+    .engine-option.selected { color: #c0622a; }
+    .engine-option-icon { font-size: 16px; width: 20px; text-align: center; }
+
+    /* Landing engine picker (inside search bar) */
+    .landing-engine-btn {
+      background: none;
+      border: none;
+      border-left: 1px solid #2a2a30;
+      color: #888;
+      padding: 0 14px;
+      font-size: 18px;
+      cursor: pointer;
+      transition: color 0.2s;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 13px;
+    }
+    .landing-engine-btn:hover { color: #c0622a; }
+
+    #landing-engine-dropdown {
+      position: absolute;
+      top: calc(100% + 8px);
+      left: 50%;
+      transform: translateX(-50%);
+      background: #0e0e14;
+      border: 1px solid var(--border-bright);
+      border-radius: 10px;
+      padding: 6px;
+      display: none;
+      flex-direction: column;
+      gap: 2px;
+      z-index: 9999;
+      min-width: 170px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+    }
+    #landing-engine-dropdown.open { display: flex; }
+
     
     .btn-bookmark {
       background: var(--card-bg);
@@ -1415,10 +1591,21 @@
         <div class="proxy-landing-inner">
           <div class="proxy-landing-title">Willie Browser</div>
           <div class="proxy-landing-sub">welcome to willie-games search a link or query</div>
+          <div style="position:relative;width:100%;">
           <div class="proxy-landing-bar">
             <span class="proxy-landing-bar-icon">⌯⌲</span>
             <input type="text" id="proxy-url" placeholder="Search or enter URL" />
+            <button class="landing-engine-btn" id="landing-engine-btn" onclick="toggleLandingEngine(event)" title="Choose search engine">🔍 <span id="landing-engine-label">Google</span></button>
             <button class="proxy-landing-go" onclick="loadProxy()">→</button>
+          </div>
+          <div id="landing-engine-dropdown">
+            <div class="engine-option selected" onclick="setEngine('google',this)"><span class="engine-option-icon">🔵</span>Google</div>
+            <div class="engine-option" onclick="setEngine('brave',this)"><span class="engine-option-icon">🦁</span>Brave</div>
+            <div class="engine-option" onclick="setEngine('duckduckgo',this)"><span class="engine-option-icon">🦆</span>DuckDuckGo</div>
+            <div class="engine-option" onclick="setEngine('bing',this)"><span class="engine-option-icon">🟦</span>Bing</div>
+            <div class="engine-option" onclick="setEngine('yahoo',this)"><span class="engine-option-icon">💜</span>Yahoo</div>
+            <div class="engine-option" onclick="setEngine('ecosia',this)"><span class="engine-option-icon">🌿</span>Ecosia</div>
+          </div>
           </div>
           <div class="proxy-quicklinks">
             <a class="proxy-quicklink" onclick="quickNav('https://youtube.com')">
@@ -1447,16 +1634,33 @@
 
       
       <div id="proxy-browser">
+        <!-- Tab Bar -->
+        <div id="proxy-tabbar">
+          <!-- tabs injected by JS -->
+          <button id="proxy-tab-new" onclick="proxyNewTab()" title="New tab">+</button>
+        </div>
         <div class="proxy-bar">
           <button class="nav-btn" onclick="proxyBack()" title="Back">&#8592;</button>
           <button class="nav-btn" onclick="proxyForward()" title="Forward">&#8594;</button>
           <button class="nav-btn" onclick="proxyRefresh()" title="Refresh">&#8635;</button>
           <input type="text" id="proxy-url-bar" placeholder="Enter a URL like google.com" />
+          <!-- Engine picker -->
+          <div style="position:relative;flex-shrink:0;">
+            <button class="engine-picker-btn" id="bar-engine-btn" onclick="toggleBarEngine(event)" title="Search engine">🔍 <span id="bar-engine-label">Google</span></button>
+            <div id="engine-dropdown">
+              <div class="engine-option selected" onclick="setEngine('google',this)"><span class="engine-option-icon">🔵</span>Google</div>
+              <div class="engine-option" onclick="setEngine('brave',this)"><span class="engine-option-icon">🦁</span>Brave</div>
+              <div class="engine-option" onclick="setEngine('duckduckgo',this)"><span class="engine-option-icon">🦆</span>DuckDuckGo</div>
+              <div class="engine-option" onclick="setEngine('bing',this)"><span class="engine-option-icon">🟦</span>Bing</div>
+              <div class="engine-option" onclick="setEngine('yahoo',this)"><span class="engine-option-icon">💜</span>Yahoo</div>
+              <div class="engine-option" onclick="setEngine('ecosia',this)"><span class="engine-option-icon">🌿</span>Ecosia</div>
+            </div>
+          </div>
           <button class="btn-bookmark" id="proxy-bookmark-btn" onclick="toggleBookmark()" title="Bookmark">☆</button>
           <button class="btn-home" onclick="proxyHome()" title="Home">⌂</button>
         </div>
         <div id="proxy-frame-container">
-          <iframe id="proxy-iframe" src="/"></iframe>
+          <!-- frames injected by tab system -->
         </div>
       </div>
 
@@ -2032,63 +2236,211 @@
   scramjet.init();
 
   const connection = new BareMux.BareMuxConnection('/baremux/worker.js');
-  let sjFrame = null;
 
-  async function _doNavigate(url) {
-    
+  // ── Multi-Tab System ──
+  let tabs = [];       // { id, sjFrame, url, title }
+  let activeTabId = null;
+  let tabCounter = 0;
+
+  const ENGINES = {
+    google:     { label: 'Google',     icon: '🔵', url: 'https://www.google.com/search?q=%s' },
+    brave:      { label: 'Brave',      icon: '🦁', url: 'https://search.brave.com/search?q=%s' },
+    duckduckgo: { label: 'DuckDuckGo', icon: '🦆', url: 'https://duckduckgo.com/?q=%s' },
+    bing:       { label: 'Bing',       icon: '🟦', url: 'https://www.bing.com/search?q=%s' },
+    yahoo:      { label: 'Yahoo',      icon: '💜', url: 'https://search.yahoo.com/search?p=%s' },
+    ecosia:     { label: 'Ecosia',     icon: '🌿', url: 'https://www.ecosia.org/search?q=%s' },
+  };
+  let currentEngineKey = localStorage.getItem('willie-engine') || 'google';
+
+  function getEngineUrl() { return (ENGINES[currentEngineKey] || ENGINES.google).url; }
+
+  function setEngine(key, el) {
+    currentEngineKey = key;
+    localStorage.setItem('willie-engine', key);
+    const eng = ENGINES[key] || ENGINES.google;
+    // update all labels
+    ['landing-engine-label','bar-engine-label'].forEach(id => {
+      const el2 = document.getElementById(id);
+      if (el2) el2.textContent = eng.label;
+    });
+    // update selected class in both dropdowns
+    document.querySelectorAll('.engine-option').forEach(o => o.classList.remove('selected'));
+    document.querySelectorAll('.engine-option').forEach(o => {
+      if (o.textContent.trim().toLowerCase().includes(eng.label.toLowerCase())) o.classList.add('selected');
+    });
+    closeEngineDropdowns();
+  }
+
+  function toggleLandingEngine(e) {
+    e.stopPropagation();
+    document.getElementById('engine-dropdown').classList.remove('open');
+    document.getElementById('landing-engine-dropdown').classList.toggle('open');
+  }
+
+  function toggleBarEngine(e) {
+    e.stopPropagation();
+    document.getElementById('landing-engine-dropdown').classList.remove('open');
+    document.getElementById('engine-dropdown').classList.toggle('open');
+  }
+
+  function closeEngineDropdowns() {
+    document.getElementById('landing-engine-dropdown').classList.remove('open');
+    document.getElementById('engine-dropdown').classList.remove('open');
+  }
+
+  document.addEventListener('click', closeEngineDropdowns);
+
+  // init engine label
+  (function() {
+    const eng = ENGINES[currentEngineKey] || ENGINES.google;
+    ['landing-engine-label','bar-engine-label'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.textContent = eng.label;
+    });
+    document.querySelectorAll('.engine-option').forEach(o => {
+      if (o.textContent.trim().toLowerCase().includes(eng.label.toLowerCase())) o.classList.add('selected');
+      else o.classList.remove('selected');
+    });
+  })();
+
+  // ── SW init (shared) ──
+  async function _ensureSW() {
     try {
       await registerSW();
-      
-      if (navigator.serviceWorker.controller) {
-        
-      } else {
-        
-        await new Promise((resolve) => {
+      if (!navigator.serviceWorker.controller) {
+        await new Promise(resolve => {
           navigator.serviceWorker.addEventListener('controllerchange', resolve, { once: true });
-          
           setTimeout(resolve, 3000);
         });
       }
-    } catch(e) {
-      console.error('SW registration failed', e);
-      return;
-    }
-
+    } catch(e) { console.error('SW registration failed', e); }
     const wispUrl = (location.protocol === 'https:' ? 'wss' : 'ws') + '://' + location.host + '/wisp/';
     if ((await connection.getTransport()) !== '/libcurl/index.mjs') {
       await connection.setTransport('/libcurl/index.mjs', [{ websocket: wispUrl }]);
     }
+  }
 
-    const container = document.getElementById('proxy-frame-container');
-    if (!sjFrame) {
-      const old = document.getElementById('proxy-iframe');
-      if (old) old.remove();
-      sjFrame = scramjet.createFrame();
-      sjFrame.frame.id = 'proxy-iframe';
-      sjFrame.frame.style.cssText = 'width:100%;height:100%;border:none;';
-      container.appendChild(sjFrame.frame);
+  // ── Tab rendering ──
+  function renderTabs() {
+    const bar = document.getElementById('proxy-tabbar');
+    const newBtn = document.getElementById('proxy-tab-new');
+    // remove old tab elements
+    bar.querySelectorAll('.proxy-tab').forEach(t => t.remove());
+    tabs.forEach(tab => {
+      const el = document.createElement('div');
+      el.className = 'proxy-tab' + (tab.id === activeTabId ? ' active' : '');
+      el.dataset.tabId = tab.id;
+      el.innerHTML = `<span class="proxy-tab-title">${tab.title || 'New Tab'}</span><button class="proxy-tab-close" title="Close tab">✕</button>`;
+      el.querySelector('.proxy-tab-title').addEventListener('click', () => switchTab(tab.id));
+      el.querySelector('.proxy-tab-close').addEventListener('click', e => { e.stopPropagation(); closeTab(tab.id); });
+      bar.insertBefore(el, newBtn);
+    });
+  }
+
+  function getActiveTab() { return tabs.find(t => t.id === activeTabId) || null; }
+
+  function switchTab(id) {
+    const prev = getActiveTab();
+    if (prev && prev.sjFrame) prev.sjFrame.frame.style.display = 'none';
+    activeTabId = id;
+    const tab = getActiveTab();
+    if (tab && tab.sjFrame) {
+      tab.sjFrame.frame.style.display = '';
+      document.getElementById('proxy-url-bar').value = tab.url || '';
+      updateBookmarkBtn(tab.url || '');
     }
+    renderTabs();
+  }
 
-    sjFrame.go(url);
+  function closeTab(id) {
+    const idx = tabs.findIndex(t => t.id === id);
+    if (idx < 0) return;
+    const tab = tabs[idx];
+    if (tab.sjFrame) tab.sjFrame.frame.remove();
+    tabs.splice(idx, 1);
+    if (tabs.length === 0) {
+      activeTabId = null;
+      proxyHome();
+      return;
+    }
+    if (activeTabId === id) {
+      const next = tabs[Math.min(idx, tabs.length - 1)];
+      switchTab(next.id);
+    } else {
+      renderTabs();
+    }
+  }
+
+  async function proxyNewTab(url) {
+    await _ensureSW();
+    const id = ++tabCounter;
+    const container = document.getElementById('proxy-frame-container');
+    // hide current frame
+    if (getActiveTab() && getActiveTab().sjFrame) getActiveTab().sjFrame.frame.style.display = 'none';
+    const sjFrame = scramjet.createFrame();
+    sjFrame.frame.style.cssText = 'width:100%;height:100%;border:none;position:absolute;inset:0;';
+    container.style.position = 'relative';
+    container.appendChild(sjFrame.frame);
+    const tab = { id, sjFrame, url: url || '', title: url ? shortenTitle(url) : 'New Tab' };
+    tabs.push(tab);
+    activeTabId = id;
+    document.getElementById('proxy-landing').classList.add('hidden');
+    document.getElementById('proxy-browser').classList.add('visible');
+    if (url) {
+      sjFrame.go(url);
+      document.getElementById('proxy-url-bar').value = url;
+      addHistory(url);
+      updateBookmarkBtn(url);
+    } else {
+      document.getElementById('proxy-url-bar').value = '';
+    }
+    renderTabs();
+  }
+
+  function shortenTitle(url) {
+    try { return new URL(url).hostname.replace('www.',''); } catch { return url.slice(0,20); }
+  }
+
+  async function _doNavigate(url) {
+    await _ensureSW();
+    if (!getActiveTab()) {
+      await proxyNewTab(url);
+      return;
+    }
+    const tab = getActiveTab();
+    if (!tab.sjFrame) {
+      await proxyNewTab(url);
+      return;
+    }
+    tab.url = url;
+    tab.title = shortenTitle(url);
+    tab.sjFrame.go(url);
     addHistory(url);
     updateBookmarkBtn(url);
-
-    
     document.getElementById('proxy-landing').classList.add('hidden');
     document.getElementById('proxy-browser').classList.add('visible');
     document.getElementById('proxy-url-bar').value = url;
+    renderTabs();
   }
 
   async function loadProxy() {
     let val = document.getElementById('proxy-url').value.trim();
     if (!val) return;
-    const url = search(val, currentSearchEngine);
-    await _doNavigate(url);
+    const url = search(val, getEngineUrl());
+    if (!getActiveTab()) {
+      await proxyNewTab(url);
+    } else {
+      await _doNavigate(url);
+    }
   }
 
   async function quickNav(url) {
     document.getElementById('proxy-url').value = url;
-    await _doNavigate(url);
+    if (!getActiveTab()) {
+      await proxyNewTab(url);
+    } else {
+      await _doNavigate(url);
+    }
   }
 
   async function proxyNav(url) {
@@ -2097,22 +2449,31 @@
       if (n.getAttribute('onclick') && n.getAttribute('onclick').includes("'proxy'")) n.classList.add('active');
       else n.classList.remove('active');
     });
-    await _doNavigate(url);
+    if (!getActiveTab()) {
+      await proxyNewTab(url);
+    } else {
+      await _doNavigate(url);
+    }
   }
 
   function proxyBack() {
-    if (sjFrame) sjFrame.frame.contentWindow.history.back();
+    const tab = getActiveTab();
+    if (tab && tab.sjFrame) tab.sjFrame.frame.contentWindow.history.back();
   }
 
   function proxyForward() {
-    if (sjFrame) sjFrame.frame.contentWindow.history.forward();
+    const tab = getActiveTab();
+    if (tab && tab.sjFrame) tab.sjFrame.frame.contentWindow.history.forward();
   }
 
   function proxyRefresh() {
-    if (sjFrame) sjFrame.frame.contentWindow.location.reload();
+    const tab = getActiveTab();
+    if (tab && tab.sjFrame) tab.sjFrame.frame.contentWindow.location.reload();
   }
 
   function proxyHome() {
+    // hide all frames
+    tabs.forEach(t => { if (t.sjFrame) t.sjFrame.frame.style.display = 'none'; });
     document.getElementById('proxy-landing').classList.remove('hidden');
     document.getElementById('proxy-browser').classList.remove('visible');
     document.getElementById('proxy-url').value = '';
@@ -2124,8 +2485,8 @@
 
   document.getElementById('proxy-url-bar').addEventListener('keydown', async e => {
     if (e.key === 'Enter') {
-      const url = search(e.target.value.trim(), 'https://www.google.com/search?q=%s');
-      if (sjFrame) { sjFrame.go(url); e.target.value = url; }
+      const url = search(e.target.value.trim(), getEngineUrl());
+      await _doNavigate(url);
     }
   });
 
