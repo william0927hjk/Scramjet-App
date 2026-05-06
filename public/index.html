@@ -1615,7 +1615,7 @@
     <div class="view active" id="view-home">
       <div class="hero">
         <h2>WILLIE GAMES</h2>
-        <p>best enblocked games ▶︎ •၊၊||၊|။||||။‌‌‌‌‌၊|• 0:30</p>
+        <p>best enblocked games oat</p>
       </div>
       <div class="stats-row">
         <div class="stat-card">
@@ -2716,7 +2716,7 @@
     tabs.splice(idx, 1);
     if (tabs.length === 0) {
       activeTabId = null;
-      // go back to the main landing
+      
       document.getElementById('proxy-landing').classList.remove('hidden');
       document.getElementById('proxy-browser').classList.remove('visible');
       return;
@@ -2752,7 +2752,7 @@
     if (url) await _doNavigateInTab(id, url);
   }
 
-  // Navigate a specific tab to a URL
+  
   async function _doNavigateInTab(tabId, url) {
     await _ensureSW();
     const tab = tabs.find(t => t.id === tabId);
@@ -3343,7 +3343,7 @@
       document.title = 'New Tab';
       history.pushState({}, '', 'about:blank');
     }
-    // B key opens browser
+    
     const tag = document.activeElement.tagName;
     if (e.key === 'b' && tag !== 'INPUT' && tag !== 'TEXTAREA') {
       showView('proxy');
@@ -3441,7 +3441,7 @@
   }
   if (settings.weirdText) setWeirdText(true);
 
-  // Cursor color
+  
   function setCursorColor(color, glow1, glow2) {
     const cursor = document.getElementById('custom-cursor');
     if (!cursor) return;
@@ -3452,7 +3452,7 @@
   }
   window.setCursorColor = setCursorColor;
 
-  // Cursor size
+  
   function setCursorSize(size) {
     const cursor = document.getElementById('custom-cursor');
     if (!cursor) return;
@@ -3463,7 +3463,7 @@
   }
   window.setCursorSize = setCursorSize;
 
-  // Load saved cursor settings
+  
   if (settings.cursorColor) {
     const c = settings.cursorColor;
     setCursorColor(c.color, c.glow1, c.glow2);
