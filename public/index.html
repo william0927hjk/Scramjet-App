@@ -1913,6 +1913,7 @@
           </div>
           <button class="btn-bookmark" id="proxy-bookmark-btn" onclick="toggleBookmark()" title="Bookmark">☆</button>
           <button class="btn-home" onclick="proxyHome()" title="Home">⌂</button>
+          <button class="nav-btn" onclick="proxyFullscreen()" id="proxy-fs-btn" title="Fullscreen">⛶</button>
         </div>
         <div id="proxy-frame-container">
           
@@ -2838,6 +2839,30 @@
     const tab = getActiveTab();
     if (tab && tab.sjFrame) tab.sjFrame.frame.contentWindow.location.reload();
   }
+
+  function proxyFullscreen() {
+    const container = document.getElementById('proxy-frame-container');
+    const btn = document.getElementById('proxy-fs-btn');
+    if (!document.fullscreenElement) {
+      container.requestFullscreen().then(() => {
+        btn.textContent = '⊠';
+        btn.title = 'Exit Fullscreen';
+      }).catch(() => {});
+    } else {
+      document.exitFullscreen().then(() => {
+        btn.textContent = '⛶';
+        btn.title = 'Fullscreen';
+      }).catch(() => {});
+    }
+  }
+
+  document.addEventListener('fullscreenchange', () => {
+    const btn = document.getElementById('proxy-fs-btn');
+    if (btn) {
+      btn.textContent = document.fullscreenElement ? '⊠' : '⛶';
+      btn.title = document.fullscreenElement ? 'Exit Fullscreen' : 'Fullscreen';
+    }
+  });
 
   function proxyHome() {
     
