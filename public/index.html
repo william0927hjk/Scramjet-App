@@ -974,7 +974,8 @@
     }
     .engine-option:hover { background: var(--card-hover); color: var(--silver-bright); }
     .engine-option.selected { color: #c0622a; }
-    .engine-option-icon { font-size: 16px; width: 20px; text-align: center; }
+    .engine-option-icon { font-size: 16px; width: 20px; height: 20px; text-align: center; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+    .engine-option-icon img { width:16px; height:16px; object-fit:contain; border-radius:3px; }
 
     /* Per-tab new-tab page */
     .tab-newtab-page {
@@ -1688,16 +1689,16 @@
           <div class="proxy-landing-bar">
             <span class="proxy-landing-bar-icon">⌯⌲</span>
             <input type="text" id="proxy-url" placeholder="Search or enter URL" />
-            <button class="landing-engine-btn" id="landing-engine-btn" onclick="toggleLandingEngine(event)" title="Choose search engine">🔍 <span class="engine-label-span">Google</span></button>
+            <button class="landing-engine-btn" id="landing-engine-btn" onclick="toggleLandingEngine(event)" title="Choose search engine"><img class="engine-btn-logo" src="https://www.google.com/favicon.ico" alt="Google" style="width:16px;height:16px;object-fit:contain;border-radius:3px;flex-shrink:0;"/> <span class="engine-label-span">Google</span></button>
             <button class="proxy-landing-go" onclick="loadProxy()">→</button>
           </div>
           <div id="landing-engine-dropdown">
-            <div class="engine-option selected" onclick="setEngine('google',this)"><span class="engine-option-icon">🔵</span>Google</div>
-            <div class="engine-option" onclick="setEngine('brave',this)"><span class="engine-option-icon">🦁</span>Brave</div>
-            <div class="engine-option" onclick="setEngine('duckduckgo',this)"><span class="engine-option-icon">🦆</span>DuckDuckGo</div>
-            <div class="engine-option" onclick="setEngine('bing',this)"><span class="engine-option-icon">🟦</span>Bing</div>
-            <div class="engine-option" onclick="setEngine('yahoo',this)"><span class="engine-option-icon">💜</span>Yahoo</div>
-            <div class="engine-option" onclick="setEngine('ecosia',this)"><span class="engine-option-icon">🌿</span>Ecosia</div>
+            <div class="engine-option" data-engine="google" onclick="setEngine('google',this)"><span class="engine-option-icon"><img src="https://www.google.com/favicon.ico" alt="Google"/></span>Google</div>
+            <div class="engine-option" data-engine="brave" onclick="setEngine('brave',this)"><span class="engine-option-icon"><img src="https://brave.com/static-assets/images/brave-favicon.png" alt="Brave"/></span>Brave</div>
+            <div class="engine-option" data-engine="duckduckgo" onclick="setEngine('duckduckgo',this)"><span class="engine-option-icon"><img src="https://duckduckgo.com/favicon.ico" alt="DuckDuckGo"/></span>DuckDuckGo</div>
+            <div class="engine-option" data-engine="bing" onclick="setEngine('bing',this)"><span class="engine-option-icon"><img src="https://www.bing.com/favicon.ico" alt="Bing"/></span>Bing</div>
+            <div class="engine-option" data-engine="yahoo" onclick="setEngine('yahoo',this)"><span class="engine-option-icon"><img src="https://s.yimg.com/rz/l/favicon.ico" alt="Yahoo"/></span>Yahoo</div>
+            <div class="engine-option" data-engine="ecosia" onclick="setEngine('ecosia',this)"><span class="engine-option-icon"><img src="https://www.ecosia.org/favicon.ico" alt="Ecosia"/></span>Ecosia</div>
           </div>
           </div>
           <div class="proxy-quicklinks">
@@ -1739,14 +1740,14 @@
           <input type="text" id="proxy-url-bar" placeholder="Enter a URL like google.com" />
           <!-- Engine picker -->
           <div style="position:relative;flex-shrink:0;">
-            <button class="engine-picker-btn" id="bar-engine-btn" onclick="toggleBarEngine(event)" title="Search engine">🔍 <span class="engine-label-span">Google</span></button>
+            <button class="engine-picker-btn" id="bar-engine-btn" onclick="toggleBarEngine(event)" title="Search engine"><img class="engine-btn-logo" src="https://www.google.com/favicon.ico" alt="Google" style="width:16px;height:16px;object-fit:contain;border-radius:3px;flex-shrink:0;"/> <span class="engine-label-span">Google</span></button>
             <div id="engine-dropdown">
-              <div class="engine-option selected" onclick="setEngine('google',this)"><span class="engine-option-icon">🔵</span>Google</div>
-              <div class="engine-option" onclick="setEngine('brave',this)"><span class="engine-option-icon">🦁</span>Brave</div>
-              <div class="engine-option" onclick="setEngine('duckduckgo',this)"><span class="engine-option-icon">🦆</span>DuckDuckGo</div>
-              <div class="engine-option" onclick="setEngine('bing',this)"><span class="engine-option-icon">🟦</span>Bing</div>
-              <div class="engine-option" onclick="setEngine('yahoo',this)"><span class="engine-option-icon">💜</span>Yahoo</div>
-              <div class="engine-option" onclick="setEngine('ecosia',this)"><span class="engine-option-icon">🌿</span>Ecosia</div>
+              <div class="engine-option" data-engine="google" onclick="setEngine('google',this)"><span class="engine-option-icon"><img src="https://www.google.com/favicon.ico" alt="Google"/></span>Google</div>
+              <div class="engine-option" data-engine="brave" onclick="setEngine('brave',this)"><span class="engine-option-icon"><img src="https://brave.com/static-assets/images/brave-favicon.png" alt="Brave"/></span>Brave</div>
+              <div class="engine-option" data-engine="duckduckgo" onclick="setEngine('duckduckgo',this)"><span class="engine-option-icon"><img src="https://duckduckgo.com/favicon.ico" alt="DuckDuckGo"/></span>DuckDuckGo</div>
+              <div class="engine-option" data-engine="bing" onclick="setEngine('bing',this)"><span class="engine-option-icon"><img src="https://www.bing.com/favicon.ico" alt="Bing"/></span>Bing</div>
+              <div class="engine-option" data-engine="yahoo" onclick="setEngine('yahoo',this)"><span class="engine-option-icon"><img src="https://s.yimg.com/rz/l/favicon.ico" alt="Yahoo"/></span>Yahoo</div>
+              <div class="engine-option" data-engine="ecosia" onclick="setEngine('ecosia',this)"><span class="engine-option-icon"><img src="https://www.ecosia.org/favicon.ico" alt="Ecosia"/></span>Ecosia</div>
             </div>
           </div>
           <button class="btn-bookmark" id="proxy-bookmark-btn" onclick="toggleBookmark()" title="Bookmark">☆</button>
@@ -2332,12 +2333,12 @@
 
   // ── Engine System ──
   const ENGINES = {
-    google:     { label: 'Google',     icon: '🔵', url: 'https://www.google.com/search?q=%s' },
-    brave:      { label: 'Brave',      icon: '🦁', url: 'https://search.brave.com/search?q=%s' },
-    duckduckgo: { label: 'DuckDuckGo', icon: '🦆', url: 'https://duckduckgo.com/?q=%s' },
-    bing:       { label: 'Bing',       icon: '🟦', url: 'https://www.bing.com/search?q=%s' },
-    yahoo:      { label: 'Yahoo',      icon: '💜', url: 'https://search.yahoo.com/search?p=%s' },
-    ecosia:     { label: 'Ecosia',     icon: '🌿', url: 'https://www.ecosia.org/search?q=%s' },
+    google:     { label: 'Google',     logo: 'https://www.google.com/favicon.ico',                                          url: 'https://www.google.com/search?q=%s' },
+    brave:      { label: 'Brave',      logo: 'https://brave.com/static-assets/images/brave-favicon.png',                   url: 'https://search.brave.com/search?q=%s' },
+    duckduckgo: { label: 'DuckDuckGo', logo: 'https://duckduckgo.com/favicon.ico',                                         url: 'https://duckduckgo.com/?q=%s' },
+    bing:       { label: 'Bing',       logo: 'https://www.bing.com/favicon.ico',                                           url: 'https://www.bing.com/search?q=%s' },
+    yahoo:      { label: 'Yahoo',      logo: 'https://s.yimg.com/rz/l/favicon.ico',                                        url: 'https://search.yahoo.com/search?p=%s' },
+    ecosia:     { label: 'Ecosia',     logo: 'https://www.ecosia.org/favicon.ico',                                         url: 'https://www.ecosia.org/search?q=%s' },
   };
   let currentEngineKey = localStorage.getItem('willie-engine') || 'google';
   function getEngineUrl() { return (ENGINES[currentEngineKey] || ENGINES.google).url; }
@@ -2347,12 +2348,13 @@
     localStorage.setItem('willie-engine', key);
     const eng = ENGINES[key] || ENGINES.google;
     document.querySelectorAll('.engine-label-span').forEach(s => s.textContent = eng.label);
+    document.querySelectorAll('.engine-btn-logo').forEach(img => { img.src = eng.logo; img.alt = eng.label; });
     document.querySelectorAll('.engine-option').forEach(o => o.classList.remove('selected'));
     document.querySelectorAll('.engine-option').forEach(o => {
-      if (o.textContent.trim().toLowerCase().includes(eng.label.toLowerCase())) o.classList.add('selected');
+      if (o.dataset.engine === key) o.classList.add('selected');
     });
-    // also update any open newtab page engine labels
     document.querySelectorAll('.tab-newtab-engine-label').forEach(s => s.textContent = eng.label);
+    document.querySelectorAll('.tab-newtab-engine-logo').forEach(img => { img.src = eng.logo; img.alt = eng.label; });
     closeEngineDropdowns();
   }
 
@@ -2378,8 +2380,9 @@
   (function() {
     const eng = ENGINES[currentEngineKey] || ENGINES.google;
     document.querySelectorAll('.engine-label-span').forEach(s => s.textContent = eng.label);
+    document.querySelectorAll('.engine-btn-logo').forEach(img => { img.src = eng.logo; img.alt = eng.label; });
     document.querySelectorAll('.engine-option').forEach(o => {
-      o.classList.toggle('selected', o.textContent.trim().toLowerCase().includes(eng.label.toLowerCase()));
+      o.classList.toggle('selected', o.dataset.engine === currentEngineKey);
     });
   })();
 
@@ -2425,16 +2428,16 @@
         <div class="tab-newtab-bar">
           <span class="tab-newtab-bar-icon" style="padding:0 16px;display:flex;align-items:center;color:#555;font-size:18px;flex-shrink:0;">⌯⌲</span>
           <input class="tab-newtab-input" placeholder="Search or enter URL" data-nt-input="${tabId}" />
-          <button class="tab-newtab-engine-btn" onclick="toggleNTEngine(event,'${tabId}')">🔍 <span class="tab-newtab-engine-label">${eng.label}</span></button>
+          <button class="tab-newtab-engine-btn" onclick="toggleNTEngine(event,'${tabId}')"><img class="tab-newtab-engine-logo engine-btn-logo" src="${eng.logo}" alt="${eng.label}" style="width:16px;height:16px;object-fit:contain;border-radius:3px;flex-shrink:0;"/> <span class="tab-newtab-engine-label engine-label-span">${eng.label}</span></button>
           <button class="tab-newtab-go" data-nt-go="${tabId}">→</button>
         </div>
-        <div class="tab-newtab-engine-dropdown engine-dropdown-inner" id="nt-engine-${tabId}" style="position:absolute;top:calc(100% + 8px);left:50%;transform:translateX(-50%);background:#0e0e14;border:1px solid var(--border-bright);border-radius:10px;padding:6px;display:none;flex-direction:column;gap:2px;z-index:9999;min-width:170px;box-shadow:0 8px 32px rgba(0,0,0,.5);">
-          <div class="engine-option${currentEngineKey==='google'?' selected':''}" onclick="setEngine('google',this)"><span class="engine-option-icon">🔵</span>Google</div>
-          <div class="engine-option${currentEngineKey==='brave'?' selected':''}" onclick="setEngine('brave',this)"><span class="engine-option-icon">🦁</span>Brave</div>
-          <div class="engine-option${currentEngineKey==='duckduckgo'?' selected':''}" onclick="setEngine('duckduckgo',this)"><span class="engine-option-icon">🦆</span>DuckDuckGo</div>
-          <div class="engine-option${currentEngineKey==='bing'?' selected':''}" onclick="setEngine('bing',this)"><span class="engine-option-icon">🟦</span>Bing</div>
-          <div class="engine-option${currentEngineKey==='yahoo'?' selected':''}" onclick="setEngine('yahoo',this)"><span class="engine-option-icon">💜</span>Yahoo</div>
-          <div class="engine-option${currentEngineKey==='ecosia'?' selected':''}" onclick="setEngine('ecosia',this)"><span class="engine-option-icon">🌿</span>Ecosia</div>
+          <div class="tab-newtab-engine-dropdown engine-dropdown-inner" id="nt-engine-${tabId}" style="position:absolute;top:calc(100% + 8px);left:50%;transform:translateX(-50%);background:#0e0e14;border:1px solid var(--border-bright);border-radius:10px;padding:6px;display:none;flex-direction:column;gap:2px;z-index:9999;min-width:170px;box-shadow:0 8px 32px rgba(0,0,0,.5);">
+          <div class="engine-option${currentEngineKey==='google'?' selected':''}" data-engine="google" onclick="setEngine('google',this)"><span class="engine-option-icon"><img src="https://www.google.com/favicon.ico" alt="Google"/></span>Google</div>
+          <div class="engine-option${currentEngineKey==='brave'?' selected':''}" data-engine="brave" onclick="setEngine('brave',this)"><span class="engine-option-icon"><img src="https://brave.com/static-assets/images/brave-favicon.png" alt="Brave"/></span>Brave</div>
+          <div class="engine-option${currentEngineKey==='duckduckgo'?' selected':''}" data-engine="duckduckgo" onclick="setEngine('duckduckgo',this)"><span class="engine-option-icon"><img src="https://duckduckgo.com/favicon.ico" alt="DuckDuckGo"/></span>DuckDuckGo</div>
+          <div class="engine-option${currentEngineKey==='bing'?' selected':''}" data-engine="bing" onclick="setEngine('bing',this)"><span class="engine-option-icon"><img src="https://www.bing.com/favicon.ico" alt="Bing"/></span>Bing</div>
+          <div class="engine-option${currentEngineKey==='yahoo'?' selected':''}" data-engine="yahoo" onclick="setEngine('yahoo',this)"><span class="engine-option-icon"><img src="https://s.yimg.com/rz/l/favicon.ico" alt="Yahoo"/></span>Yahoo</div>
+          <div class="engine-option${currentEngineKey==='ecosia'?' selected':''}" data-engine="ecosia" onclick="setEngine('ecosia',this)"><span class="engine-option-icon"><img src="https://www.ecosia.org/favicon.ico" alt="Ecosia"/></span>Ecosia</div>
         </div>
       </div>
       <div class="tab-newtab-quicklinks">
