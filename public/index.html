@@ -1636,6 +1636,12 @@
         </div>
       </div>
       <div class="section-title">games we have</div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px;">
+        <div style="background:var(--card-bg);border:1px solid var(--border);border-radius:8px;padding:8px 14px;font-size:12px;color:var(--text-dim);display:flex;align-items:center;gap:8px;">
+          <kbd style="background:var(--border-bright);color:var(--silver-bright);padding:2px 7px;border-radius:4px;font-family:'Orbitron',monospace;font-size:11px;">B</kbd>
+          press to open browser
+        </div>
+      </div>
       <div class="games-grid" id="featured-grid"></div>
       <div id="recently-played-section" style="display:none;">
         <div class="section-title">Recently Played</div>
@@ -3336,6 +3342,15 @@
       document.body.innerHTML = '';
       document.title = 'New Tab';
       history.pushState({}, '', 'about:blank');
+    }
+    // B key opens browser
+    const tag = document.activeElement.tagName;
+    if (e.key === 'b' && tag !== 'INPUT' && tag !== 'TEXTAREA') {
+      showView('proxy');
+      document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+      document.querySelectorAll('.nav-item').forEach(n => {
+        if (n.getAttribute('onclick') && n.getAttribute('onclick').includes("'proxy'")) n.classList.add('active');
+      });
     }
   });
 
