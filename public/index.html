@@ -837,7 +837,7 @@
       flex-shrink: 0;
     }
 
-    /* ── Proxy Tab Bar ── */
+    
     #proxy-tabbar {
       display: flex;
       align-items: center;
@@ -923,7 +923,7 @@
     }
     #proxy-tab-new:hover { background: var(--card-hover); color: var(--silver-bright); border-color: var(--border-bright); }
 
-    /* ── Engine Picker Button ── */
+    
     .engine-picker-btn {
       background: var(--card-bg);
       border: 1px solid var(--border);
@@ -977,7 +977,7 @@
     .engine-option-icon { font-size: 16px; width: 20px; height: 20px; text-align: center; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
     .engine-option-icon img { width:16px; height:16px; object-fit:contain; border-radius:3px; }
 
-    /* Per-tab new-tab page */
+    
     .tab-newtab-page {
       position: absolute;
       inset: 0;
@@ -1070,7 +1070,7 @@
       justify-content: center;
     }
 
-    /* Landing engine picker (inside search bar) */
+    
     .landing-engine-btn {
       background: none;
       border: none;
@@ -1740,9 +1740,9 @@
 
       
       <div id="proxy-browser">
-        <!-- Tab Bar -->
+        
         <div id="proxy-tabbar">
-          <!-- tabs injected by JS -->
+          
           <button id="proxy-tab-new" onclick="proxyNewTab()" title="New tab">+</button>
         </div>
         <div class="proxy-bar">
@@ -1750,7 +1750,7 @@
           <button class="nav-btn" onclick="proxyForward()" title="Forward">&#8594;</button>
           <button class="nav-btn" onclick="proxyRefresh()" title="Refresh">&#8635;</button>
           <input type="text" id="proxy-url-bar" placeholder="Enter a URL like google.com" />
-          <!-- Engine picker -->
+          
           <div style="position:relative;flex-shrink:0;">
             <button class="engine-picker-btn" id="bar-engine-btn" onclick="toggleBarEngine(event)" title="Search engine"><img class="engine-btn-logo" src="https://www.google.com/favicon.ico" alt="Google" style="width:16px;height:16px;object-fit:contain;border-radius:3px;flex-shrink:0;"/> <span class="engine-label-span">Google</span></button>
             <div id="engine-dropdown">
@@ -1766,7 +1766,7 @@
           <button class="btn-home" onclick="proxyHome()" title="Home">⌂</button>
         </div>
         <div id="proxy-frame-container">
-          <!-- frames injected by tab system -->
+          
         </div>
       </div>
 
@@ -2343,7 +2343,7 @@
 
   const connection = new BareMux.BareMuxConnection('/baremux/worker.js');
 
-  // ── Engine System ──
+  
   const ENGINES = {
     google:     { label: 'Google',     logo: 'https://www.google.com/favicon.ico',                                          url: 'https://www.google.com/search?q=%s' },
     brave:      { label: 'Brave',      logo: 'https://brave.com/static-assets/images/brave-favicon.png',                   url: 'https://search.brave.com/search?q=%s' },
@@ -2388,7 +2388,7 @@
 
   document.addEventListener('click', closeEngineDropdowns);
 
-  // init engine labels
+  
   (function() {
     const eng = ENGINES[currentEngineKey] || ENGINES.google;
     document.querySelectorAll('.engine-label-span').forEach(s => s.textContent = eng.label);
@@ -2398,7 +2398,7 @@
     });
   })();
 
-  // ── SW init ──
+  
   async function _ensureSW() {
     try {
       await registerSW();
@@ -2415,8 +2415,7 @@
     }
   }
 
-  // ── Multi-Tab System ──
-  // Each tab: { id, sjFrame|null, ntPage (newtab div), url, title }
+ 
   let tabs = [];
   let activeTabId = null;
   let tabCounter = 0;
@@ -2427,7 +2426,7 @@
     try { return new URL(url).hostname.replace('www.',''); } catch { return url.slice(0,20); }
   }
 
-  // Build a new-tab-page div for a tab
+  
   function makeNewTabPage(tabId) {
     const eng = ENGINES[currentEngineKey] || ENGINES.google;
     const div = document.createElement('div');
@@ -2475,7 +2474,7 @@
         </a>
       </div>
     `;
-    // wire up go button
+   
     div.querySelector(`[data-nt-go="${tabId}"]`).addEventListener('click', () => {
       const val = div.querySelector(`[data-nt-input="${tabId}"]`).value.trim();
       if (val) _doNavigateInTab(tabId, search(val, getEngineUrl()));
@@ -2500,14 +2499,14 @@
     if (!wasOpen) dd.style.display = 'flex';
   }
 
-  // closeEngineDropdowns also needs to handle newtab dropdowns
+  
   const _origCloseEng = closeEngineDropdowns;
   closeEngineDropdowns = function() {
     document.querySelectorAll('#landing-engine-dropdown, #engine-dropdown').forEach(d => d.classList.remove('open'));
     document.querySelectorAll('.engine-dropdown-inner').forEach(d => d.style.display = 'none');
   };
 
-  // ── Tab rendering ──
+  
   function renderTabs() {
     const bar = document.getElementById('proxy-tabbar');
     const newBtn = document.getElementById('proxy-tab-new');
@@ -2524,11 +2523,11 @@
   }
 
   function showTabContent(tab) {
-    // Hide everything first
+    
     const container = document.getElementById('proxy-frame-container');
     container.querySelectorAll('.tab-newtab-page').forEach(p => p.style.display = 'none');
     container.querySelectorAll('iframe').forEach(f => f.style.display = 'none');
-    // Show this tab's content
+    
     if (tab.url && tab.sjFrame) {
       tab.sjFrame.frame.style.display = '';
     } else {
@@ -2571,7 +2570,7 @@
     const container = document.getElementById('proxy-frame-container');
     container.style.position = 'relative';
 
-    // Build the newtab page for this tab
+    
     const ntPage = makeNewTabPage(id);
     container.appendChild(ntPage);
 
@@ -2579,14 +2578,14 @@
     tabs.push(tab);
     activeTabId = id;
 
-    // Show proxy-browser (hides the big landing)
+    
     document.getElementById('proxy-landing').classList.add('hidden');
     document.getElementById('proxy-browser').classList.add('visible');
 
     showTabContent(tab);
     renderTabs();
 
-    // If a URL was passed, navigate immediately
+    
     if (url) await _doNavigateInTab(id, url);
   }
 
@@ -2661,7 +2660,7 @@
   }
 
   function proxyHome() {
-    // No tabs open — go back to the big landing page
+    
     tabs.forEach(t => {
       if (t.sjFrame) t.sjFrame.frame.style.display = 'none';
       if (t.ntPage) t.ntPage.style.display = 'none';
