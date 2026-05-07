@@ -3541,107 +3541,88 @@
 
 <style>
   #chat-toggle {
-    position: fixed; bottom: 24px; right: 24px; width: 52px; height: 52px;
-    border-radius: 50%; background: transparent; border: 1px solid #37474f;
-    color: #e0e8ef; font-size: 22px; cursor: pointer; z-index: 500;
-    display: flex; align-items: center; justify-content: center;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.5); transition: all 0.2s;
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: transparent;
+    border: 1px solid #37474f;
+    color: #e0e8ef;
+    font-size: 22px;
+    cursor: pointer;
+    z-index: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+    transition: all 0.2s;
   }
   #chat-toggle:hover { border-color: #b0bec5; transform: scale(1.05); }
   #chat-unread {
-    position: absolute; top: -4px; right: -4px; background: #ef5350; color: #fff;
-    font-size: 10px; font-family: 'Orbitron', monospace; width: 18px; height: 18px;
-    border-radius: 50%; display: none; align-items: center; justify-content: center;
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    background: #ef5350;
+    color: #fff;
+    font-size: 10px;
+    font-family: 'Orbitron', monospace;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    display: none;
+    align-items: center;
+    justify-content: center;
   }
   #chat-unread.show { display: flex; }
   #chat-panel {
-    position: fixed; bottom: 88px; right: 24px; width: 320px; height: 540px;
-    background: rgba(14,14,20,0.55); backdrop-filter: blur(12px);
-    border: 1px solid #37474f; border-radius: 14px; display: flex;
-    flex-direction: column; z-index: 499; box-shadow: 0 8px 40px rgba(0,0,0,0.6);
-    transform: scale(0.95) translateY(10px); opacity: 0; pointer-events: none;
-    transition: all 0.2s cubic-bezier(0.4,0,0.2,1); overflow: hidden;
+    position: fixed;
+    bottom: 88px;
+    right: 24px;
+    width: 320px;
+    height: 480px;
+    background: rgba(14,14,20,0.55);
+    backdrop-filter: blur(12px);
+    border: 1px solid #37474f;
+    border-radius: 14px;
+    display: flex;
+    flex-direction: column;
+    z-index: 499;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.6);
+    transform: scale(0.95) translateY(10px);
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.2s cubic-bezier(0.4,0,0.2,1);
+    overflow: hidden;
   }
   #chat-panel.open { transform: scale(1) translateY(0); opacity: 1; pointer-events: all; }
-  #chat-header { padding: 12px 16px; border-bottom: 1px solid #1e2a32; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
-  #chat-header-left { display: flex; align-items: center; gap: 10px; min-width: 0; }
-  #chat-status-dot { width: 8px; height: 8px; border-radius: 50%; background: #ef5350; transition: background 0.3s; flex-shrink: 0; }
+  #chat-header { padding: 14px 16px; border-bottom: 1px solid #1e2a32; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
+  #chat-header-left { display: flex; align-items: center; gap: 10px; }
+  #chat-status-dot { width: 8px; height: 8px; border-radius: 50%; background: #ef5350; transition: background 0.3s; }
   #chat-status-dot.connected { background: #66bb6a; }
-  #chat-title { font-family: 'Orbitron', monospace; font-size: 11px; font-weight: 700; color: #e0e8ef; letter-spacing: 2px; text-transform: uppercase; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  #chat-online { font-size: 11px; color: #546e7a; letter-spacing: 1px; white-space: nowrap; }
+  #chat-title { font-family: 'Orbitron', monospace; font-size: 11px; font-weight: 700; color: #e0e8ef; letter-spacing: 2px; text-transform: uppercase; }
+  #chat-online { font-size: 11px; color: #546e7a; letter-spacing: 1px; }
   #chat-close { color: #546e7a; cursor: pointer; font-size: 16px; transition: color 0.2s; line-height: 1; }
   #chat-close:hover { color: #e0e8ef; }
-  #chat-owner-controls { display: none; align-items: center; gap: 6px; padding: 5px 10px; border-bottom: 1px solid #1e2a32; flex-shrink: 0; background: rgba(239,83,80,0.05); }
-  #chat-owner-controls.show { display: flex; }
-  #chat-owner-label { font-family: 'Orbitron', monospace; font-size: 9px; color: #ef5350; letter-spacing: 1px; flex: 1; }
-  .owner-btn { background: transparent; border: 1px solid #37474f; color: #b0bec5; padding: 3px 8px; border-radius: 6px; cursor: pointer; font-size: 11px; font-family: 'Rajdhani', sans-serif; transition: all 0.15s; }
-  .owner-btn:hover { border-color: #ef5350; color: #ef5350; }
-  #chat-username-bar { padding: 6px 12px; border-bottom: 1px solid #1e2a32; display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+  #chat-username-bar { padding: 8px 12px; border-bottom: 1px solid #1e2a32; display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
   #chat-username-bar label { font-size: 11px; color: #546e7a; letter-spacing: 1px; white-space: nowrap; }
-  #chat-username { flex: 1; background: rgba(20,20,26,0.7); border: 1px solid #1e2a32; color: #cfd8dc; padding: 4px 8px; border-radius: 6px; font-family: 'Rajdhani', sans-serif; font-size: 13px; outline: none; }
+  #chat-username { flex: 1; background: #14141a; border: 1px solid #1e2a32; color: #cfd8dc; padding: 4px 8px; border-radius: 6px; font-family: 'Rajdhani', sans-serif; font-size: 13px; outline: none; }
   #chat-username:focus { border-color: #607d8b; }
-  #chat-rooms-bar { display: flex; align-items: center; gap: 6px; padding: 7px 10px; border-bottom: 1px solid #1e2a32; overflow-x: auto; flex-shrink: 0; scrollbar-width: none; }
-  #chat-rooms-bar::-webkit-scrollbar { display: none; }
-  .room-pill { font-family: 'Orbitron', monospace; font-size: 9px; letter-spacing: 1px; padding: 4px 10px; border-radius: 20px; border: 1px solid #2a2a36; color: #546e7a; cursor: pointer; white-space: nowrap; transition: all 0.15s; background: transparent; }
-  .room-pill:hover { border-color: #607d8b; color: #b0bec5; }
-  .room-pill.active { border-color: var(--silver); color: var(--silver-bright); background: rgba(176,190,197,0.08); }
-  .room-pill .room-count { font-size: 8px; color: #37474f; margin-left: 4px; }
-  .room-pill.active .room-count { color: #78909c; }
-  #room-new-btn { font-family: 'Orbitron', monospace; font-size: 9px; padding: 4px 8px; border-radius: 20px; border: 1px dashed #2a2a36; color: #37474f; cursor: pointer; white-space: nowrap; transition: all 0.15s; background: transparent; flex-shrink: 0; }
-  #room-new-btn:hover { border-color: #546e7a; color: #607d8b; }
-
-  /* Modal overlay */
-  #chat-modal { display: none; position: absolute; inset: 0; background: rgba(10,10,16,0.85); backdrop-filter: blur(4px); z-index: 10; align-items: center; justify-content: center; border-radius: 14px; }
-  #chat-modal.show { display: flex; }
-  #chat-modal-box { background: rgba(20,20,30,0.95); border: 1px solid #37474f; border-radius: 12px; padding: 20px; width: 260px; display: flex; flex-direction: column; gap: 12px; }
-  #chat-modal-title { font-family: 'Orbitron', monospace; font-size: 11px; color: #e0e8ef; letter-spacing: 2px; text-transform: uppercase; }
-  .modal-tabs { display: flex; gap: 6px; }
-  .modal-tab { flex: 1; font-family: 'Orbitron', monospace; font-size: 9px; padding: 5px; border-radius: 6px; border: 1px solid #2a2a36; color: #546e7a; cursor: pointer; background: transparent; text-align: center; letter-spacing: 1px; transition: all 0.15s; }
-  .modal-tab.active { border-color: var(--silver); color: var(--silver-bright); background: rgba(176,190,197,0.08); }
-  .modal-section { display: none; flex-direction: column; gap: 8px; }
-  .modal-section.show { display: flex; }
-  .modal-input { background: rgba(20,20,26,0.8); border: 1px solid #1e2a32; color: #cfd8dc; padding: 7px 10px; border-radius: 8px; font-family: 'Rajdhani', sans-serif; font-size: 13px; outline: none; transition: border-color 0.2s; }
-  .modal-input:focus { border-color: #607d8b; }
-  .modal-input::placeholder { color: #37474f; }
-  .modal-hint { font-size: 11px; color: #37474f; letter-spacing: 0.5px; }
-  .modal-error { font-size: 11px; color: #ef5350; letter-spacing: 0.5px; display: none; }
-  .modal-error.show { display: block; }
-  .modal-success { font-size: 11px; color: #66bb6a; letter-spacing: 0.5px; display: none; word-break: break-all; }
-  .modal-success.show { display: block; }
-  .modal-btns { display: flex; gap: 8px; }
-  .modal-btn { flex: 1; background: transparent; border: 1px solid #37474f; color: #b0bec5; padding: 7px; border-radius: 8px; cursor: pointer; font-family: 'Rajdhani', sans-serif; font-size: 13px; transition: all 0.15s; }
-  .modal-btn:hover { border-color: #b0bec5; color: #e0e8ef; }
-  .modal-btn.primary { border-color: var(--silver); color: var(--silver-bright); }
-  .modal-btn.primary:hover { background: rgba(176,190,197,0.1); }
-
-  /* Members list */
-  #chat-members { display: none; position: absolute; inset: 0; background: rgba(10,10,16,0.9); backdrop-filter: blur(4px); z-index: 9; border-radius: 14px; flex-direction: column; overflow: hidden; }
-  #chat-members.show { display: flex; }
-  #chat-members-header { padding: 12px 16px; border-bottom: 1px solid #1e2a32; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
-  #chat-members-title { font-family: 'Orbitron', monospace; font-size: 11px; color: #e0e8ef; letter-spacing: 2px; }
-  #chat-members-close { color: #546e7a; cursor: pointer; font-size: 16px; }
-  #chat-members-close:hover { color: #e0e8ef; }
-  #chat-members-list { flex: 1; overflow-y: auto; padding: 10px; display: flex; flex-direction: column; gap: 6px; scrollbar-width: thin; scrollbar-color: #1e2a32 transparent; }
-  .member-row { display: flex; align-items: center; justify-content: space-between; padding: 6px 10px; background: rgba(20,20,26,0.6); border: 1px solid #1e2a32; border-radius: 8px; }
-  .member-name { font-family: 'Orbitron', monospace; font-size: 10px; color: #b0bec5; letter-spacing: 1px; }
-  .member-name.owner { color: #ffa040; }
-  .kick-btn { background: transparent; border: 1px solid #37474f; color: #546e7a; padding: 2px 8px; border-radius: 6px; cursor: pointer; font-size: 10px; font-family: 'Rajdhani', sans-serif; transition: all 0.15s; }
-  .kick-btn:hover { border-color: #ef5350; color: #ef5350; }
-
   #chat-messages { flex: 1; overflow-y: auto; padding: 12px; display: flex; flex-direction: column; gap: 8px; scrollbar-width: thin; scrollbar-color: #1e2a32 transparent; }
   #chat-messages::-webkit-scrollbar { width: 3px; }
   #chat-messages::-webkit-scrollbar-thumb { background: #1e2a32; border-radius: 2px; }
-  .chat-msg { background: rgba(20,20,26,0.6); border: 1px solid #1e2a32; border-radius: 8px; padding: 8px 10px; animation: msgIn 0.15s ease; }
+  .chat-msg { background: #14141a; border: 1px solid #1e2a32; border-radius: 8px; padding: 8px 10px; animation: msgIn 0.15s ease; }
   @keyframes msgIn { from { opacity:0; transform:translateY(4px); } to { opacity:1; transform:translateY(0); } }
   .chat-msg-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; }
   .chat-msg-user { font-family: 'Orbitron', monospace; font-size: 10px; font-weight: 700; color: #b0bec5; letter-spacing: 1px; }
   .chat-msg-time { font-size: 10px; color: #37474f; }
   .chat-msg-text { font-size: 13px; color: #cfd8dc; line-height: 1.4; word-break: break-word; }
-  .chat-msg.mine { border-color: #1e3040; background: rgba(16,24,32,0.7); }
+  .chat-msg.mine { border-color: #1e3040; background: #101820; }
   .chat-msg.mine .chat-msg-user { color: #64b5f6; }
   .chat-system { text-align: center; font-size: 11px; color: #37474f; letter-spacing: 1px; font-family: 'Orbitron', monospace; padding: 4px 0; }
   #chat-input-area { padding: 10px 12px; border-top: 1px solid #1e2a32; display: flex; gap: 8px; flex-shrink: 0; }
-  #chat-input { flex: 1; background: rgba(20,20,26,0.7); border: 1px solid #1e2a32; color: #cfd8dc; padding: 8px 12px; border-radius: 8px; font-family: 'Rajdhani', sans-serif; font-size: 14px; outline: none; transition: border-color 0.2s; }
+  #chat-input { flex: 1; background: #14141a; border: 1px solid #1e2a32; color: #cfd8dc; padding: 8px 12px; border-radius: 8px; font-family: 'Rajdhani', sans-serif; font-size: 14px; outline: none; transition: border-color 0.2s; }
   #chat-input:focus { border-color: #607d8b; }
   #chat-input::placeholder { color: #37474f; }
   #chat-send { background: transparent; border: 1px solid #37474f; color: #b0bec5; width: 36px; height: 36px; border-radius: 8px; cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center; transition: all 0.2s; flex-shrink: 0; }
@@ -3654,74 +3635,22 @@
 </button>
 
 <div id="chat-panel">
-  <!-- Modal for create/join private room -->
-  <div id="chat-modal">
-    <div id="chat-modal-box">
-      <div id="chat-modal-title">Private Rooms</div>
-      <div class="modal-tabs">
-        <button class="modal-tab active" onclick="switchModalTab('create')">Create</button>
-        <button class="modal-tab" onclick="switchModalTab('join')">Join</button>
-      </div>
-      <!-- Create tab -->
-      <div class="modal-section show" id="modal-create">
-        <input class="modal-input" id="modal-create-name" placeholder="room name (e.g. squad)" maxlength="32"/>
-        <input class="modal-input" id="modal-create-pass" placeholder="password" maxlength="64" type="password"/>
-        <div class="modal-error" id="modal-create-error"></div>
-        <div class="modal-success" id="modal-create-success"></div>
-        <div class="modal-btns">
-          <button class="modal-btn" onclick="closeModal()">cancel</button>
-          <button class="modal-btn primary" onclick="createPrivateRoom()">create</button>
-        </div>
-      </div>
-      <!-- Join tab -->
-      <div class="modal-section" id="modal-join">
-        <input class="modal-input" id="modal-join-name" placeholder="room name" maxlength="32"/>
-        <input class="modal-input" id="modal-join-pass" placeholder="password" maxlength="64" type="password"/>
-        <div class="modal-error" id="modal-join-error"></div>
-        <div class="modal-btns">
-          <button class="modal-btn" onclick="closeModal()">cancel</button>
-          <button class="modal-btn primary" onclick="joinPrivateRoom()">join</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Members list overlay -->
-  <div id="chat-members">
-    <div id="chat-members-header">
-      <span id="chat-members-title">Members</span>
-      <span id="chat-members-close" onclick="closeMembersList()">✕</span>
-    </div>
-    <div id="chat-members-list"></div>
-  </div>
-
   <div id="chat-header">
     <div id="chat-header-left">
       <div id="chat-status-dot"></div>
-      <span id="chat-title"># general</span>
+      <span id="chat-title">willie-chat Chat</span>
     </div>
-    <div style="display:flex;align-items:center;gap:8px">
-      <span id="chat-online" style="cursor:pointer" onclick="openMembersList()" title="View members">0 online</span>
+    <div style="display:flex;align-items:center;gap:12px">
+      <span id="chat-online">0 online</span>
       <span id="chat-close" onclick="toggleChat()">✕</span>
     </div>
   </div>
-
-  <!-- Owner controls bar -->
-  <div id="chat-owner-controls">
-    <span id="chat-owner-label">👑 owner</span>
-    <button class="owner-btn" onclick="openMembersList()">members</button>
-    <button class="owner-btn" onclick="closeRoom()">close room</button>
-  </div>
-
   <div id="chat-username-bar">
     <label>Name:</label>
     <input id="chat-username" maxlength="20" placeholder="Anonymous"/>
   </div>
-  <div id="chat-rooms-bar">
-    <button id="room-new-btn" onclick="openModal()">🔒 private</button>
-  </div>
   <div id="chat-messages">
-    <div class="chat-system">WILLIE GAMES — CHAT</div>
+    <div class="chat-system">WILLIE GAMES — willie CHAT</div>
   </div>
   <div id="chat-input-area">
     <input id="chat-input" placeholder="Say something..." maxlength="300"/>
@@ -3735,34 +3664,35 @@
   let chatOpen = false;
   let unreadCount = 0;
   let joined = false;
-  let currentRoom = 'general';
-  let isOwner = false;
-  let membersList = [];
-  let myUsername = 'Anonymous';
   const AudioCtx = window.AudioContext || window.webkitAudioContext;
   let audioCtx = null;
 
+  
   function playPing() {
     try {
       if (!audioCtx) audioCtx = new AudioCtx();
       const osc = audioCtx.createOscillator();
       const gain = audioCtx.createGain();
-      osc.connect(gain); gain.connect(audioCtx.destination);
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
       osc.frequency.setValueAtTime(880, audioCtx.currentTime);
       osc.frequency.exponentialRampToValueAtTime(440, audioCtx.currentTime + 0.15);
       gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
       gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.3);
-      osc.start(audioCtx.currentTime); osc.stop(audioCtx.currentTime + 0.3);
+      osc.start(audioCtx.currentTime);
+      osc.stop(audioCtx.currentTime + 0.3);
     } catch(e) {}
   }
 
+  
   const savedName = localStorage.getItem('willie-chat-username');
   if (savedName) document.getElementById('chat-username').value = savedName;
+
   document.getElementById('chat-username').addEventListener('change', () => {
-    myUsername = document.getElementById('chat-username').value.trim() || 'Anonymous';
-    localStorage.setItem('willie-chat-username', myUsername);
+    localStorage.setItem('willie-chat-username', document.getElementById('chat-username').value.trim());
   });
 
+  
   function toggleChat() {
     chatOpen = !chatOpen;
     document.getElementById('chat-panel').classList.toggle('open', chatOpen);
@@ -3775,15 +3705,17 @@
     }
   }
 
+  
   function connectChat() {
     const proto = location.protocol === 'https:' ? 'wss' : 'ws';
     chatWs = new WebSocket(`${proto}://${location.host}/chat/`);
 
     chatWs.addEventListener('open', () => {
       document.getElementById('chat-status-dot').classList.add('connected');
-      addSystemMsg('Connected');
-      myUsername = document.getElementById('chat-username').value.trim() || 'Anonymous';
-      chatWs.send(JSON.stringify({ type: 'join', username: myUsername }));
+      addSystemMsg('Connected to global chat');
+      
+      const username = document.getElementById('chat-username').value.trim() || 'Anonymous';
+      chatWs.send(JSON.stringify({ type: 'join', username }));
       joined = true;
     });
 
@@ -3796,199 +3728,29 @@
 
     chatWs.addEventListener('message', (e) => {
       let data; try { data = JSON.parse(e.data); } catch { return; }
-
       if (data.type === 'history') {
-        if (data.room === currentRoom) {
-          document.getElementById('chat-messages').innerHTML = '';
-          data.messages.forEach(m => { if (m.type === 'system') addSystemMsg(m.text); else appendMsg(m, false); });
-          scrollChatBottom();
-        }
+        data.messages.forEach(m => {
+          if (m.type === 'system') addSystemMsg(m.text);
+          else appendMsg(m, false);
+        });
+        scrollChatBottom();
       } else if (data.type === 'message') {
-        if (data.room === currentRoom) appendMsg(data, true);
+        appendMsg(data, true);
       } else if (data.type === 'system') {
-        if (data.room === currentRoom) { addSystemMsg(data.text); if (!chatOpen) playPing(); }
+        addSystemMsg(data.text);
+        if (!chatOpen) playPing();
       } else if (data.type === 'online') {
-        if (data.room === currentRoom) {
-          document.getElementById('chat-online').textContent = `${data.count} online`;
-          membersList = data.members || [];
-          if (document.getElementById('chat-members').classList.contains('show')) renderMembersList();
-        }
-        updateRoomPillCount(data.room, data.count);
-      } else if (data.type === 'global_online') {
+        document.getElementById('chat-online').textContent = `${data.count} online`;
         const sv = document.getElementById('stat-viewers');
         if (sv) sv.textContent = data.count;
-      } else if (data.type === 'room_list') {
-        renderRoomPills(data.rooms);
-      } else if (data.type === 'room_created') {
-        setOwner(true);
-        currentRoom = data.room;
-        document.getElementById('chat-title').textContent = `🔒 ${data.room}`;
-        document.getElementById('modal-create-error').classList.remove('show');
-        document.getElementById('modal-create-success').textContent = `Room created! Share: name="${data.room}" pass="${data.password}"`;
-        document.getElementById('modal-create-success').classList.add('show');
-        setTimeout(closeModal, 3500);
-      } else if (data.type === 'room_owner') {
-        setOwner(true);
-      } else if (data.type === 'kicked') {
-        currentRoom = data.toRoom;
-        setOwner(false);
-        document.getElementById('chat-title').textContent = `# ${data.toRoom}`;
-        document.getElementById('chat-messages').innerHTML = '';
-        addSystemMsg('You were kicked to #general');
-        document.querySelectorAll('.room-pill').forEach(p => p.classList.toggle('active', p.dataset.room === data.toRoom));
-      } else if (data.type === 'room_closed') {
-        if (data.room === currentRoom && !isOwner) {
-          currentRoom = 'general';
-          setOwner(false);
-          document.getElementById('chat-title').textContent = '# general';
-          document.getElementById('chat-messages').innerHTML = '';
-          addSystemMsg('Room was closed by owner');
-        }
-      } else if (data.type === 'error') {
-        // Show error in whichever modal section is active
-        const createErr = document.getElementById('modal-create-error');
-        const joinErr = document.getElementById('modal-join-error');
-        if (document.getElementById('modal-create').classList.contains('show')) {
-          createErr.textContent = data.msg; createErr.classList.add('show');
-        } else {
-          joinErr.textContent = data.msg; joinErr.classList.add('show');
-        }
       }
     });
   }
 
-  function setOwner(val) {
-    isOwner = val;
-    document.getElementById('chat-owner-controls').classList.toggle('show', val);
-  }
-
-  function renderRoomPills(list) {
-    const bar = document.getElementById('chat-rooms-bar');
-    bar.querySelectorAll('.room-pill').forEach(p => p.remove());
-    const newBtn = document.getElementById('room-new-btn');
-    for (const r of list) {
-      const pill = document.createElement('button');
-      pill.className = 'room-pill' + (r.name === currentRoom ? ' active' : '');
-      pill.dataset.room = r.name;
-      pill.innerHTML = `#${r.name}<span class="room-count">${r.count}</span>`;
-      pill.onclick = () => switchRoom(r.name);
-      bar.insertBefore(pill, newBtn);
-    }
-  }
-
-  function updateRoomPillCount(roomName, count) {
-    const pill = document.querySelector(`.room-pill[data-room="${roomName}"]`);
-    if (pill) { const s = pill.querySelector('.room-count'); if (s) s.textContent = count; }
-  }
-
-  function switchRoom(name) {
-    if (name === currentRoom) return;
-    if (!chatWs || chatWs.readyState !== 1) return;
-    currentRoom = name;
-    setOwner(false);
-    document.getElementById('chat-title').textContent = `# ${name}`;
-    document.getElementById('chat-messages').innerHTML = '';
-    addSystemMsg(`Switching to #${name}...`);
-    document.getElementById('chat-online').textContent = '0 online';
-    document.querySelectorAll('.room-pill').forEach(p => p.classList.toggle('active', p.dataset.room === name));
-    chatWs.send(JSON.stringify({ type: 'join_room', room: name }));
-  }
-
-  // Modal
-  function openModal() {
-    document.getElementById('chat-modal').classList.add('show');
-    document.getElementById('modal-create-error').classList.remove('show');
-    document.getElementById('modal-create-success').classList.remove('show');
-    document.getElementById('modal-join-error').classList.remove('show');
-    document.getElementById('modal-create-name').value = '';
-    document.getElementById('modal-create-pass').value = '';
-    document.getElementById('modal-join-name').value = '';
-    document.getElementById('modal-join-pass').value = '';
-    switchModalTab('create');
-    setTimeout(() => document.getElementById('modal-create-name').focus(), 50);
-  }
-
-  function closeModal() { document.getElementById('chat-modal').classList.remove('show'); }
-
-  function switchModalTab(tab) {
-    document.querySelectorAll('.modal-tab').forEach((t, i) => t.classList.toggle('active', (i === 0 && tab === 'create') || (i === 1 && tab === 'join')));
-    document.getElementById('modal-create').classList.toggle('show', tab === 'create');
-    document.getElementById('modal-join').classList.toggle('show', tab === 'join');
-  }
-
-  function createPrivateRoom() {
-    const name = document.getElementById('modal-create-name').value.trim().toLowerCase().replace(/[^a-z0-9-_]/g,'').slice(0,32);
-    const pass = document.getElementById('modal-create-pass').value.trim();
-    const err = document.getElementById('modal-create-error');
-    if (!name) { err.textContent = 'Enter a room name'; err.classList.add('show'); return; }
-    if (!pass) { err.textContent = 'Enter a password'; err.classList.add('show'); return; }
-    err.classList.remove('show');
-    if (!chatWs || chatWs.readyState !== 1) { connectChat(); return; }
-    chatWs.send(JSON.stringify({ type: 'create_room', room: name, password: pass }));
-  }
-
-  function joinPrivateRoom() {
-    const name = document.getElementById('modal-join-name').value.trim().toLowerCase().replace(/[^a-z0-9-_]/g,'').slice(0,32);
-    const pass = document.getElementById('modal-join-pass').value.trim();
-    const err = document.getElementById('modal-join-error');
-    if (!name) { err.textContent = 'Enter a room name'; err.classList.add('show'); return; }
-    if (!pass) { err.textContent = 'Enter a password'; err.classList.add('show'); return; }
-    err.classList.remove('show');
-    if (!chatWs || chatWs.readyState !== 1) { connectChat(); return; }
-    currentRoom = name;
-    setOwner(false);
-    document.getElementById('chat-title').textContent = `🔒 ${name}`;
-    document.getElementById('chat-messages').innerHTML = '';
-    addSystemMsg(`Joining #${name}...`);
-    chatWs.send(JSON.stringify({ type: 'join_room', room: name, password: pass }));
-    closeModal();
-  }
-
-  // Members list
-  function openMembersList() {
-    renderMembersList();
-    document.getElementById('chat-members').classList.add('show');
-  }
-
-  function closeMembersList() { document.getElementById('chat-members').classList.remove('show'); }
-
-  function renderMembersList() {
-    const list = document.getElementById('chat-members-list');
-    list.innerHTML = '';
-    for (const m of membersList) {
-      const row = document.createElement('div');
-      row.className = 'member-row';
-      const nameEl = document.createElement('span');
-      nameEl.className = 'member-name' + (m.username === myUsername ? ' owner' : '');
-      nameEl.textContent = m.username;
-      row.appendChild(nameEl);
-      if (isOwner && m.username !== myUsername) {
-        const kickBtn = document.createElement('button');
-        kickBtn.className = 'kick-btn';
-        kickBtn.textContent = 'kick';
-        kickBtn.onclick = () => kickMember(m.id, m.username);
-        row.appendChild(kickBtn);
-      }
-      list.appendChild(row);
-    }
-  }
-
-  function kickMember(id, name) {
-    if (!confirm(`Kick ${name}?`)) return;
-    chatWs.send(JSON.stringify({ type: 'kick', targetId: id }));
-  }
-
-  function closeRoom() {
-    if (!confirm('Close this room? Everyone will be moved to #general.')) return;
-    chatWs.send(JSON.stringify({ type: 'close_room' }));
-    currentRoom = 'general';
-    setOwner(false);
-    document.getElementById('chat-title').textContent = '# general';
-  }
-
+  
   function appendMsg(msg, animate) {
-    myUsername = document.getElementById('chat-username').value.trim() || 'Anonymous';
-    const isMe = msg.username === myUsername;
+    const myName = document.getElementById('chat-username').value.trim() || 'Anonymous';
+    const isMe = msg.username === myName;
     const el = document.createElement('div');
     el.className = 'chat-msg' + (isMe ? ' mine' : '');
     const t = new Date(msg.time);
@@ -3997,11 +3759,17 @@
     document.getElementById('chat-messages').appendChild(el);
     if (animate && !isMe) {
       playPing();
-      if (!chatOpen) { unreadCount++; const b = document.getElementById('chat-unread'); b.textContent = unreadCount > 9 ? '9+' : unreadCount; b.classList.add('show'); }
+      if (!chatOpen) {
+        unreadCount++;
+        const badge = document.getElementById('chat-unread');
+        badge.textContent = unreadCount > 9 ? '9+' : unreadCount;
+        badge.classList.add('show');
+      }
     }
     if (animate) scrollChatBottom();
   }
 
+  
   function addSystemMsg(text) {
     const el = document.createElement('div');
     el.className = 'chat-system';
@@ -4010,37 +3778,32 @@
     scrollChatBottom();
   }
 
-  function scrollChatBottom() { const el = document.getElementById('chat-messages'); el.scrollTop = el.scrollHeight; }
+  function scrollChatBottom() {
+    const el = document.getElementById('chat-messages');
+    el.scrollTop = el.scrollHeight;
+  }
 
+  
   function chatSend() {
     const input = document.getElementById('chat-input');
     const text = input.value.trim();
     if (!text) return;
     if (!chatWs || chatWs.readyState !== 1) { connectChat(); return; }
-    myUsername = document.getElementById('chat-username').value.trim() || 'Anonymous';
-    localStorage.setItem('willie-chat-username', myUsername);
-    chatWs.send(JSON.stringify({ type: 'message', username: myUsername, text }));
+    const username = document.getElementById('chat-username').value.trim() || 'Anonymous';
+    localStorage.setItem('willie-chat-username', username);
+    chatWs.send(JSON.stringify({ type: 'message', username, text }));
     input.value = '';
   }
 
-  function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+  function esc(s) {
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
 
   document.getElementById('chat-input').addEventListener('keydown', e => { if (e.key === 'Enter') chatSend(); });
-  document.getElementById('modal-create-pass').addEventListener('keydown', e => { if (e.key === 'Enter') createPrivateRoom(); });
-  document.getElementById('modal-join-pass').addEventListener('keydown', e => { if (e.key === 'Enter') joinPrivateRoom(); });
 
   connectChat();
   window.toggleChat = toggleChat;
   window.chatSend = chatSend;
-  window.openModal = openModal;
-  window.closeModal = closeModal;
-  window.switchModalTab = switchModalTab;
-  window.createPrivateRoom = createPrivateRoom;
-  window.joinPrivateRoom = joinPrivateRoom;
-  window.openMembersList = openMembersList;
-  window.closeMembersList = closeMembersList;
-  window.kickMember = kickMember;
-  window.closeRoom = closeRoom;
 })();
 </script>
 
