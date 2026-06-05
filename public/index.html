@@ -1382,6 +1382,386 @@
       cursor: pointer;
     }
 
+    /* ── Cloud Gaming View ── */
+    .cg-hero {
+      background: linear-gradient(135deg, #0a0a1a 0%, #1a0a2e 40%, #0a1a2e 100%);
+      border: 1px solid #2a1a4a;
+      border-radius: 16px;
+      padding: 48px 44px;
+      margin-bottom: 32px;
+      position: relative;
+      overflow: hidden;
+    }
+    .cg-hero::before {
+      content: '';
+      position: absolute;
+      top: -60%;
+      right: -15%;
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(124,77,255,0.12), transparent 70%);
+      pointer-events: none;
+    }
+    .cg-hero::after {
+      content: '';
+      position: absolute;
+      bottom: -40%;
+      left: -10%;
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(0,229,255,0.08), transparent 70%);
+      pointer-events: none;
+    }
+    .cg-hero h2 {
+      font-family: 'Orbitron', monospace;
+      font-size: 32px;
+      font-weight: 900;
+      background: linear-gradient(135deg, #00e5ff, #7c4dff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: 4px;
+      margin-bottom: 12px;
+      position: relative;
+    }
+    .cg-hero p {
+      color: #78909c;
+      font-size: 16px;
+      max-width: 520px;
+      line-height: 1.7;
+      position: relative;
+    }
+    .cg-hero-badges {
+      display: flex;
+      gap: 12px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+      position: relative;
+    }
+    .cg-badge {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(124,77,255,0.1);
+      border: 1px solid rgba(124,77,255,0.25);
+      color: #b39ddb;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-family: 'Orbitron', monospace;
+      letter-spacing: 1px;
+    }
+    .cg-stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-bottom: 32px;
+    }
+    .cg-stat {
+      background: rgba(20,20,30,0.6);
+      border: 1px solid #1e1e3a;
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+      transition: border-color 0.3s, transform 0.2s;
+    }
+    .cg-stat:hover {
+      border-color: #7c4dff;
+      transform: translateY(-2px);
+    }
+    .cg-stat-num {
+      font-family: 'Orbitron', monospace;
+      font-size: 24px;
+      font-weight: 900;
+      background: linear-gradient(135deg, #00e5ff, #7c4dff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .cg-stat-label {
+      font-size: 11px;
+      color: #546e7a;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-top: 6px;
+    }
+    .cg-category-tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    .cg-tab {
+      background: rgba(20,20,30,0.5);
+      border: 1px solid #1e1e3a;
+      color: #78909c;
+      padding: 8px 18px;
+      border-radius: 20px;
+      font-family: 'Orbitron', monospace;
+      font-size: 11px;
+      letter-spacing: 1.5px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .cg-tab:hover {
+      border-color: #7c4dff;
+      color: #b39ddb;
+    }
+    .cg-tab.active {
+      background: rgba(124,77,255,0.15);
+      border-color: #7c4dff;
+      color: #e0e0ff;
+    }
+    .cg-search-bar {
+      display: flex;
+      margin-bottom: 24px;
+      background: rgba(20,20,30,0.5);
+      border: 1px solid #1e1e3a;
+      border-radius: 12px;
+      overflow: hidden;
+      transition: border-color 0.2s;
+    }
+    .cg-search-bar:focus-within {
+      border-color: #7c4dff;
+    }
+    .cg-search-bar input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      color: #cfd8dc;
+      padding: 12px 18px;
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 15px;
+      outline: none;
+    }
+    .cg-search-bar input::placeholder { color: #37474f; }
+    .cg-search-icon {
+      padding: 0 16px;
+      display: flex;
+      align-items: center;
+      color: #37474f;
+      font-size: 16px;
+    }
+    .cg-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 18px;
+      margin-bottom: 36px;
+    }
+    .cg-card {
+      background: rgba(16,16,28,0.7);
+      border: 1px solid #1e1e3a;
+      border-radius: 14px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      text-decoration: none;
+      display: block;
+      position: relative;
+    }
+    .cg-card::before {
+      content: '';
+      position: absolute;
+      inset: -1px;
+      border-radius: 15px;
+      background: linear-gradient(135deg, #00e5ff, #7c4dff, #00e5ff);
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      padding: 1px;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      z-index: 0;
+    }
+    .cg-card:hover::before { opacity: 1; }
+    .cg-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(124,77,255,0.15), 0 0 0 1px rgba(124,77,255,0.2);
+    }
+    .cg-card-thumb {
+      width: 100%;
+      aspect-ratio: 16/10;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 48px;
+      background: linear-gradient(135deg, #0e0e1e, #141428);
+      border-bottom: 1px solid #1e1e3a;
+      position: relative;
+      overflow: hidden;
+    }
+    .cg-card-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .cg-card-platform {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      background: rgba(0,0,0,0.7);
+      border: 1px solid rgba(124,77,255,0.3);
+      color: #b39ddb;
+      font-size: 9px;
+      font-family: 'Orbitron', monospace;
+      letter-spacing: 1px;
+      padding: 3px 8px;
+      border-radius: 6px;
+      text-transform: uppercase;
+    }
+    .cg-card-live {
+      position: absolute;
+      top: 8px;
+      left: 8px;
+      background: rgba(255,23,68,0.85);
+      color: #fff;
+      font-size: 9px;
+      font-family: 'Orbitron', monospace;
+      letter-spacing: 1px;
+      padding: 3px 8px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .cg-card-live::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      background: #fff;
+      border-radius: 50%;
+      animation: cgPulse 1.5s infinite;
+    }
+    @keyframes cgPulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+    .cg-card-info {
+      padding: 14px 16px;
+    }
+    .cg-card-name {
+      font-family: 'Orbitron', monospace;
+      font-size: 12px;
+      font-weight: 700;
+      color: #e0e8ef;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+    .cg-card-genre {
+      font-size: 12px;
+      color: #546e7a;
+      letter-spacing: 1px;
+    }
+    .cg-card-meta {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 8px;
+    }
+    .cg-card-players {
+      font-size: 11px;
+      color: #7c4dff;
+      font-family: 'Orbitron', monospace;
+    }
+    .cg-card-rating {
+      font-size: 11px;
+      color: #ffd600;
+      letter-spacing: 1px;
+    }
+    .cg-features {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 36px;
+    }
+    .cg-feature {
+      background: rgba(16,16,28,0.5);
+      border: 1px solid #1e1e3a;
+      border-radius: 12px;
+      padding: 24px 20px;
+      text-align: center;
+      transition: border-color 0.3s, transform 0.2s;
+    }
+    .cg-feature:hover {
+      border-color: #7c4dff;
+      transform: translateY(-2px);
+    }
+    .cg-feature-icon {
+      font-size: 32px;
+      margin-bottom: 12px;
+    }
+    .cg-feature-title {
+      font-family: 'Orbitron', monospace;
+      font-size: 11px;
+      font-weight: 700;
+      color: #e0e8ef;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+    .cg-feature-desc {
+      font-size: 12px;
+      color: #546e7a;
+      line-height: 1.5;
+    }
+    .cg-platforms-row {
+      display: flex;
+      gap: 14px;
+      margin-bottom: 32px;
+      flex-wrap: wrap;
+    }
+    .cg-platform-card {
+      background: rgba(16,16,28,0.5);
+      border: 1px solid #1e1e3a;
+      border-radius: 14px;
+      padding: 20px 24px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      cursor: pointer;
+      transition: all 0.25s;
+      text-decoration: none;
+      flex: 1;
+      min-width: 200px;
+    }
+    .cg-platform-card:hover {
+      border-color: #7c4dff;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 32px rgba(124,77,255,0.1);
+    }
+    .cg-platform-logo {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      background: rgba(124,77,255,0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      flex-shrink: 0;
+    }
+    .cg-platform-info {
+      flex: 1;
+    }
+    .cg-platform-name {
+      font-family: 'Orbitron', monospace;
+      font-size: 12px;
+      font-weight: 700;
+      color: #e0e8ef;
+      letter-spacing: 1px;
+    }
+    .cg-platform-desc {
+      font-size: 12px;
+      color: #546e7a;
+      margin-top: 2px;
+    }
+    @media (max-width: 768px) {
+      .cg-stats { grid-template-columns: repeat(2, 1fr); }
+      .cg-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
+      .cg-features { grid-template-columns: 1fr; }
+    }
+
     
     #tool-topbar {
       display: none;
@@ -1503,6 +1883,10 @@
     
     <div class="nav-item" onclick="showView('apps')">
       <span class="icon">⌬</span> 𐌕ꝊꝊ𐌋𐌔
+    </div>
+    
+    <div class="nav-item" onclick="showView('cloudgaming')">
+      <span class="icon" style="font-size:16px;">☁</span> Cloud Gaming
     </div>
     
     <div class="nav-item" onclick="showView('proxy')">
@@ -1864,6 +2248,119 @@
     </div>
 
     
+    <!-- Cloud Gaming View -->
+    <div class="view" id="view-cloudgaming">
+      <div class="cg-hero">
+        <h2>CLOUD GAMING</h2>
+        <p>Play AAA titles and indie favorites instantly in your browser. No downloads, no installs — just click and play with ultra-low latency streaming.</p>
+        <div class="cg-hero-badges">
+          <span class="cg-badge">ZERO DOWNLOADS</span>
+          <span class="cg-badge">INSTANT PLAY</span>
+          <span class="cg-badge">CROSS-DEVICE</span>
+          <span class="cg-badge">LOW LATENCY</span>
+        </div>
+      </div>
+
+      <div class="cg-stats">
+        <div class="cg-stat">
+          <div class="cg-stat-num">50+</div>
+          <div class="cg-stat-label">Cloud Games</div>
+        </div>
+        <div class="cg-stat">
+          <div class="cg-stat-num">0ms</div>
+          <div class="cg-stat-label">Download Time</div>
+        </div>
+        <div class="cg-stat">
+          <div class="cg-stat-num">24/7</div>
+          <div class="cg-stat-label">Available</div>
+        </div>
+        <div class="cg-stat">
+          <div class="cg-stat-num">HD</div>
+          <div class="cg-stat-label">Quality</div>
+        </div>
+      </div>
+
+      <div class="section-title">Cloud Gaming Platforms</div>
+      <div class="cg-platforms-row">
+        <a class="cg-platform-card" onclick="proxyNav('https://play.geforcenow.com')">
+          <div class="cg-platform-logo" style="background:rgba(118,185,0,0.15);">🎮</div>
+          <div class="cg-platform-info">
+            <div class="cg-platform-name">GeForce NOW</div>
+            <div class="cg-platform-desc">Stream PC games from the cloud</div>
+          </div>
+        </a>
+        <a class="cg-platform-card" onclick="proxyNav('https://www.xbox.com/en-US/play')">
+          <div class="cg-platform-logo" style="background:rgba(16,124,16,0.15);">🟢</div>
+          <div class="cg-platform-info">
+            <div class="cg-platform-name">Xbox Cloud Gaming</div>
+            <div class="cg-platform-desc">Play Xbox games on any device</div>
+          </div>
+        </a>
+        <a class="cg-platform-card" onclick="proxyNav('https://luna.amazon.com')">
+          <div class="cg-platform-logo" style="background:rgba(0,168,225,0.15);">🌙</div>
+          <div class="cg-platform-info">
+            <div class="cg-platform-name">Amazon Luna</div>
+            <div class="cg-platform-desc">Cloud gaming by Amazon</div>
+          </div>
+        </a>
+      </div>
+
+      <div class="section-title">Browse Games</div>
+      <div class="cg-search-bar">
+        <span class="cg-search-icon">🔍</span>
+        <input type="text" id="cg-search" placeholder="Search cloud games..." oninput="filterCloudGames(this.value)" />
+      </div>
+
+      <div class="cg-category-tabs" id="cg-tabs">
+        <div class="cg-tab active" onclick="filterCGCategory('all', this)">All Games</div>
+        <div class="cg-tab" onclick="filterCGCategory('action', this)">Action</div>
+        <div class="cg-tab" onclick="filterCGCategory('racing', this)">Racing</div>
+        <div class="cg-tab" onclick="filterCGCategory('puzzle', this)">Puzzle</div>
+        <div class="cg-tab" onclick="filterCGCategory('adventure', this)">Adventure</div>
+        <div class="cg-tab" onclick="filterCGCategory('sports', this)">Sports</div>
+        <div class="cg-tab" onclick="filterCGCategory('rpg', this)">RPG</div>
+        <div class="cg-tab" onclick="filterCGCategory('shooter', this)">Shooter</div>
+        <div class="cg-tab" onclick="filterCGCategory('sandbox', this)">Sandbox</div>
+        <div class="cg-tab" onclick="filterCGCategory('platformer', this)">Platformer</div>
+      </div>
+
+      <div class="cg-grid" id="cg-grid"></div>
+
+      <div class="section-title">Why Cloud Gaming?</div>
+      <div class="cg-features">
+        <div class="cg-feature">
+          <div class="cg-feature-icon">⚡</div>
+          <div class="cg-feature-title">Instant Play</div>
+          <div class="cg-feature-desc">No downloads or installs needed. Click and start playing in seconds.</div>
+        </div>
+        <div class="cg-feature">
+          <div class="cg-feature-icon">🌐</div>
+          <div class="cg-feature-title">Cross-Device</div>
+          <div class="cg-feature-desc">Play on any device with a browser — PC, tablet, or phone.</div>
+        </div>
+        <div class="cg-feature">
+          <div class="cg-feature-icon">🎯</div>
+          <div class="cg-feature-title">Low Latency</div>
+          <div class="cg-feature-desc">Optimized streaming for responsive, lag-free gameplay.</div>
+        </div>
+        <div class="cg-feature">
+          <div class="cg-feature-icon">💾</div>
+          <div class="cg-feature-title">No Storage</div>
+          <div class="cg-feature-desc">Save your disk space. Games run entirely in the cloud.</div>
+        </div>
+        <div class="cg-feature">
+          <div class="cg-feature-icon">🔒</div>
+          <div class="cg-feature-title">Safe & Secure</div>
+          <div class="cg-feature-desc">No files to download means no risk of malware or viruses.</div>
+        </div>
+        <div class="cg-feature">
+          <div class="cg-feature-icon">🔄</div>
+          <div class="cg-feature-title">Always Updated</div>
+          <div class="cg-feature-desc">Games are always the latest version. No patches to wait for.</div>
+        </div>
+      </div>
+    </div>
+
     <div class="view" id="view-history">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
         <div class="section-title" style="margin:0">History</div>
@@ -2427,12 +2924,122 @@
     if (q) showView('games');
   }
 
+  // ── Cloud Gaming Data & Functions ──
+  const cloudGames = [
+    {name:"Fortnite",genre:"Shooter",platform:"Browser",players:"350M+",rating:"4.8",img:"https://cdn2.unrealengine.com/social-image-chapter4-s3-3840x2160-d35912cc25ad.jpg",url:"https://www.xbox.com/en-US/play/games/fortnite/BT5P2X999VH2"},
+    {name:"Rocket League",genre:"Sports",platform:"Browser",players:"90M+",rating:"4.7",img:"https://rocketleague.media.zestyio.com/rl_platform_keyart_2019.jpg",url:"https://www.xbox.com/en-US/play/games/rocket-league/C125W9BG2K0V"},
+    {name:"Minecraft",genre:"Sandbox",platform:"Browser",players:"238M+",rating:"4.9",img:"https://www.minecraft.net/content/dam/games/minecraft/key-art/Games_Subnav_702x1422-702x1422.jpg",url:"https://www.xbox.com/en-US/play/games/minecraft/CFQP3Q29W1V2"},
+    {name:"Halo Infinite",genre:"Shooter",platform:"Cloud",players:"20M+",rating:"4.5",img:"https://store-images.s-microsoft.com/image/apps.10075.13727851868390641.c9cc5f66-edf0-4135-b1ef-21f3f5ba3951.78ebb893-9a66-44e1-b66e-aab2ff498f23",url:"https://www.xbox.com/en-US/play/games/halo-infinite/9PP5G1F0C2B6"},
+    {name:"GTA V",genre:"Action",platform:"Cloud",players:"190M+",rating:"4.7",img:"https://media-rockstargames-com.akamaized.net/mfe6/prod/__batch/gtav-social-club-redesign-deadsite-img.jpg",url:"https://play.geforcenow.com"},
+    {name:"Apex Legends",genre:"Shooter",platform:"Browser",players:"100M+",rating:"4.6",img:"https://media.contentapi.ea.com/content/dam/apex-legends/common/articles/revenant-reborn-revealed/apex-legends-s18-keyart.jpg.adapt.crop191x100.628p.jpg",url:"https://www.xbox.com/en-US/play/games/apex-legends/BV9ML45J2Q5V"},
+    {name:"Among Us",genre:"Action",platform:"Browser",players:"500M+",rating:"4.5",img:"https://cdn.cloudflare.steamstatic.com/steam/apps/945360/capsule_616x353.jpg",url:"https://www.xbox.com/en-US/play/games/among-us/9NG07QJNK38J"},
+    {name:"Fall Guys",genre:"Action",platform:"Browser",players:"80M+",rating:"4.4",img:"https://cdn2.unrealengine.com/egs-fallguys-mediatonic-s1-2560x1440-2d0363c7a3a0.jpg",url:"https://www.xbox.com/en-US/play/games/fall-guys/9PMXH5249DG5"},
+    {name:"Stardew Valley",genre:"RPG",platform:"Cloud",players:"30M+",rating:"4.9",img:"https://cdn.cloudflare.steamstatic.com/steam/apps/413150/capsule_616x353.jpg",url:"https://play.geforcenow.com"},
+    {name:"Destiny 2",genre:"Shooter",platform:"Cloud",players:"40M+",rating:"4.3",img:"https://cdn.cloudflare.steamstatic.com/steam/apps/1085660/capsule_616x353.jpg",url:"https://play.geforcenow.com"},
+    {name:"Cyberpunk 2077",genre:"RPG",platform:"Cloud",players:"25M+",rating:"4.6",img:"https://cdn.cloudflare.steamstatic.com/steam/apps/1091500/capsule_616x353.jpg",url:"https://play.geforcenow.com"},
+    {name:"Valorant",genre:"Shooter",platform:"Cloud",players:"28M+",rating:"4.5",img:"https://cdn.cloudflare.steamstatic.com/steam/apps/2215160/header.jpg",url:"https://play.geforcenow.com"},
+    {name:"Elden Ring",genre:"RPG",platform:"Cloud",players:"23M+",rating:"4.8",img:"https://cdn.cloudflare.steamstatic.com/steam/apps/1245620/capsule_616x353.jpg",url:"https://play.geforcenow.com"},
+    {name:"CS2",genre:"Shooter",platform:"Cloud",players:"64M+",rating:"4.4",img:"https://cdn.cloudflare.steamstatic.com/steam/apps/730/capsule_616x353.jpg",url:"https://play.geforcenow.com"},
+    {name:"No Man's Sky",genre:"Adventure",platform:"Cloud",players:"10M+",rating:"4.5",img:"https://cdn.cloudflare.steamstatic.com/steam/apps/275850/capsule_616x353.jpg",url:"https://play.geforcenow.com"},
+    {name:"The Witcher 3",genre:"RPG",platform:"Cloud",players:"50M+",rating:"4.9",img:"https://cdn.cloudflare.steamstatic.com/steam/apps/292030/capsule_616x353.jpg",url:"https://play.geforcenow.com"},
+    {name:"Terraria",genre:"Sandbox",platform:"Cloud",players:"44M+",rating:"4.9",img:"https://cdn.cloudflare.steamstatic.com/steam/apps/105600/capsule_616x353.jpg",url:"https://play.geforcenow.com"},
+    {name:"Ark: Survival",genre:"Adventure",platform:"Cloud",players:"40M+",rating:"4.3",img:"https://cdn.cloudflare.steamstatic.com/steam/apps/346110/capsule_616x353.jpg",url:"https://play.geforcenow.com"},
+    {name:"Rust",genre:"Action",platform:"Cloud",players:"14M+",rating:"4.5",img:"https://cdn.cloudflare.steamstatic.com/steam/apps/252490/capsule_616x353.jpg",url:"https://play.geforcenow.com"},
+    {name:"Rainbow Six Siege",genre:"Shooter",platform:"Cloud",players:"85M+",rating:"4.3",img:"https://cdn.cloudflare.steamstatic.com/steam/apps/359550/capsule_616x353.jpg",url:"https://play.geforcenow.com"},
+    {name:"Deep Rock Galactic",genre:"Shooter",platform:"Cloud",players:"8M+",rating:"4.8",img:"https://cdn.cloudflare.steamstatic.com/steam/apps/548430/capsule_616x353.jpg",url:"https://play.geforcenow.com"},
+    {name:"Sea of Thieves",genre:"Adventure",platform:"Browser",players:"35M+",rating:"4.4",img:"https://cdn.cloudflare.steamstatic.com/steam/apps/1172620/capsule_616x353.jpg",url:"https://www.xbox.com/en-US/play/games/sea-of-thieves/9P2N57MC619K"},
+    {name:"Grounded",genre:"Adventure",platform:"Browser",players:"15M+",rating:"4.6",img:"https://store-images.s-microsoft.com/image/apps.60563.14456089668044215.6a08618b-5d49-4b1a-8472-42c20c820a37.9da1adf8-6285-47e3-84bb-73cb2a6a8a6e",url:"https://www.xbox.com/en-US/play/games/grounded/C2M3F1FKG1KV"},
+    {name:"Palworld",genre:"Adventure",platform:"Browser",players:"25M+",rating:"4.3",img:"https://cdn.cloudflare.steamstatic.com/steam/apps/1623730/capsule_616x353.jpg",url:"https://www.xbox.com/en-US/play/games/palworld/9N2B6N7Z5BDB"},
+    {name:"Hollow Knight",genre:"Platformer",platform:"Cloud",players:"10M+",rating:"4.9",img:"https://cdn.cloudflare.steamstatic.com/steam/apps/367520/capsule_616x353.jpg",url:"https://play.geforcenow.com"},
+    {name:"Celeste",genre:"Platformer",platform:"Cloud",players:"5M+",rating:"4.8",img:"https://cdn.cloudflare.steamstatic.com/steam/apps/504230/capsule_616x353.jpg",url:"https://play.geforcenow.com"},
+    {name:"Cuphead",genre:"Platformer",platform:"Cloud",players:"12M+",rating:"4.7",img:"https://cdn.cloudflare.steamstatic.com/steam/apps/268910/capsule_616x353.jpg",url:"https://play.geforcenow.com"},
+    {name:"Civilization VI",genre:"Puzzle",platform:"Cloud",players:"15M+",rating:"4.5",img:"https://cdn.cloudflare.steamstatic.com/steam/apps/289070/capsule_616x353.jpg",url:"https://play.geforcenow.com"},
+    {name:"Portal 2",genre:"Puzzle",platform:"Cloud",players:"20M+",rating:"4.9",img:"https://cdn.cloudflare.steamstatic.com/steam/apps/620/capsule_616x353.jpg",url:"https://play.geforcenow.com"},
+    {name:"Tetris Effect",genre:"Puzzle",platform:"Cloud",players:"4M+",rating:"4.7",img:"https://cdn.cloudflare.steamstatic.com/steam/apps/1003590/capsule_616x353.jpg",url:"https://play.geforcenow.com"},
+    {name:"FIFA Online",genre:"Sports",platform:"Cloud",players:"45M+",rating:"4.2",img:"https://cdn.cloudflare.steamstatic.com/steam/apps/1811260/capsule_616x353.jpg",url:"https://play.geforcenow.com"},
+    {name:"NBA 2K24",genre:"Sports",platform:"Cloud",players:"12M+",rating:"4.1",img:"https://cdn.cloudflare.steamstatic.com/steam/apps/2338770/capsule_616x353.jpg",url:"https://play.geforcenow.com"},
+    {name:"Trackmania",genre:"Racing",platform:"Cloud",players:"18M+",rating:"4.4",img:"https://cdn.cloudflare.steamstatic.com/steam/apps/2225070/capsule_616x353.jpg",url:"https://play.geforcenow.com"},
+    {name:"Need for Speed",genre:"Racing",platform:"Cloud",players:"30M+",rating:"4.3",img:"https://cdn.cloudflare.steamstatic.com/steam/apps/1846380/capsule_616x353.jpg",url:"https://play.geforcenow.com"},
+    {name:"Assetto Corsa",genre:"Racing",platform:"Cloud",players:"9M+",rating:"4.6",img:"https://cdn.cloudflare.steamstatic.com/steam/apps/244210/capsule_616x353.jpg",url:"https://play.geforcenow.com"},
+    {name:"Forza Horizon 5",genre:"Racing",platform:"Browser",players:"35M+",rating:"4.8",img:"https://store-images.s-microsoft.com/image/apps.52291.14595498475371101.cfa71c75-3e81-4849-9a68-e6f1d581f0df.c07fd236-014e-46d3-bb42-e3ed56d1e44b",url:"https://www.xbox.com/en-US/play/games/forza-horizon-5/9NKX70BBCDRN"},
+    {name:"Diablo IV",genre:"RPG",platform:"Browser",players:"15M+",rating:"4.2",img:"https://cdn.cloudflare.steamstatic.com/steam/apps/2344520/capsule_616x353.jpg",url:"https://www.xbox.com/en-US/play/games/diablo-iv/9NJ07BSKT0LG"},
+    {name:"Starfield",genre:"RPG",platform:"Browser",players:"12M+",rating:"4.0",img:"https://store-images.s-microsoft.com/image/apps.58193.68253524912487614.c0e50cd0-3c97-48a3-b290-b8e73b4a5a95.14d6cba8-df15-421e-89f4-74f5174b7e00",url:"https://www.xbox.com/en-US/play/games/starfield/9NP1P1WFS0LB"},
+    {name:"Dead Cells",genre:"Platformer",platform:"Cloud",players:"10M+",rating:"4.7",img:"https://cdn.cloudflare.steamstatic.com/steam/apps/588650/capsule_616x353.jpg",url:"https://play.geforcenow.com"},
+    {name:"Subnautica",genre:"Adventure",platform:"Cloud",players:"8M+",rating:"4.8",img:"https://cdn.cloudflare.steamstatic.com/steam/apps/264710/capsule_616x353.jpg",url:"https://play.geforcenow.com"},
+    {name:"Satisfactory",genre:"Sandbox",platform:"Cloud",players:"6M+",rating:"4.7",img:"https://cdn.cloudflare.steamstatic.com/steam/apps/526870/capsule_616x353.jpg",url:"https://play.geforcenow.com"},
+    {name:"V Rising",genre:"Action",platform:"Cloud",players:"4M+",rating:"4.5",img:"https://cdn.cloudflare.steamstatic.com/steam/apps/1604030/capsule_616x353.jpg",url:"https://play.geforcenow.com"},
+    {name:"Geometry Dash",genre:"Platformer",platform:"Cloud",players:"40M+",rating:"4.6",img:"https://cdn.cloudflare.steamstatic.com/steam/apps/322170/capsule_616x353.jpg",url:"https://play.geforcenow.com"},
+    {name:"Plague Inc",genre:"Puzzle",platform:"Cloud",players:"160M+",rating:"4.5",img:"https://cdn.cloudflare.steamstatic.com/steam/apps/246620/capsule_616x353.jpg",url:"https://play.geforcenow.com"},
+    {name:"Baldur's Gate 3",genre:"RPG",platform:"Cloud",players:"15M+",rating:"4.9",img:"https://cdn.cloudflare.steamstatic.com/steam/apps/1086940/capsule_616x353.jpg",url:"https://play.geforcenow.com"},
+    {name:"Lethal Company",genre:"Action",platform:"Cloud",players:"14M+",rating:"4.7",img:"https://cdn.cloudflare.steamstatic.com/steam/apps/1966720/capsule_616x353.jpg",url:"https://play.geforcenow.com"},
+    {name:"Monster Hunter",genre:"Action",platform:"Cloud",players:"20M+",rating:"4.6",img:"https://cdn.cloudflare.steamstatic.com/steam/apps/582010/capsule_616x353.jpg",url:"https://play.geforcenow.com"},
+    {name:"Phasmophobia",genre:"Adventure",platform:"Cloud",players:"11M+",rating:"4.6",img:"https://cdn.cloudflare.steamstatic.com/steam/apps/739630/capsule_616x353.jpg",url:"https://play.geforcenow.com"},
+    {name:"PowerWash Sim",genre:"Puzzle",platform:"Browser",players:"8M+",rating:"4.7",img:"https://cdn.cloudflare.steamstatic.com/steam/apps/1290000/capsule_616x353.jpg",url:"https://www.xbox.com/en-US/play/games/powerwash-simulator/9P1413TH06WR"},
+    {name:"Cities: Skylines",genre:"Sandbox",platform:"Cloud",players:"12M+",rating:"4.6",img:"https://cdn.cloudflare.steamstatic.com/steam/apps/255710/capsule_616x353.jpg",url:"https://play.geforcenow.com"},
+  ];
+
+  let cgCategoryFilter = 'all';
+
+  function makeCGCard(g) {
+    const live = Math.random() > 0.7;
+    return `<a class="cg-card" onclick="proxyNav('${g.url}')">
+      <div class="cg-card-thumb">
+        <img src="${g.img}" alt="${g.name}" onerror="this.style.display='none';this.parentNode.textContent='${g.name.charAt(0)}';">
+        <span class="cg-card-platform">${g.platform}</span>
+        ${live ? '<span class="cg-card-live">LIVE</span>' : ''}
+      </div>
+      <div class="cg-card-info">
+        <div class="cg-card-name">${g.name}</div>
+        <div class="cg-card-genre">${g.genre}</div>
+        <div class="cg-card-meta">
+          <span class="cg-card-players">${g.players}</span>
+          <span class="cg-card-rating">\u2605 ${g.rating}</span>
+        </div>
+      </div>
+    </a>`;
+  }
+
+  function renderCGGrid(list) {
+    document.getElementById('cg-grid').innerHTML = list.map(makeCGCard).join('');
+  }
+
+  function filterCGCategory(cat, el) {
+    cgCategoryFilter = cat;
+    document.querySelectorAll('.cg-tab').forEach(t => t.classList.remove('active'));
+    if (el) el.classList.add('active');
+    const searchVal = document.getElementById('cg-search')?.value || '';
+    applyCloudGamesFilter(searchVal, cat);
+  }
+
+  function filterCloudGames(q) {
+    applyCloudGamesFilter(q, cgCategoryFilter);
+  }
+
+  function applyCloudGamesFilter(q, cat) {
+    let filtered = cloudGames;
+    if (cat && cat !== 'all') {
+      filtered = filtered.filter(g => g.genre.toLowerCase() === cat.toLowerCase());
+    }
+    if (q) {
+      const ql = q.toLowerCase();
+      filtered = filtered.filter(g =>
+        g.name.toLowerCase().includes(ql) ||
+        g.genre.toLowerCase().includes(ql) ||
+        g.platform.toLowerCase().includes(ql)
+      );
+    }
+    renderCGGrid(filtered);
+  }
+
+  // Initialize cloud gaming grid
+  renderCGGrid(cloudGames);
+
   
   function showView(id) {
     document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
     document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
     document.getElementById('view-' + id).classList.add('active');
-    const titles = { home: 'Home', games: 'Games', apps: 'Tools', proxy: 'Proxy', history: 'History', bookmarks: 'Bookmarks', settings: 'Settings' };
+    const titles = { home: 'Home', games: 'Games', apps: 'Tools', cloudgaming: 'Cloud Gaming', proxy: 'Proxy', history: 'History', bookmarks: 'Bookmarks', settings: 'Settings' };
     document.getElementById('page-title').textContent = titles[id] || id;
     event?.currentTarget?.classList.add('active');
   }
