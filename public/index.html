@@ -1,4 +1,7 @@
-<!DOCTYPE html>
+<html>
+        <head><title>Downloaded HTML</title></head>
+        <body>
+            <pre style="white-space: pre-wrap; word-wrap: break-word;"><!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -44,15 +47,12 @@
 
     body {
       background: var(--bg);
-      background-image: url('https://media4.giphy.com/media/v1.Y2lkPTZjMDliOTUycDdsbjNoaTRmNDVtMHQ5MXJkb292bGJiMmwwcjZkcTg0dGZ3YThpbSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/sTzAXLbAnZ5NvpHd6m/giphy.gif?width=1920&format=gif&auto=webp&s=531f944dc855186c05478a8e3d6a570059e84ba4');
-      background-size: cover;
-      background-position: center;
-      background-attachment: fixed;
+
       color: var(--text);
       font-family: 'Rajdhani', sans-serif;
       display: flex;
       height: 100vh;
-      overflow: hidden;
+      overflow: hidden
     }
 
     
@@ -3436,56 +3436,75 @@
 
   
   function initParticles() {
-    
     const canvas = document.getElementById('global-particles');
-    if (canvas) {
-      const ctx = canvas.getContext('2d');
-      let W, H, particles;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    let W, H, stars;
 
-      function resize() {
-        W = canvas.width = window.innerWidth;
-        H = canvas.height = window.innerHeight;
-      }
-
-      function makeParticle() {
-        return {
-          x: Math.random() * W,
-          y: Math.random() * H,
-          r: Math.random() * 2.5 + 0.5,
-          dx: (Math.random() - 0.5) * 0.35,
-          dy: (Math.random() - 0.5) * 0.35,
-          a: Math.random() * 0.35 + 0.05,
-        };
-      }
-
-      function init() {
-        resize();
-        particles = Array.from({ length: 100 }, makeParticle);
-      }
-
-      function draw() {
-        ctx.clearRect(0, 0, W, H);
-        if (particlesEnabled) {
-          for (const p of particles) {
-            ctx.beginPath();
-            ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-            ctx.fillStyle = `rgba(180,180,190,${p.a})`;
-            ctx.fill();
-            p.x += p.dx;
-            p.y += p.dy;
-            if (p.x < 0 || p.x > W) p.dx *= -1;
-            if (p.y < 0 || p.y > H) p.dy *= -1;
-          }
-        }
-        requestAnimationFrame(draw);
-      }
-
-      window.addEventListener('resize', resize);
-      init();
-      draw();
+    function resize() {
+      W = canvas.width = window.innerWidth;
+      H = canvas.height = window.innerHeight;
     }
 
-    
+    function makeStar() {
+      return {
+        x: Math.random() * W - W / 2,
+        y: Math.random() * H - H / 2,
+        z: Math.random() * W,
+        pz: 0,
+      };
+    }
+
+    function init() {
+      resize();
+      stars = Array.from({ length: 800 }, makeStar);
+    }
+
+    function draw() {
+      ctx.fillStyle = 'rgba(0,0,0,0.2)';
+      ctx.fillRect(0, 0, W, H);
+
+      if (particlesEnabled) {
+        const cx = W / 2;
+        const cy = H / 2;
+        const speed = 6;
+
+        for (const s of stars) {
+          s.pz = s.z;
+          s.z -= speed;
+
+          if (s.z <= 0) {
+            s.x = Math.random() * W - cx;
+            s.y = Math.random() * H - cy;
+            s.z = W;
+            s.pz = s.z;
+          }
+
+          const sx = (s.x / s.z) * W + cx;
+          const sy = (s.y / s.z) * H + cy;
+          const px = (s.x / s.pz) * W + cx;
+          const py = (s.y / s.pz) * H + cy;
+
+          const size = Math.max(0.1, (1 - s.z / W) * 3);
+          const brightness = Math.floor((1 - s.z / W) * 255);
+          const alpha = (1 - s.z / W);
+
+          ctx.strokeStyle = `rgba(${brightness},${brightness},${brightness+20},${alpha})`;
+          ctx.lineWidth = size;
+          ctx.beginPath();
+          ctx.moveTo(px, py);
+          ctx.lineTo(sx, sy);
+          ctx.stroke();
+        }
+      }
+
+      requestAnimationFrame(draw);
+    }
+
+    window.addEventListener('resize', resize);
+    init();
+    draw();
+
     const proxyCanvas = document.getElementById('proxy-particles');
     if (proxyCanvas) proxyCanvas.style.display = 'none';
   }
@@ -4420,3 +4439,6 @@
 </script>
 </body>
 </html>
+</pre>
+        </body>
+    </html>
