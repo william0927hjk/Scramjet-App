@@ -44,10 +44,7 @@
 
     body {
       background: var(--bg);
-      background-image: url('https://media4.giphy.com/media/v1.Y2lkPTZjMDliOTUycDdsbjNoaTRmNDVtMHQ5MXJkb292bGJiMmwwcjZkcTg0dGZ3YThpbSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/sTzAXLbAnZ5NvpHd6m/giphy.gif?width=1920&format=gif&auto=webp&s=531f944dc855186c05478a8e3d6a570059e84ba4');
-      background-size: cover;
-      background-position: center;
-      background-attachment: fixed;
+
       color: var(--text);
       font-family: 'Rajdhani', sans-serif;
       display: flex;
@@ -405,30 +402,36 @@
       font-family: 'Orbitron', monospace;
       font-size: 42px;
       font-weight: 900;
-      color: #c0622a;
+      background: linear-gradient(135deg, #e0e8ef, #00e5ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
       letter-spacing: 2px;
       margin-bottom: 4px;
     }
 
     .proxy-landing-sub {
       font-size: 16px;
-      color: #888;
+      color: #aaa;
       margin-bottom: 20px;
-      letter-spacing: 1px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
     }
 
     .proxy-landing-bar {
       display: flex;
       width: 100%;
-      background: #1a1a1e;
-      border: 1px solid #2a2a30;
+      background: rgba(20,20,28,0.8);
+      border: 1px solid #37474f;
       border-radius: 50px;
       overflow: hidden;
-      transition: border-color 0.2s;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      backdrop-filter: blur(8px);
     }
 
     .proxy-landing-bar:focus-within {
-      border-color: #c0622a;
+      border-color: #00e5ff;
+      box-shadow: 0 0 0 2px rgba(0,229,255,0.1);
     }
 
     .proxy-landing-bar-icon {
@@ -488,16 +491,21 @@
     .proxy-quicklink:hover { transform: translateY(-4px); }
 
     .proxy-quicklink-icon {
-      width: 56px;
-      height: 56px;
-      border-radius: 14px;
-      background: #1a1a1e;
-      border: 1px solid #2a2a30;
+      width: 72px;
+      height: 72px;
+      border-radius: 18px;
+      background: rgba(20,20,28,0.8);
+      border: 1px solid #37474f;
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: 28px;
       overflow: hidden;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .proxy-quicklink:hover .proxy-quicklink-icon {
+      border-color: #00e5ff;
+      box-shadow: 0 0 12px rgba(0,229,255,0.15);
     }
 
     .proxy-quicklink-icon img {
@@ -528,7 +536,8 @@
       gap: 8px;
       align-items: center;
       padding: 8px 12px;
-      background: #101014;
+      background: rgba(12,12,20,0.85);
+      backdrop-filter: blur(12px);
       border-bottom: 1px solid var(--border);
       flex-shrink: 0;
     }
@@ -539,7 +548,7 @@
       color: var(--silver);
       width: 34px;
       height: 34px;
-      border-radius: 8px;
+      border-radius: 50%;
       font-size: 16px;
       cursor: pointer;
       transition: all 0.2s;
@@ -557,18 +566,18 @@
 
     #proxy-url-bar {
       flex: 1;
-      background: var(--card-bg);
+      background: rgba(20,20,28,0.8);
       border: 1px solid var(--border);
       color: var(--text);
       padding: 8px 14px;
-      border-radius: 20px;
+      border-radius: 50px;
       font-family: 'Rajdhani', sans-serif;
       font-size: 14px;
       outline: none;
-      transition: border-color 0.2s;
+      transition: border-color 0.2s, box-shadow 0.2s;
     }
 
-    #proxy-url-bar:focus { border-color: #c0622a; }
+    #proxy-url-bar:focus { border-color: #00e5ff; box-shadow: 0 0 0 2px rgba(0,229,255,0.1); }
 
     .btn-home {
       background: var(--card-bg);
@@ -918,10 +927,10 @@
     #proxy-tabbar {
       display: flex;
       align-items: center;
-      background: #0c0c10;
+      background: #12121a;
       border-bottom: 1px solid var(--border);
       padding: 0 6px;
-      height: 38px;
+      height: 44px;
       gap: 4px;
       overflow-x: auto;
       scrollbar-width: none;
@@ -955,7 +964,7 @@
     .proxy-tab.active {
       background: #101014;
       color: var(--silver-bright);
-      border-color: #c0622a;
+      border-color: #00e5ff;
       border-bottom-color: #101014;
     }
     .proxy-tab-title {
@@ -3436,56 +3445,75 @@
 
   
   function initParticles() {
-    
     const canvas = document.getElementById('global-particles');
-    if (canvas) {
-      const ctx = canvas.getContext('2d');
-      let W, H, particles;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    let W, H, stars;
 
-      function resize() {
-        W = canvas.width = window.innerWidth;
-        H = canvas.height = window.innerHeight;
-      }
-
-      function makeParticle() {
-        return {
-          x: Math.random() * W,
-          y: Math.random() * H,
-          r: Math.random() * 2.5 + 0.5,
-          dx: (Math.random() - 0.5) * 0.35,
-          dy: (Math.random() - 0.5) * 0.35,
-          a: Math.random() * 0.35 + 0.05,
-        };
-      }
-
-      function init() {
-        resize();
-        particles = Array.from({ length: 100 }, makeParticle);
-      }
-
-      function draw() {
-        ctx.clearRect(0, 0, W, H);
-        if (particlesEnabled) {
-          for (const p of particles) {
-            ctx.beginPath();
-            ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-            ctx.fillStyle = `rgba(180,180,190,${p.a})`;
-            ctx.fill();
-            p.x += p.dx;
-            p.y += p.dy;
-            if (p.x < 0 || p.x > W) p.dx *= -1;
-            if (p.y < 0 || p.y > H) p.dy *= -1;
-          }
-        }
-        requestAnimationFrame(draw);
-      }
-
-      window.addEventListener('resize', resize);
-      init();
-      draw();
+    function resize() {
+      W = canvas.width = window.innerWidth;
+      H = canvas.height = window.innerHeight;
     }
 
-    
+    function makeStar() {
+      return {
+        x: Math.random() * W - W / 2,
+        y: Math.random() * H - H / 2,
+        z: Math.random() * W,
+        pz: 0,
+      };
+    }
+
+    function init() {
+      resize();
+      stars = Array.from({ length: 800 }, makeStar);
+    }
+
+    function draw() {
+      ctx.fillStyle = 'rgba(0,0,0,0.2)';
+      ctx.fillRect(0, 0, W, H);
+
+      if (particlesEnabled) {
+        const cx = W / 2;
+        const cy = H / 2;
+        const speed = 6;
+
+        for (const s of stars) {
+          s.pz = s.z;
+          s.z -= speed;
+
+          if (s.z <= 0) {
+            s.x = Math.random() * W - cx;
+            s.y = Math.random() * H - cy;
+            s.z = W;
+            s.pz = s.z;
+          }
+
+          const sx = (s.x / s.z) * W + cx;
+          const sy = (s.y / s.z) * H + cy;
+          const px = (s.x / s.pz) * W + cx;
+          const py = (s.y / s.pz) * H + cy;
+
+          const size = Math.max(0.1, (1 - s.z / W) * 3);
+          const brightness = Math.floor((1 - s.z / W) * 255);
+          const alpha = (1 - s.z / W);
+
+          ctx.strokeStyle = `rgba(${brightness},${brightness},${brightness+20},${alpha})`;
+          ctx.lineWidth = size;
+          ctx.beginPath();
+          ctx.moveTo(px, py);
+          ctx.lineTo(sx, sy);
+          ctx.stroke();
+        }
+      }
+
+      requestAnimationFrame(draw);
+    }
+
+    window.addEventListener('resize', resize);
+    init();
+    draw();
+
     const proxyCanvas = document.getElementById('proxy-particles');
     if (proxyCanvas) proxyCanvas.style.display = 'none';
   }
