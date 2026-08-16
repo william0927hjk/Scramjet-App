@@ -20,7 +20,7 @@
     "@fastify/static": "^9.0.0",
     "@mercuryworkshop/bare-mux": "^2.1.9",
     "@mercuryworkshop/libcurl-transport": "^1.5.2",
-    "@mercuryworkshop/scramjet": "https://github.com/MercuryWorkshop/scramjet/releases/download/v2.0.0/mercuryworkshop-scramjet-2.0.0.tgz",
+    "@mercuryworkshop/scramjet": "2.0.67-alpha.2",
     "@mercuryworkshop/wisp-js": "^0.4.1",
     "dotenv": "^17.4.2",
     "fastify": "^5.7.4",
