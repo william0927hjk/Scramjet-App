@@ -10,17 +10,20 @@ const error = document.getElementById("sj-error");
 
 const errorCode = document.getElementById("sj-error-code");
 
-const { ScramjetController } = $scramjetLoadController();
-
 const scramjet = new ScramjetController({
+	prefix: '/scramjet/',
+	codec: {
+		wasm: '/scramjet/scramjet.wasm.wasm',
+	},
 	files: {
-		wasm: "/scram/scramjet.wasm.wasm",
-		all: "/scram/scramjet.all.js",
-		sync: "/scram/scramjet.sync.js",
+		worker: '/scramjet/scramjet.worker.js',
+		client: '/scramjet/scramjet.client.js',
+		shared: '/scramjet/scramjet.shared.js',
+		sync:   '/scramjet/scramjet.sync.js',
 	},
 });
 
-scramjet.init();
+await scramjet.init();
 
 const connection = new BareMux.BareMuxConnection("/baremux/worker.js");
 
@@ -78,19 +81,16 @@ form.addEventListener("submit", async (event) => {
 		]);
 	}
 
-	
 	const existingFrame = document.getElementById("sj-frame");
 	if (existingFrame) existingFrame.remove();
 
-	
 	document.querySelectorAll(".sj-hide-on-proxy").forEach((el) => {
 		el.style.display = "none";
 	});
 
-	
 	const frame = scramjet.createFrame();
-	frame.frame.id = "sj-frame";
-	frame.frame.style.cssText = `
+	frame.iframe.id = "sj-frame";
+	frame.iframe.style.cssText = `
 		position: fixed;
 		top: 0;
 		left: 0;
@@ -99,7 +99,7 @@ form.addEventListener("submit", async (event) => {
 		border: none;
 		z-index: 9999;
 	`;
-	document.body.appendChild(frame.frame);
+	document.body.appendChild(frame.iframe);
 	frame.go(url);
 
 	backBtn.style.display = "block";
