@@ -1557,6 +1557,87 @@
       gap: 18px;
       margin-bottom: 36px;
     }
+
+    /* ── Movies ── */
+    .movie-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 18px;
+      margin-top: 16px;
+    }
+    .movie-tile {
+      position: relative;
+      aspect-ratio: 1 / 1;
+      width: 100%;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid var(--border-bright);
+      background: var(--card-bg);
+      cursor: pointer;
+      background-size: cover;
+      background-position: center;
+      display: flex;
+      align-items: flex-end;
+      transition: transform 0.15s ease, border-color 0.15s ease;
+    }
+    .movie-tile:hover {
+      transform: translateY(-3px);
+      border-color: var(--silver);
+    }
+    .movie-tile-label {
+      width: 100%;
+      padding: 10px 8px;
+      background: linear-gradient(0deg, rgba(0,0,0,0.85), rgba(0,0,0,0));
+      color: var(--silver-bright);
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      text-align: center;
+    }
+
+    .movie-watch-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.6);
+      z-index: 5000;
+      align-items: center;
+      justify-content: center;
+    }
+    .movie-watch-overlay.open { display: flex; }
+
+    .movie-watch-box {
+      background: var(--sidebar-bg);
+      border: 1px solid var(--border-bright);
+      border-radius: 10px;
+      overflow: hidden;
+      width: 640px;
+      max-width: 92vw;
+    }
+    .movie-watch-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--border);
+      font-size: 13px;
+      letter-spacing: 1px;
+      color: var(--silver-bright);
+      font-family: 'Orbitron', monospace;
+    }
+    .movie-watch-close { cursor: pointer; color: var(--silver-dim); }
+    .movie-watch-close:hover { color: var(--silver-bright); }
+    .movie-watch-frame {
+      width: 640px;
+      height: 480px;
+      max-width: 92vw;
+    }
+    .movie-watch-frame iframe {
+      width: 100%;
+      height: 100%;
+      border: 0;
+      display: block;
+    }
     .cg-card {
       background: rgba(16,16,28,0.7);
       border: 1px solid #1e1e3a;
@@ -1895,7 +1976,7 @@
     </div>
     
     <div class="nav-item" onclick="showView('cloudgaming')">
-      <span class="icon" style="font-size:16px;">☁</span> Cloud Gaming
+      <span class="icon" style="font-size:16px;">☁</span> Movies
     </div>
     
     <div class="nav-item" onclick="showView('proxy')">
@@ -2257,116 +2338,20 @@
     </div>
 
     
-    <!-- Cloud Gaming View -->
+    <!-- Movies View -->
     <div class="view" id="view-cloudgaming">
-      <div class="cg-hero">
-        <h2>CLOUD GAMING</h2>
-        <p>Play AAA titles and indie favorites instantly in your browser. No downloads, no installs — just click and play with ultra-low latency streaming.</p>
-        <div class="cg-hero-badges">
-          <span class="cg-badge">ZERO DOWNLOADS</span>
-          <span class="cg-badge">INSTANT PLAY</span>
-          <span class="cg-badge">CROSS-DEVICE</span>
-          <span class="cg-badge">LOW LATENCY</span>
-        </div>
-      </div>
+      <div class="section-title">Movies</div>
+      <div class="movie-grid" id="movie-grid"></div>
+    </div>
 
-      <div class="cg-stats">
-        <div class="cg-stat">
-          <div class="cg-stat-num">50+</div>
-          <div class="cg-stat-label">Cloud Games</div>
+    <!-- Movie Watch Modal -->
+    <div class="movie-watch-overlay" id="movie-watch-overlay">
+      <div class="movie-watch-box">
+        <div class="movie-watch-header">
+          <span id="movie-watch-title"></span>
+          <span class="movie-watch-close" onclick="closeMovieWatch()">✕</span>
         </div>
-        <div class="cg-stat">
-          <div class="cg-stat-num">0ms</div>
-          <div class="cg-stat-label">Download Time</div>
-        </div>
-        <div class="cg-stat">
-          <div class="cg-stat-num">24/7</div>
-          <div class="cg-stat-label">Available</div>
-        </div>
-        <div class="cg-stat">
-          <div class="cg-stat-num">HD</div>
-          <div class="cg-stat-label">Quality</div>
-        </div>
-      </div>
-
-      <div class="section-title">Cloud Gaming Platforms</div>
-      <div class="cg-platforms-row">
-        <a class="cg-platform-card" onclick="proxyNav('https://play.geforcenow.com')">
-          <div class="cg-platform-logo" style="background:rgba(118,185,0,0.15);">🎮</div>
-          <div class="cg-platform-info">
-            <div class="cg-platform-name">GeForce NOW</div>
-            <div class="cg-platform-desc">Stream PC games from the cloud</div>
-          </div>
-        </a>
-        <a class="cg-platform-card" onclick="proxyNav('https://www.xbox.com/en-US/play')">
-          <div class="cg-platform-logo" style="background:rgba(16,124,16,0.15);">🟢</div>
-          <div class="cg-platform-info">
-            <div class="cg-platform-name">Xbox Cloud Gaming</div>
-            <div class="cg-platform-desc">Play Xbox games on any device</div>
-          </div>
-        </a>
-        <a class="cg-platform-card" onclick="proxyNav('https://luna.amazon.com')">
-          <div class="cg-platform-logo" style="background:rgba(0,168,225,0.15);">🌙</div>
-          <div class="cg-platform-info">
-            <div class="cg-platform-name">Amazon Luna</div>
-            <div class="cg-platform-desc">Cloud gaming by Amazon</div>
-          </div>
-        </a>
-      </div>
-
-      <div class="section-title">Browse Games</div>
-      <div class="cg-search-bar">
-        <span class="cg-search-icon">🔍</span>
-        <input type="text" id="cg-search" placeholder="Search cloud games..." oninput="filterCloudGames(this.value)" />
-      </div>
-
-      <div class="cg-category-tabs" id="cg-tabs">
-        <div class="cg-tab active" onclick="filterCGCategory('all', this)">All Games</div>
-        <div class="cg-tab" onclick="filterCGCategory('action', this)">Action</div>
-        <div class="cg-tab" onclick="filterCGCategory('racing', this)">Racing</div>
-        <div class="cg-tab" onclick="filterCGCategory('puzzle', this)">Puzzle</div>
-        <div class="cg-tab" onclick="filterCGCategory('adventure', this)">Adventure</div>
-        <div class="cg-tab" onclick="filterCGCategory('sports', this)">Sports</div>
-        <div class="cg-tab" onclick="filterCGCategory('rpg', this)">RPG</div>
-        <div class="cg-tab" onclick="filterCGCategory('shooter', this)">Shooter</div>
-        <div class="cg-tab" onclick="filterCGCategory('sandbox', this)">Sandbox</div>
-        <div class="cg-tab" onclick="filterCGCategory('platformer', this)">Platformer</div>
-      </div>
-
-      <div class="cg-grid" id="cg-grid"></div>
-
-      <div class="section-title">Why Cloud Gaming?</div>
-      <div class="cg-features">
-        <div class="cg-feature">
-          <div class="cg-feature-icon">⚡</div>
-          <div class="cg-feature-title">Instant Play</div>
-          <div class="cg-feature-desc">No downloads or installs needed. Click and start playing in seconds.</div>
-        </div>
-        <div class="cg-feature">
-          <div class="cg-feature-icon">🌐</div>
-          <div class="cg-feature-title">Cross-Device</div>
-          <div class="cg-feature-desc">Play on any device with a browser — PC, tablet, or phone.</div>
-        </div>
-        <div class="cg-feature">
-          <div class="cg-feature-icon">🎯</div>
-          <div class="cg-feature-title">Low Latency</div>
-          <div class="cg-feature-desc">Optimized streaming for responsive, lag-free gameplay.</div>
-        </div>
-        <div class="cg-feature">
-          <div class="cg-feature-icon">💾</div>
-          <div class="cg-feature-title">No Storage</div>
-          <div class="cg-feature-desc">Save your disk space. Games run entirely in the cloud.</div>
-        </div>
-        <div class="cg-feature">
-          <div class="cg-feature-icon">🔒</div>
-          <div class="cg-feature-title">Safe & Secure</div>
-          <div class="cg-feature-desc">No files to download means no risk of malware or viruses.</div>
-        </div>
-        <div class="cg-feature">
-          <div class="cg-feature-icon">🔄</div>
-          <div class="cg-feature-title">Always Updated</div>
-          <div class="cg-feature-desc">Games are always the latest version. No patches to wait for.</div>
-        </div>
+        <div class="movie-watch-frame" id="movie-watch-frame"></div>
       </div>
     </div>
 
@@ -3040,15 +3025,62 @@
     renderCGGrid(filtered);
   }
 
-  // Initialize cloud gaming grid
-  renderCGGrid(cloudGames);
+  // ── Movies ──
+  // Pre-seeded tiles. To add your own embed, edit DEFAULT_MOVIES below —
+  // replace REPLACE_WITH_YOUR_EMBED_URL with the iframe src you want this tile to open.
+  const DEFAULT_MOVIES = [
+    { name: "Spiderman: Brand New Day", img: "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcQR0RtSBPqjiQScSPYV5YnWdDTUNGWWrjaUIwnEs2WuioLTCJBM", embed: "https://drive.google.com/file/d/1Ug2O0m63GuRhw6VMOZhzFt-22LKzgpn0/preview"
+ }
+  ];
+  function loadMovies() {
+    try {
+      const stored = localStorage.getItem('willie-movies');
+      if (stored) return JSON.parse(stored);
+      saveMovies(DEFAULT_MOVIES);
+      return DEFAULT_MOVIES;
+    } catch { return DEFAULT_MOVIES; }
+  }
+  function saveMovies(list) {
+    localStorage.setItem('willie-movies', JSON.stringify(list));
+  }
+  function escHtml(s) {
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+  function renderMovies() {
+    const grid = document.getElementById('movie-grid');
+    if (!grid) return;
+    const movies = loadMovies();
+    grid.innerHTML = movies.map((m, i) => `
+      <div class="movie-tile" style="background-image:url('${escHtml(m.img)}')" onclick="openMovieWatch(${i})">
+        <div class="movie-tile-label">${escHtml(m.name)}</div>
+      </div>
+    `).join('');
+  }
+
+  function openMovieWatch(i) {
+    const movies = loadMovies();
+    const m = movies[i];
+    if (!m) return;
+    document.getElementById('movie-watch-title').textContent = m.name;
+    document.getElementById('movie-watch-frame').innerHTML =
+      `<iframe src="${escHtml(m.embed)}" width="640" height="480"></iframe>`;
+    document.getElementById('movie-watch-overlay').classList.add('open');
+  }
+  function closeMovieWatch() {
+    document.getElementById('movie-watch-overlay').classList.remove('open');
+    document.getElementById('movie-watch-frame').innerHTML = '';
+  }
+
+  renderMovies();
+  window.openMovieWatch = openMovieWatch;
+  window.closeMovieWatch = closeMovieWatch;
 
   
   function showView(id) {
     document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
     document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
     document.getElementById('view-' + id).classList.add('active');
-    const titles = { home: 'Home', games: 'Games', apps: 'Tools', cloudgaming: 'Cloud Gaming', proxy: 'Proxy', history: 'History', bookmarks: 'Bookmarks', settings: 'Settings' };
+    const titles = { home: 'Home', games: 'Games', apps: 'Tools', cloudgaming: 'Movies', proxy: 'Proxy', history: 'History', bookmarks: 'Bookmarks', settings: 'Settings' };
     document.getElementById('page-title').textContent = titles[id] || id;
     event?.currentTarget?.classList.add('active');
   }
