@@ -13,7 +13,6 @@ import { baremuxPath } from "@mercuryworkshop/bare-mux/node";
 
 const publicPath = fileURLToPath(new URL("../public/", import.meta.url));
 
-
 try {
 	const env = readFileSync(process.cwd() + "/.env", "utf8");
 	for (const line of env.split("\n")) {
@@ -22,14 +21,12 @@ try {
 	}
 } catch { /* no .env file, use existing env */ }
 
-
 logging.set_level(logging.NONE);
 Object.assign(wisp.options, {
 	allow_udp_streams: false,
 	hostname_blacklist: [/example\.com/],
 	dns_servers: ["1.1.1.3", "1.0.0.3"],
 });
-
 
 const BAD_WORDS = [
 	"fuck", "shit", "ass", "bitch", "cunt", "dick", "pussy", "cock",
@@ -45,7 +42,6 @@ function filterText(text) {
 	}
 	return filtered;
 }
-
 
 const chatClients = new Map();
 const chatHistory = [];
@@ -136,8 +132,6 @@ const fastify = Fastify({
 		return createServer()
 			.on("request", (req, res) => {
 				res.setHeader("Cross-Origin-Opener-Policy", "same-origin");
-				// Use credentialless instead of require-corp so external images load
-				// Only scramjet/baremux/libcurl need the stricter require-corp
 				const needsStrictCOEP = req.url.startsWith("/scramjet/") || req.url.startsWith("/baremux/") || req.url.startsWith("/libcurl/");
 				res.setHeader("Cross-Origin-Embedder-Policy", needsStrictCOEP ? "require-corp" : "credentialless");
 				handler(req, res);
@@ -161,7 +155,6 @@ fastify.register(fastifyStatic, { root: scramjetPath, prefix: "/scramjet/", deco
 fastify.register(fastifyStatic, { root: libcurlPath, prefix: "/libcurl/", decorateReply: false });
 fastify.register(fastifyStatic, { root: baremuxPath, prefix: "/baremux/", decorateReply: false });
 
-// ── AI PROXY ENDPOINT ──
 fastify.post("/ai", async (req, reply) => {
 	const key = process.env.GROQ_KEY;
 	if (!key) {
