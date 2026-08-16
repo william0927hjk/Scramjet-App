@@ -3025,15 +3025,56 @@
     renderCGGrid(filtered);
   }
 
-<!-- Movies -->
-<div class="movie-container">
-  <iframe
-    src="https://vidlink.pro/movie/969681"
-    style="width:100%; height:100%; min-height:500px; border:0;"
-    allowfullscreen>
-  </iframe>
-</div>
+  // ── Movies ──
+  // Pre-seeded tiles. To add your own embed, edit DEFAULT_MOVIES below —
+  // replace REPLACE_WITH_YOUR_EMBED_URL with the iframe src you want this tile to open.
+  const DEFAULT_MOVIES = [
+    { name: "Spiderman: Brand New Day", img: "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcQR0RtSBPqjiQScSPYV5YnWdDTUNGWWrjaUIwnEs2WuioLTCJBM", embed: "https://vidsrc.ir/embed/movie/tt1300854" }
+  ];
+  function loadMovies() {
+    try {
+      const stored = localStorage.getItem('willie-movies');
+      if (stored) return JSON.parse(stored);
+      saveMovies(DEFAULT_MOVIES);
+      return DEFAULT_MOVIES;
+    } catch { return DEFAULT_MOVIES; }
+  }
+  function saveMovies(list) {
+    localStorage.setItem('willie-movies', JSON.stringify(list));
+  }
+  function escHtml(s) {
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+  function renderMovies() {
+    const grid = document.getElementById('movie-grid');
+    if (!grid) return;
+    const movies = loadMovies();
+    grid.innerHTML = movies.map((m, i) => `
+      <div class="movie-tile" style="background-image:url('${escHtml(m.img)}')" onclick="openMovieWatch(${i})">
+        <div class="movie-tile-label">${escHtml(m.name)}</div>
+      </div>
+    `).join('');
+  }
 
+  function openMovieWatch(i) {
+    const movies = loadMovies();
+    const m = movies[i];
+    if (!m) return;
+    document.getElementById('movie-watch-title').textContent = m.name;
+    document.getElementById('movie-watch-frame').innerHTML =
+      `<iframe src="${escHtml(m.embed)}" width="640" height="480"></iframe>`;
+    document.getElementById('movie-watch-overlay').classList.add('open');
+  }
+  function closeMovieWatch() {
+    document.getElementById('movie-watch-overlay').classList.remove('open');
+    document.getElementById('movie-watch-frame').innerHTML = '';
+  }
+
+  renderMovies();
+  window.openMovieWatch = openMovieWatch;
+  window.closeMovieWatch = closeMovieWatch;
+
+  
   function showView(id) {
     document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
     document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
