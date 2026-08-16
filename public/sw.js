@@ -1,12 +1,11 @@
-importScripts("/scram/scramjet.all.js");
+importScripts("/scramjet/scramjet.js");
 
-const { ScramjetServiceWorker } = $scramjetLoadWorker();
+const { ScramjetServiceWorker } = ScramjetWorker;
 const scramjet = new ScramjetServiceWorker();
 
 async function handleRequest(event) {
 	const url = new URL(event.request.url);
 
-	
 	if (
 		url.pathname.startsWith("/ai") ||
 		url.pathname.startsWith("/chat") ||
