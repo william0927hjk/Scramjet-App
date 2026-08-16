@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>WILLIE GAMES V2 | Education</title>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600&display=swap" rel="stylesheet"/>
-  <script src="/scramjet/scramjet.all.js"></script>
+  <script src="/scram/scramjet.all.js"></script>
   <script src="/baremux/index.js"></script>
   <script src="register-sw.js"></script>
   <script src="search.js"></script>
@@ -3100,17 +3100,14 @@
   }
 
   
-  
   const { ScramjetController } = $scramjetLoadController();
-
   const scramjet = new ScramjetController({
     files: {
-      wasm: '/scramjet/scramjet.wasm.wasm',
-      all: '/scramjet/scramjet.all.js',
-      sync: '/scramjet/scramjet.sync.js',
+      wasm: '/scram/scramjet.wasm.wasm',
+      all: '/scram/scramjet.all.js',
+      sync: '/scram/scramjet.sync.js',
     },
   });
-
   scramjet.init();
 
   const connection = new BareMux.BareMuxConnection('/baremux/worker.js');
@@ -3301,7 +3298,7 @@
     container.querySelectorAll('iframe').forEach(f => f.style.display = 'none');
     
     if (tab.url && tab.sjFrame) {
-      tab.sjFrame.iframe.style.display = '';
+      tab.sjFrame.frame.style.display = '';
     } else {
       tab.ntPage.style.display = 'flex';
     }
@@ -3320,7 +3317,7 @@
     const idx = tabs.findIndex(t => t.id === id);
     if (idx < 0) return;
     const tab = tabs[idx];
-    if (tab.sjFrame) tab.sjFrame.iframe.remove();
+    if (tab.sjFrame) tab.sjFrame.frame.remove();
     if (tab.ntPage) tab.ntPage.remove();
     tabs.splice(idx, 1);
     if (tabs.length === 0) {
@@ -3369,8 +3366,8 @@
     if (!tab.sjFrame) {
       const container = document.getElementById('proxy-frame-container');
       const sjFrame = scramjet.createFrame();
-      sjFrame.iframe.style.cssText = 'width:100%;height:100%;border:none;position:absolute;inset:0;display:none;';
-      container.appendChild(sjFrame.iframe);
+      sjFrame.frame.style.cssText = 'width:100%;height:100%;border:none;position:absolute;inset:0;display:none;';
+      container.appendChild(sjFrame.frame);
       tab.sjFrame = sjFrame;
     }
     tab.url = url;
@@ -3418,17 +3415,17 @@
 
   function proxyBack() {
     const tab = getActiveTab();
-    if (tab && tab.sjFrame) tab.sjFrame.iframe.contentWindow.history.back();
+    if (tab && tab.sjFrame) tab.sjFrame.frame.contentWindow.history.back();
   }
 
   function proxyForward() {
     const tab = getActiveTab();
-    if (tab && tab.sjFrame) tab.sjFrame.iframe.contentWindow.history.forward();
+    if (tab && tab.sjFrame) tab.sjFrame.frame.contentWindow.history.forward();
   }
 
   function proxyRefresh() {
     const tab = getActiveTab();
-    if (tab && tab.sjFrame) tab.sjFrame.iframe.contentWindow.location.reload();
+    if (tab && tab.sjFrame) tab.sjFrame.frame.contentWindow.location.reload();
   }
 
   function proxyFullscreen() {
@@ -3458,7 +3455,7 @@
   function proxyHome() {
     
     tabs.forEach(t => {
-      if (t.sjFrame) t.sjFrame.iframe.style.display = 'none';
+      if (t.sjFrame) t.sjFrame.frame.style.display = 'none';
       if (t.ntPage) t.ntPage.style.display = 'none';
     });
     document.getElementById('proxy-landing').classList.remove('hidden');
