@@ -47,7 +47,7 @@ function filterText(text) {
 }
 
 
-const chatClients = new Map(); 
+const chatClients = new Map();
 const chatHistory = [];
 const MAX_HISTORY = 50;
 
@@ -79,12 +79,10 @@ chatWss.on("connection", (ws) => {
 	let username = "Anonymous";
 	chatClients.set(ws, { username });
 
-	
 	if (chatHistory.length) {
 		ws.send(JSON.stringify({ type: "history", messages: chatHistory }));
 	}
 
-	// Send current online count to everyone
 	broadcastOnline();
 
 	ws.on("message", (raw) => {
@@ -140,7 +138,7 @@ const fastify = Fastify({
 				res.setHeader("Cross-Origin-Opener-Policy", "same-origin");
 				// Use credentialless instead of require-corp so external images load
 				// Only scramjet/baremux/libcurl need the stricter require-corp
-				const needsStrictCOEP = req.url.startsWith("/scram/") || req.url.startsWith("/baremux/") || req.url.startsWith("/libcurl/");
+				const needsStrictCOEP = req.url.startsWith("/scramjet/") || req.url.startsWith("/baremux/") || req.url.startsWith("/libcurl/");
 				res.setHeader("Cross-Origin-Embedder-Policy", needsStrictCOEP ? "require-corp" : "credentialless");
 				handler(req, res);
 			})
@@ -159,11 +157,11 @@ const fastify = Fastify({
 });
 
 fastify.register(fastifyStatic, { root: publicPath, decorateReply: true });
-fastify.register(fastifyStatic, { root: scramjetPath, prefix: "/scram/", decorateReply: false });
+fastify.register(fastifyStatic, { root: scramjetPath, prefix: "/scramjet/", decorateReply: false });
 fastify.register(fastifyStatic, { root: libcurlPath, prefix: "/libcurl/", decorateReply: false });
 fastify.register(fastifyStatic, { root: baremuxPath, prefix: "/baremux/", decorateReply: false });
 
-// â”€â”€ AI PROXY ENDPOINT â”€â”€
+// ── AI PROXY ENDPOINT ──
 fastify.post("/ai", async (req, reply) => {
 	const key = process.env.GROQ_KEY;
 	if (!key) {
@@ -189,7 +187,6 @@ fastify.post("/ai", async (req, reply) => {
 		});
 		const data = await response.json();
 		console.log("Groq response:", JSON.stringify(data));
-		// Return in Anthropic-compatible format so frontend doesn't need changes
 		const text = data.choices?.[0]?.message?.content || "Sorry, something went wrong.";
 		return reply.send({ content: [{ type: "text", text }] });
 	} catch (err) {
