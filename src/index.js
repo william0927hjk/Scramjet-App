@@ -13,6 +13,7 @@ import { baremuxPath } from "@mercuryworkshop/bare-mux/node";
 
 const publicPath = fileURLToPath(new URL("../public/", import.meta.url));
 
+
 try {
 	const env = readFileSync(process.cwd() + "/.env", "utf8");
 	for (const line of env.split("\n")) {
@@ -21,12 +22,14 @@ try {
 	}
 } catch { /* no .env file, use existing env */ }
 
+
 logging.set_level(logging.NONE);
 Object.assign(wisp.options, {
 	allow_udp_streams: false,
 	hostname_blacklist: [/example\.com/],
 	dns_servers: ["1.1.1.3", "1.0.0.3"],
 });
+
 
 const BAD_WORDS = [
 	"fuck", "shit", "ass", "bitch", "cunt", "dick", "pussy", "cock",
@@ -43,7 +46,8 @@ function filterText(text) {
 	return filtered;
 }
 
-const chatClients = new Map();
+
+const chatClients = new Map(); 
 const chatHistory = [];
 const MAX_HISTORY = 50;
 
@@ -75,10 +79,12 @@ chatWss.on("connection", (ws) => {
 	let username = "Anonymous";
 	chatClients.set(ws, { username });
 
+	
 	if (chatHistory.length) {
 		ws.send(JSON.stringify({ type: "history", messages: chatHistory }));
 	}
 
+	// Send current online count to everyone
 	broadcastOnline();
 
 	ws.on("message", (raw) => {
@@ -132,7 +138,9 @@ const fastify = Fastify({
 		return createServer()
 			.on("request", (req, res) => {
 				res.setHeader("Cross-Origin-Opener-Policy", "same-origin");
-				const needsStrictCOEP = req.url.startsWith("/scramjet/") || req.url.startsWith("/baremux/") || req.url.startsWith("/libcurl/");
+				// Use credentialless instead of require-corp so external images load
+				// Only scramjet/baremux/libcurl need the stricter require-corp
+				const needsStrictCOEP = req.url.startsWith("/scram/") || req.url.startsWith("/baremux/") || req.url.startsWith("/libcurl/");
 				res.setHeader("Cross-Origin-Embedder-Policy", needsStrictCOEP ? "require-corp" : "credentialless");
 				handler(req, res);
 			})
@@ -151,10 +159,11 @@ const fastify = Fastify({
 });
 
 fastify.register(fastifyStatic, { root: publicPath, decorateReply: true });
-fastify.register(fastifyStatic, { root: scramjetPath, prefix: "/scramjet/", decorateReply: false });
+fastify.register(fastifyStatic, { root: scramjetPath, prefix: "/scram/", decorateReply: false });
 fastify.register(fastifyStatic, { root: libcurlPath, prefix: "/libcurl/", decorateReply: false });
 fastify.register(fastifyStatic, { root: baremuxPath, prefix: "/baremux/", decorateReply: false });
 
+// â”€â”€ AI PROXY ENDPOINT â”€â”€
 fastify.post("/ai", async (req, reply) => {
 	const key = process.env.GROQ_KEY;
 	if (!key) {
@@ -180,6 +189,7 @@ fastify.post("/ai", async (req, reply) => {
 		});
 		const data = await response.json();
 		console.log("Groq response:", JSON.stringify(data));
+		// Return in Anthropic-compatible format so frontend doesn't need changes
 		const text = data.choices?.[0]?.message?.content || "Sorry, something went wrong.";
 		return reply.send({ content: [{ type: "text", text }] });
 	} catch (err) {
