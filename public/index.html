@@ -2343,10 +2343,10 @@
   <div class="section-title">Movies</div>
   
   <div class="movie-btn-container" style="padding: 20px 0;">
-    <!-- Button triggers the popup and encodes the VidCore target URL -->
+    <!-- Button triggers the popup and correctly paths through Scramjet -->
     <button 
       class="movie-page-btn" 
-      onclick="openProxiedMovie('https://vidcore.org')"
+      onclick="openProxiedMovie('https://vidcore.org/embed/movie/969681')"
       style="padding: 12px 24px; background-color: #e50914; color: white; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 16px; transition: background 0.2s;">
       Open Movies Page
     </button>
@@ -2367,32 +2367,28 @@
 
 <!-- JavaScript Integration -->
 <script>
-  /**
-   * Scramjet's default XOR string obfuscation algorithm 
-   */
-  function encodeXor(input) {
-    if (!input) return '';
-    const xorTransformed = input
-      .split('')
-      .map((ch, i) => (i % 2 ? String.fromCharCode(ch.charCodeAt(0) ^ 2) : ch))
-      .join('');
-    return encodeURIComponent(xorTransformed);
-  }
-
   function openProxiedMovie(targetUrl) {
     const modal = document.getElementById('videoModalOverlay');
     const iframe = document.getElementById('moviePlayerIframe');
     
-    // 1. Obfuscate the target streaming site URL using Scramjet XOR string mappings
-    const obfuscatedUrl = encodeXor(targetUrl);
+    // 1. Fallback to default Mercury prefixes if config window variables aren't globally bound
+    const config = window.__scramjet_config || {};
+    const prefix = config.prefix || '/service/'; 
     
-    // 2. Route the URL into Scramjet's native navigation prefix gateway context
-    // (Adjust '/service/' if your client config uses a different prefix, like '__scramjet__')
-    const proxyPrefix = "/service/"; 
-    const finalProxiedUrl = window.location.origin + proxyPrefix + obfuscatedUrl;
+    // 2. Safely encode the target stream URL using Scramjet's default codec method if available
+    let encodedUrl = '';
+    if (window.__scramjet && typeof window.__scramjet.encodeUrl === 'function') {
+      encodedUrl = window.__scramjet.encodeUrl(targetUrl);
+    } else {
+      // Manual XOR fallback wrapper if the script components are completely sandboxed
+      encodedUrl = targetUrl.split('').map((ch, i) => (i % 2 ? String.fromCharCode(ch.charCodeAt(0) ^ 2) : ch)).join('');
+      encodedUrl = encodeURIComponent(encodedUrl);
+    }
     
-    // 3. Inject into iframe and bring up the modal container
-    iframe.src = finalProxiedUrl;
+    // 3. Formulate absolute path string to override site-root interception bugs
+    iframe.src = window.location.origin + prefix + encodedUrl;
+    
+    // 4. Reveal the modal player frame
     modal.style.display = 'flex';
     document.body.style.overflow = 'hidden'; 
   }
@@ -2402,7 +2398,7 @@
     const iframe = document.getElementById('moviePlayerIframe');
     
     modal.style.display = 'none';
-    iframe.src = ''; // Strips source out to immediately stop playback
+    iframe.src = ''; // Strips source out to stop streams instantly
     document.body.style.overflow = ''; 
   }
 
@@ -2414,6 +2410,7 @@
     }
   }
 </script>
+
 
 
 
