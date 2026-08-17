@@ -2338,22 +2338,21 @@
     </div>
 
     
-    <!-- Movies View -->
-    <div class="view" id="view-cloudgaming">
-      <div class="section-title">Movies</div>
-      <div class="movie-grid" id="movie-grid"></div>
-    </div>
+   <!-- Movies View -->
+<div class="view" id="view-cloudgaming">
+  <div class="section-title">Movies</div>
+  
+  <!-- Replaced the empty grid and modal with a clean button wrapper -->
+  <div class="movie-btn-container" style="padding: 20px 0;">
+    <button 
+      class="movie-page-btn" 
+      onclick="window.location.href='movies.html'"
+      style="padding: 12px 24px; background-color: #e50914; color: white; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 16px;">
+      Open Movies Page
+    </button>
+  </div>
+</div>
 
-    <!-- Movie Watch Modal -->
-    <div class="movie-watch-overlay" id="movie-watch-overlay">
-      <div class="movie-watch-box">
-        <div class="movie-watch-header">
-          <span id="movie-watch-title"></span>
-          <span class="movie-watch-close" onclick="closeMovieWatch()">✕</span>
-        </div>
-        <div class="movie-watch-frame" id="movie-watch-frame"></div>
-      </div>
-    </div>
 
     <div class="view" id="view-history">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
