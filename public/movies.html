@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Willie’s Movie</title>
+<style>
+body {
+  margin:0;
+  font-family:Arial, Helvetica, sans-serif;
+  background:#111;
+  color:#eee;
+}
+#movie-grid {
+  display:grid;
+  grid-template-columns:repeat(auto-fill, minmax(180px,1fr));
+  gap:12px;
+  padding:20px;
+}
+.movie-tile {
+  position:relative;
+  height:270px;
+  background:#444 no-repeat center/cover;
+  cursor:pointer;
+  overflow:hidden;
+  border-radius:8px;
+  box-shadow:0 4px 8px rgba(0,0,0,.6);
+  transition:transform .2s, box-shadow .2s;
+}
+.movie-tile:hover {
+  transform:scale(1.04);
+  box-shadow:0 8px 16px rgba(0,0,0,.8);
+}
+.movie-tile-label {
+  position:absolute;
+  bottom:0;
+  left:0;
+  right:0;
+  padding:8px;
+  background:rgba(0,0,0,.7);
+  text-align:center;
+  font-size:.9rem;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+/* overlay (movie player) */
+#movie-watch-overlay {
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.85);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .3s;
+  z-index:1000;
+}
+#movie-watch-overlay.open {
+  opacity:1;
+  pointer-events:auto;
+}
+.watch-header {
+  width:100%;
+  max-width:720px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:12px;
+  color:#fff;
+}
+.watch-header h2 {
+  margin:0;
+  font-size:1.4rem;
+}
+.watch-controls {
+  display:flex;
+  gap:10px;
+}
+.watch-controls select, .watch-controls button {
+  background:#333;
+  border:1px solid #555;
+  color:#fff;
+  padding:6px 12px;
+  border-radius:4px;
+  cursor:pointer;
+}
+.watch-controls button.close-btn {
+  background:#c33;
+  border:none;
+}
+#movie-watch-frame {
+  width:100%;
+  max-width:720px;
+  background:#000;
+  aspect-ratio: 16 / 9;
+}
+#movie-watch-frame iframe {
+  width:100%;
+  height:100%;
+  border:0;
+}
+</style>
+</head>
+<body>
+
+<div id="movie-grid"></div>
+
+<div id="movie-watch-overlay">
+  <div class="watch-header">
+    <h2 id="movie-watch-title"></h2>
+    <div class="watch-controls">
+      <!-- Added server selector fallback for the user -->
+      <select id="server-select" onchange="switchSource()"></select>
+      <button class="close-btn" onclick="closeMovieWatch()">✖</button>
+    </div>
+  </div>
+  <div id="movie-watch-frame"></div>
+</div>
+
+<script>
+const API_MOVIES   = "/movies";                         
+const IMG_POSTER   = "https://image.tmdb.org/t/p/w400"; 
+const IMG_BACKDROP = "https://image.tmdb.org/t/p/w1280";
+
+let currentMovieId = null;
+
+function escHtml(s) {
+  return String(s)
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;');
+}
+
+const CACHE_KEY = 'willie-movies';
+const CACHE_TTL = 6 * 60 * 60 * 1000; // 6h
+
+function setCache(key, data) {
+  localStorage.setItem(key, JSON.stringify({ ts: Date.now(), data }));
+}
+function getCache(key, maxAge = CACHE_TTL) {
+  const raw = localStorage.getItem(key);
+  if (!raw) return null;
+  try {
+    const { ts, data } = JSON.parse(raw);
+    return (Date.now() - ts) < maxAge ? data : null;
+  } catch (_) { return null; }
+}
+
+// 1️⃣ FIXED COMMENT: FETCH THE MOVIE CATALOGUE FROM /movies
+async function fetchCatalogue() {
+  const resp = await fetch(API_MOVIES);
+  if (!resp.ok) throw new Error(`Failed to load ${API_MOVIES}: ${resp.status}`);
+  const json = await resp.json();
+
+  return json.map(m => ({
+    id:       m.id,
+    name:     m.title,
+    poster:   IMG_POSTER   + m.poster_path,
+    backdrop: m.backdrop_path ? IMG_BACKDROP + m.backdrop_path : null
+  }));
+}
+
+async function loadMovies() {
+  const cached = getCache(CACHE_KEY);
+  if (cached) return cached;
+
+  const fresh = await fetchCatalogue();
+  setCache(CACHE_KEY, fresh);
+  return fresh;
+}
+
+function buildMovieSources(id) {
+  return [
+    { name: "Server 1 (VidCore)", url: `https://vidcore.org/embed/movie/${id}` },
+    { name: "Server 2 (VidSrc)", url: `https://vidsrc.ir/embed/movie/${id}` }
+  ];
+}
+
+async function renderMovies() {
+  const grid = document.getElementById('movie-grid');
+  if (!grid) return;
+  try {
+    const movies = await loadMovies();
+    grid.innerHTML = movies.map((m, i) => `
+      <div class="movie-tile"
+           style="background-image:url('${escHtml(m.poster)}')"
+           onclick="openMovieWatch(${i})">
+        <div class="movie-tile-label">${escHtml(m.name)}</div>
+      </div>
+    `).join('');
+  } catch(err) {
+    console.error(err);
+    grid.innerHTML = "<p>Failed to load movie catalog.</p>";
+  }
+}
+
+async function openMovieWatch(idx) {
+  try {
+    const movies = await loadMovies();
+    const movie = movies[idx];
+    if (!movie) return;
+
+    currentMovieId = movie.id;
+    document.getElementById('movie-watch-title').textContent = movie.name;
+
+    // Build manual option switches for the user
+    const sources = buildMovieSources(movie.id);
+    const select = document.getElementById('server-select');
+    select.innerHTML = sources.map(src => `<option value="${escHtml(src.url)}">${escHtml(src.name)}</option>`).join('');
+
+    // Load first default source immediately
+    switchSource();
+
+    document.getElementById('movie-watch-overlay').classList.add('open');
+  } catch (err) {
+    console.error(err);
+    alert('Sorry – we could not load this title.');
+    closeMovieWatch();
+  }
+}
+
+function switchSource() {
+  const select = document.getElementById('server-select');
+  const embedUrl = select.value;
+  document.getElementById('movie-watch-frame').innerHTML = `
+    <iframe src="${escHtml(embedUrl)}"
+            allow="autoplay; encrypted-media"
+            allowfullscreen></iframe>
+  `;
+}
+
+function closeMovieWatch() {
+  document.getElementById('movie-watch-overlay').classList.remove('open');
+  document.getElementById('movie-watch-frame').innerHTML = '';
+}
+
+renderMovies();                         
+window.openMovieWatch = openMovieWatch;
+window.closeMovieWatch = closeMovieWatch;
+window.switchSource = switchSource;
+</script>
+</body>
+</html>
