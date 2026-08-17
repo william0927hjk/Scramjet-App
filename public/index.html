@@ -2350,76 +2350,20 @@
     </button>
   </div>
 </div>
-
-<!-- Video Stream Popup Modal Layout -->
-<div id="videoModalOverlay" style="display: none; position: fixed; z-index: 9999; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.9); justify-content: center; align-items: center;">
-  <div style="position: relative; width: 90%; max-width: 900px; aspect-ratio: 16/9; background: #000; border: 1px solid #222; border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.8);">
-    
-    <!-- Close Button -->
-    <button onclick="closeMovieStream()" style="position: absolute; top: -40px; right: 0; background: none; border: none; color: #fff; font-size: 35px; cursor: pointer; font-weight: 300; line-height: 1;">&times;</button>
-    
-    <!-- Embedded Scramjet-Proxied Iframe -->
-    <iframe id="moviePlayerIframe" src="" allowfullscreen allow="autoplay; encrypted-media" style="width: 100%; height: 100%; border: none; border-radius: 6px;"></iframe>
-  </div>
-</div>
-
-<!-- JavaScript Integration -->
-<script>
-  function openProxiedMovie(targetUrl) {
-    const modal = document.getElementById('videoModalOverlay');
-    const iframe = document.getElementById('moviePlayerIframe');
-    
-    // 1. Fallback to default Mercury prefixes if config window variables aren't globally bound
-    const config = window.__scramjet_config || {};
-    const prefix = config.prefix || '/service/'; 
-    
-    // 2. Safely encode the target stream URL using Scramjet's default codec method if available
-    let encodedUrl = '';
-    if (window.__scramjet && typeof window.__scramjet.encodeUrl === 'function') {
-      encodedUrl = window.__scramjet.encodeUrl(targetUrl);
-    } else {
-      // Manual XOR fallback wrapper if the script components are completely sandboxed
-      encodedUrl = targetUrl.split('').map((ch, i) => (i % 2 ? String.fromCharCode(ch.charCodeAt(0) ^ 2) : ch)).join('');
-      encodedUrl = encodeURIComponent(encodedUrl);
-    }
-    
-    // 3. Formulate absolute path string to override site-root interception bugs
-    iframe.src = window.location.origin + prefix + encodedUrl;
-    
-    // 4. Reveal the modal player frame
-    modal.style.display = 'flex';
-    document.body.style.overflow = 'hidden'; 
-  }
-
-  function closeMovieStream() {
-    const modal = document.getElementById('videoModalOverlay');
-    const iframe = document.getElementById('moviePlayerIframe');
-    
-    modal.style.display = 'none';
-    iframe.src = ''; // Strips source out to stop streams instantly
-    document.body.style.overflow = ''; 
-  }
-
-  // Close popup naturally if clicking outside player boundary
-  window.onclick = function(event) {
-    const modal = document.getElementById('videoModalOverlay');
-    if (event.target === modal) {
-      closeMovieStream();
-    }
-  }
-</script>
     
   <!-- Movies View -->
 <div class="view" id="view-cloudgaming">
   <div class="section-title">Movies</div>
-  
   <div class="movie-btn-container" style="padding: 20px 0;">
     <button 
-  class="movie-page-btn" 
-  onclick="if(window.activeTabId) { _doNavigateInTab(window.activeTabId, 'https://vidcore.org/embed/movie/969681'); } else { alert('Please open a browser tab first!'); }"
-  style="padding: 12px 24px; background-color: #e50914; color: white; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 16px;">
-  Open Movies Page
-</button>
+      class="movie-page-btn" 
+      onclick="window.open('https://google.com', '_blank');"
+      style="padding: 12px 24px; background-color: #e50914; color: white; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 16px;">
+      Open Movies Page
+    </button>
+  </div>
+</div>
+
   </div>
 </div>
 
