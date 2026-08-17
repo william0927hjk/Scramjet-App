@@ -2343,10 +2343,10 @@
   <div class="section-title">Movies</div>
   
   <div class="movie-btn-container" style="padding: 20px 0;">
-    <!-- Button triggers the popup and passes your VidCore stream link -->
+    <!-- Button triggers the popup and encodes the VidCore target URL -->
     <button 
       class="movie-page-btn" 
-      onclick="openMovieStream('https://vidcore.org/embed/movie/969681')"
+      onclick="openProxiedMovie('https://vidcore.org')"
       style="padding: 12px 24px; background-color: #e50914; color: white; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 16px; transition: background 0.2s;">
       Open Movies Page
     </button>
@@ -2357,35 +2357,56 @@
 <div id="videoModalOverlay" style="display: none; position: fixed; z-index: 9999; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.9); justify-content: center; align-items: center;">
   <div style="position: relative; width: 90%; max-width: 900px; aspect-ratio: 16/9; background: #000; border: 1px solid #222; border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.8);">
     
-    <!-- Close Button (Positioned cleanly on top-right of the video player window) -->
+    <!-- Close Button -->
     <button onclick="closeMovieStream()" style="position: absolute; top: -40px; right: 0; background: none; border: none; color: #fff; font-size: 35px; cursor: pointer; font-weight: 300; line-height: 1;">&times;</button>
     
-    <!-- Embedded VidCore Stream Player Window -->
+    <!-- Embedded Scramjet-Proxied Iframe -->
     <iframe id="moviePlayerIframe" src="" allowfullscreen allow="autoplay; encrypted-media" style="width: 100%; height: 100%; border: none; border-radius: 6px;"></iframe>
   </div>
 </div>
 
-<!-- JavaScript Window Handlers -->
+<!-- JavaScript Integration -->
 <script>
-  function openMovieStream(url) {
+  /**
+   * Scramjet's default XOR string obfuscation algorithm 
+   */
+  function encodeXor(input) {
+    if (!input) return '';
+    const xorTransformed = input
+      .split('')
+      .map((ch, i) => (i % 2 ? String.fromCharCode(ch.charCodeAt(0) ^ 2) : ch))
+      .join('');
+    return encodeURIComponent(xorTransformed);
+  }
+
+  function openProxiedMovie(targetUrl) {
     const modal = document.getElementById('videoModalOverlay');
     const iframe = document.getElementById('moviePlayerIframe');
     
-    iframe.src = url; // Inject the VidCore source player stream link
-    modal.style.display = 'flex'; // Display popup layer centered using flexbox
-    document.body.style.overflow = 'hidden'; // Stop background website scrolling while watching
+    // 1. Obfuscate the target streaming site URL using Scramjet XOR string mappings
+    const obfuscatedUrl = encodeXor(targetUrl);
+    
+    // 2. Route the URL into Scramjet's native navigation prefix gateway context
+    // (Adjust '/service/' if your client config uses a different prefix, like '__scramjet__')
+    const proxyPrefix = "/service/"; 
+    const finalProxiedUrl = window.location.origin + proxyPrefix + obfuscatedUrl;
+    
+    // 3. Inject into iframe and bring up the modal container
+    iframe.src = finalProxiedUrl;
+    modal.style.display = 'flex';
+    document.body.style.overflow = 'hidden'; 
   }
 
   function closeMovieStream() {
     const modal = document.getElementById('videoModalOverlay');
     const iframe = document.getElementById('moviePlayerIframe');
     
-    modal.style.display = 'none'; // Dismiss popup frame
-    iframe.src = ''; // Wipe iframe source to instantly kill background audio/video playback
-    document.body.style.overflow = ''; // Restore web browser scrolling back to normal
+    modal.style.display = 'none';
+    iframe.src = ''; // Strips source out to immediately stop playback
+    document.body.style.overflow = ''; 
   }
 
-  // Close the popup frame automatically if a user clicks outside the video layout card
+  // Close popup naturally if clicking outside player boundary
   window.onclick = function(event) {
     const modal = document.getElementById('videoModalOverlay');
     if (event.target === modal) {
@@ -2393,6 +2414,7 @@
     }
   }
 </script>
+
 
 
 
